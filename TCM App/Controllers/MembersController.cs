@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TCM_App.Data;
 
 namespace TCM_App.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MembersController(DataContext context, ILogger<MembersController> logger) : ControllerBase
+    public class MembersController(DataContext context, ILogger<MembersController> logger) : BaseController
     {
-
+        
         [HttpGet]
         public async Task<IActionResult> GetMembers()
         {
@@ -26,6 +25,7 @@ namespace TCM_App.Controllers
             } 
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMembers(int id)
         {

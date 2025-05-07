@@ -2,9 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TCM_App.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+
+    public class WeatherForecastController : BaseController
     {
         private static readonly string[] Summaries = new[]
         {
