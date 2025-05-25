@@ -70,7 +70,7 @@ namespace TCM_App
                 x.AllowAnyHeader();
                 
             });
-            #endregion
+            #endregion 
 
             app.UseHttpsRedirection();
 

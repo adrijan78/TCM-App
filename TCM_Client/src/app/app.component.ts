@@ -1,29 +1,27 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { AcountService } from './_services/account/acount.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [
+    RouterOutlet,
+    MatSidenavModule, // Sidenav component
+    MatListModule, // For list items in sidenav
+    MatIconModule, // For material icons
+    MatToolbarModule, // For the toolbar
+    MatButtonModule,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   http = inject(HttpClient);
   title = 'TCM_Client';
-  members: any;
-
-  ngOnInit(): void {
-    this.http.get('https://localhost:7292/api/members').subscribe({
-      next: (res) => {
-        this.members = res;
-      },
-      error: (err) => {
-        console.log(err);
-      },
-      complete: () => {
-        console.log('Request completed');
-      },
-    });
-  }
 }

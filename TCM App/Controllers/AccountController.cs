@@ -9,11 +9,11 @@ using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Controllers
 {
-
+    [ApiController]
     public class AccountController(DataContext context,ITokenService tokenService) : BaseController
     {
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] MemberRegisterDto  registerDto)
+        public async Task<IActionResult> Register(MemberRegisterDto  registerDto)
         {
             if (await MemberExists(registerDto.Email))
             {
@@ -87,6 +87,53 @@ namespace TCM_App.Controllers
 
 
         }
+
+
+        [HttpPost("register-member")]
+        public async Task<IActionResult> RegisterMember( MemberRegisterDto registerDto)
+        {
+            try
+            {
+                if (await MemberExists(registerDto.Email))
+                {
+                    return BadRequest(new ApiResponse
+                    {
+                        Success=false,
+                        Message = "Member already exists"
+                    });
+                }
+                using var hmac = new HMACSHA512();
+                var member = new Member
+                {
+                    FirstName = registerDto.FirstName,
+                    LastName = registerDto.LastName,
+                    Email = registerDto.Email,
+                    PasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(registerDto.Password)),
+                    PasswordSalt = hmac.Key,
+                    IsActive = true,
+                    StartedOn = DateTime.UtcNow,
+                    IsCoach = false,
+                    DateOfBirth = registerDto.DateOfBirth
+
+                };
+                context.Members.Add(member);
+                await context.SaveChangesAsync();
+
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Message = "Member registered successfully",
+                    
+                });
+
+            }
+            catch (Exception e)
+            {
+                
+                throw new Exception(e.ToString());
+            }
+        }
+            
 
         private async Task<bool> MemberExists(string email)
         {
