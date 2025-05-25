@@ -67,6 +67,11 @@
   mat-icon {
     color: white;
   }
+
+  .active-link {
+    background-color: #e0e0e0; /* or any highlight style */
+    font-weight: bold;
+  }
   
   
   

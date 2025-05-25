@@ -2,18 +2,36 @@
     <mat-card class="login-card">
         <h2 class="login-title">Login</h2>
 
-        <form #loginForm="ngForm" (ngSubmit)="login()">
+        <form #loginForm="ngForm" (ngSubmit)="login()" novalidate>
+
+            <!-- Email Field -->
             <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Email</mat-label>
-                <input matInput type="email" [(ngModel)]="model.email" name="email" required />
+                <input matInput type="email" name="email" required email [(ngModel)]="model.email" #email="ngModel" />
+                <mat-error *ngIf="email.invalid && email.touched">
+                    <span *ngIf="email.errors?.['required']">Email is required.</span>
+                    <span *ngIf="email.errors?.['email']">Enter a valid email address.</span>
+                </mat-error>
             </mat-form-field>
 
+            <!-- Password Field -->
             <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Password</mat-label>
-                <input matInput type="password" [(ngModel)]="model.password" name="password" required />
+                <input matInput type="password" name="password" required minlength="6"
+                    pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$" [(ngModel)]="model.password" #password="ngModel" />
+                <mat-error *ngIf="password.invalid && password.touched">
+                    <span *ngIf="password.errors?.['required']">Password is required.</span>
+                    <span *ngIf="password.errors?.['minlength']">Minimum 6 characters required.</span>
+                    <span *ngIf="password.errors?.['pattern']">
+                        Password must include an uppercase letter, a number, and a special character.
+                    </span>
+                </mat-error>
             </mat-form-field>
 
-            <button mat-flat-button class="full-width">Login</button>
+            <!-- Submit Button -->
+            <button mat-flat-button color="primary" class="full-width mt-3" [disabled]="loginForm.invalid">
+                Login
+            </button>
 
             <div class="register-link">
                 Don't have an account?

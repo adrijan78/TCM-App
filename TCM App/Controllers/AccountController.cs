@@ -52,10 +52,14 @@ namespace TCM_App.Controllers
         {
             try
             {
-                var member = await context.Members.FirstOrDefaultAsync(x => x.Email == loginMemberDto.Email);
+                var member = await context.Members.FirstOrDefaultAsync(x => x.Email == loginMemberDto.Email)    ;
                 if (member == null)
                 {
-                    return Unauthorized("Invalid email");
+                    return Unauthorized(new ApiResponse
+                    {
+                        Success = false,
+                        Message = "Invalid credentials"
+                    });
                 }
 
                 using var hmac = new HMACSHA512(member.PasswordSalt);
@@ -65,9 +69,14 @@ namespace TCM_App.Controllers
                 {
                     if (computedHash[i] != member.PasswordHash[i])
                     {
-                        return Unauthorized("Invalid password");
+                        return Unauthorized(new ApiResponse
+                        {
+                            Success = false,
+                            Message = "Invalid credentials"
+                        });
                     }
                 }
+                
 
                 return Ok(new MemberTokenDto
                 {

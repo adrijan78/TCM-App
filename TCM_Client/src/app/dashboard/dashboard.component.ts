@@ -11,7 +11,12 @@
 // }
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import {
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,6 +33,8 @@ import { AcountService } from '../_services/account/acount.service';
     MatIconModule, // For material icons
     MatToolbarModule, // For the toolbar
     MatButtonModule,
+    RouterLink,
+    RouterLinkActive,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
