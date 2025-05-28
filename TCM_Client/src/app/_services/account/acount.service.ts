@@ -14,6 +14,13 @@ export class AcountService {
   isLoggedIn = signal(false);
   currentUser = signal<Member | null>(null);
 
+  constructor() {
+    const member = localStorage.getItem('member');
+    if (member) {
+      this.currentUser.set(JSON.parse(member));
+    }
+  }
+
   //isLoggedIn=this._isLoggedIn.asReadonly();
 
   login(model: any) {

@@ -29,23 +29,20 @@
 
         <!-- Navigation List -->
         <mat-nav-list>
-            <a [routerLink]="['/dashboard/members']" routerLinkActive="active-link" mat-list-item
-                class="d-flex mb-1 text-center">
+            <a [routerLink]="['members']" routerLinkActive="active-link" mat-list-item class="d-flex mb-1 text-center">
                 <mat-icon class="nav-icon">group</mat-icon>
                 <span class="nav-text">Members</span>
             </a>
-            <a [routerLink]="['/dashboard/trainings']" routerLinkActive="active-link" mat-list-item
+            <a [routerLink]="['trainings']" routerLinkActive="active-link" mat-list-item
                 class="d-flex mb-1 text-center">
                 <mat-icon class="nav-icon">fitness_center</mat-icon>
                 <span class="nav-text">Trainings</span>
             </a>
-            <a [routerLink]="['/dashboard/payments']" routerLinkActive="active-link" mat-list-item
-                class="d-flex mb-1 text-center">
+            <a [routerLink]="['payments']" routerLinkActive="active-link" mat-list-item class="d-flex mb-1 text-center">
                 <mat-icon class="nav-icon">payment</mat-icon>
                 <span class="nav-text">Payments</span>
             </a>
-            <a [routerLink]="['/dashboard/notes']" mat-list-item class="d-flex mb-1 text-center"
-                routerLinkActive="active-link">
+            <a [routerLink]="['notes']" mat-list-item class="d-flex mb-1 text-center" routerLinkActive="active-link">
                 <mat-icon class="nav-icon">note</mat-icon>
                 <span class="nav-text">My Notes</span>
             </a>

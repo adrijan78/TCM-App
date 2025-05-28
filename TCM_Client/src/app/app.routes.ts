@@ -12,11 +12,12 @@ import { PaymentDetailComponent } from './dashboard/payments/payment-detail/paym
 import { NoteListComponent } from './dashboard/notes/note-list/note-list.component';
 import { NoteDetailComponent } from './dashboard/notes/note-detail/note-detail.component';
 import { authGuard } from './_guards/auth.guard';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
-    path: 'dashboard',
+    path: '',
     component: DashboardComponent,
     canActivate: [authGuard],
     children: [
@@ -31,5 +32,5 @@ export const routes: Routes = [
       { path: 'notes:id', component: NoteDetailComponent },
     ],
   },
-  { path: '**', component: DashboardComponent },
+  { path: '**', component: NotFoundComponent },
 ];

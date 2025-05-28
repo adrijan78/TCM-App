@@ -32,7 +32,7 @@ export class LoginComponent {
       next: (response) => {
         console.log(response);
         this.accountService.isLoggedIn.set(true);
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/']);
       },
       error: (err) => {
         if (err.status == 0) {
