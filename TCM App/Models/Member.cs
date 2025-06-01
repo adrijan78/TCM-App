@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Metadata;
+using TCM_App.Helpers;
 
 namespace TCM_App.Models
 {
@@ -7,16 +8,35 @@ namespace TCM_App.Models
         public int Id { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
-        public  byte[] ProfilePicture { get; set; }
+        public int PhotoId { get; set; }
+        public Photo ProfilePicture { get; set; } 
         public required DateTime DateOfBirth { get; set; }
-        public List<MemberBelt> Belts { get; set; }
+        public List<MemberBelt> Belts { get; set; } = [];
         public required string Email { get; set; }
-        public required byte[] PasswordHash { get; set; }
-        public required byte[] PasswordSalt { get; set; }
+        public byte[] PasswordHash { get; set; } = [];
+        public byte[] PasswordSalt { get; set; } = [];
         public required bool IsActive { get; set; }
-        public  DateTime StartedOn { get; set; }
+        public DateTime StartedOn { get; set; }
         public bool IsCoach { get; set; }
         public float Height { get; set; }
         public float Weight { get; set; }
+
+        public int? ClubId { get; set; }
+        public Club? Club { get; set; }
+
+        public List<MemberTraining> MemberTrainings { get; set; } = [];
+
+        public List<Note> NotesSent { get; set; } = [];
+
+        public List<Note> NotesReceived { get; set; }= [];
+
+        //public int GetAge()
+        //{
+        //    return CalculateAgeHelper.CalculateAge(DateOfBirth);
+        //}
     }
+
+
+
+
 }

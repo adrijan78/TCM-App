@@ -15,10 +15,13 @@ namespace TCM_App.Models.DTOs
         [EmailAddress]
         public required string Email { get; set; }
 
-        public required string Password { get; set; }   
+        public required string Password { get; set; }
 
         //public required bool IsActive { get; set; }
         //public required DateTime StartedOn { get; set; }
+
+        public float Height { get; set; }
+        public float Weight { get; set; }
 
     }
 }

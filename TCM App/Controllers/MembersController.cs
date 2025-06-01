@@ -1,12 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TCM_App.Data;
+using TCM_App.Models.DTOs;
+using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Controllers
 {
-    public class MembersController(DataContext context, ILogger<MembersController> logger) : BaseController
+    public class MembersController(
+        IMemberService _memberService,
+        ILogger<MembersController> logger,
+        IMapper mapper) : BaseController
     {
         
         [HttpGet]
@@ -15,8 +21,9 @@ namespace TCM_App.Controllers
             // This is where you would normally get the members from the database
             try
             {
-                var members = await context.Members.ToListAsync();
-                return Ok(members);
+               // Zemi go id na club od najaveniot korisnik koga kje koristis Identity 
+                var members = await _memberService.GetMembers(1);
+                return Ok(mapper.Map<List<MemberDto>>(members));
             }
             catch (Exception e)
             {
@@ -27,16 +34,16 @@ namespace TCM_App.Controllers
 
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetMembers(int id)
+        public async Task<IActionResult> GetMember(int id)
         {
             try
             {
-               var member = await context.Members.FirstOrDefaultAsync(m => m.Id == id);
+               var member = await _memberService.GetMember(id);
                 if (member == null)
                 {
                     return NotFound();
                 }
-                return Ok(member);
+                return Ok(mapper.Map<MemberDto>(member));
             }
             catch (Exception e)
             {

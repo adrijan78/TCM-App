@@ -17,7 +17,7 @@ namespace TCM_App.Controllers
         {
             if (await MemberExists(registerDto.Email))
             {
-                return BadRequest("Member already exists");
+                return BadRequest("User already exists");
             }
 
             using var hmac = new HMACSHA512();
@@ -30,8 +30,12 @@ namespace TCM_App.Controllers
                 PasswordSalt = hmac.Key,
                 IsActive = true,
                 StartedOn = DateTime.UtcNow,
-                IsCoach = false,
-                DateOfBirth = registerDto.DateOfBirth
+                IsCoach = true,
+                DateOfBirth = registerDto.DateOfBirth,
+                //Zemi go klubot od najaveniot korisnik
+                ClubId = 1,
+                Height = registerDto.Height,
+                Weight = registerDto.Weight,
             };
 
             context.Members.Add(member);
@@ -122,7 +126,11 @@ namespace TCM_App.Controllers
                     IsActive = true,
                     StartedOn = DateTime.UtcNow,
                     IsCoach = false,
-                    DateOfBirth = registerDto.DateOfBirth
+                    DateOfBirth = registerDto.DateOfBirth,
+                    //Zemi go klubot od najaveniot korisnik
+                    ClubId = 1,
+                    Height = registerDto.Height,
+                    Weight = registerDto.Weight,
 
                 };
                 context.Members.Add(member);

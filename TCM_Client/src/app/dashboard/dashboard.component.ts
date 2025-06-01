@@ -47,17 +47,7 @@ export class DashboardComponent implements OnInit {
   members: any;
 
   ngOnInit(): void {
-    this.setCurrentUser();
     this.getMembers();
-  }
-
-  setCurrentUser() {
-    const memberString = localStorage.getItem('member');
-    if (!memberString) {
-      this.router.navigate(['/login']);
-    } else {
-      this.accountService.currentUser.set(JSON.parse(memberString));
-    }
   }
 
   getMembers() {

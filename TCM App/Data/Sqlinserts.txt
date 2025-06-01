@@ -1,0 +1,100 @@
+﻿INSERT INTO Clubs (Name, Address)
+VALUES ('Tiger Combat Martial Arts', '123 Kick St, Fightville, TX');
+
+
+
+
+INSERT INTO Belts (BeltName) VALUES 
+('White'),
+('Yellow'),
+('Orange'),
+('Green'),
+('Blue'),
+('Brown'),
+('Black');
+
+
+
+INSERT INTO Members 
+(FirstName, LastName, PhotoId, DateOfBirth, Email, PasswordHash, PasswordSalt, IsActive, StartedOn, IsCoach, Height, Weight, ClubId)
+VALUES
+('John', 'Smith', 1, '1990-01-01', 'john.smith@example.com', 0x01, 0x01, 1, '2020-01-01', 1, 180, 80, 1),
+('Jane', 'Doe', 2, '1992-02-02', 'jane.doe@example.com', 0x01, 0x01, 1, '2021-01-01', 0, 165, 60, 1),
+('Mike', 'Johnson', 3, '1995-03-03', 'mike.johnson@example.com', 0x01, 0x01, 1, '2021-05-01', 0, 175, 70, 1),
+('Emily', 'Davis', 4, '1998-04-04', 'emily.davis@example.com', 0x01, 0x01, 1, '2022-02-01', 0, 160, 55, 1),
+('Chris', 'Brown', 5, '1993-05-05', 'chris.brown@example.com', 0x01, 0x01, 1, '2022-06-01', 0, 185, 85, 1),
+('Laura', 'Wilson', 6, '1997-06-06', 'laura.wilson@example.com', 0x01, 0x01, 1, '2023-01-01', 0, 170, 65, 1),
+('David', 'Lee', 7, '2000-07-07', 'david.lee@example.com', 0x01, 0x01, 1, '2023-03-01', 0, 178, 75, 1),
+('Sophia', 'Clark', 8, '1996-08-08', 'sophia.clark@example.com', 0x01, 0x01, 1, '2023-04-01', 0, 168, 62, 1),
+('James', 'Walker', 9, '1994-09-09', 'james.walker@example.com', 0x01, 0x01, 1, '2023-05-01', 0, 182, 77, 1),
+('Olivia', 'Hall', 10, '1999-10-10', 'olivia.hall@example.com', 0x01, 0x01, 1, '2023-06-01', 0, 160, 58, 1);
+
+
+
+
+
+INSERT INTO Photos (Url, PublicId, MemberId)
+VALUES 
+('https://example.com/photos/m1.jpg', 'photo_m1', 1),
+('https://example.com/photos/m2.jpg', 'photo_m2', 2),
+('https://example.com/photos/m3.jpg', 'photo_m3', 3),
+('https://example.com/photos/m4.jpg', 'photo_m4', 4),
+('https://example.com/photos/m5.jpg', 'photo_m5', 5),
+('https://example.com/photos/m6.jpg', 'photo_m6', 6),
+('https://example.com/photos/m7.jpg', 'photo_m7', 7),
+('https://example.com/photos/m8.jpg', 'photo_m8', 8),
+('https://example.com/photos/m9.jpg', 'photo_m9', 9),
+('https://example.com/photos/m10.jpg', 'photo_m10', 10);
+
+
+INSERT INTO MemberBelts (MemberId, BeltId, DateReceived, Description) VALUES
+(1, 7, '2023-01-01', 'Earned Black Belt after years of dedication'),
+(2, 3, '2023-02-15', 'Promoted to Orange Belt'),
+(3, 4, '2023-03-10', 'Promoted to Green Belt'),
+(4, 2, '2023-02-20', 'Promoted to Yellow Belt'),
+(5, 5, '2023-04-01', 'Promoted to Blue Belt'),
+(6, 1, '2023-01-15', 'Starting at White Belt'),
+(7, 1, '2023-01-15', 'Starting at White Belt'),
+(8, 2, '2023-02-10', 'Promoted to Yellow Belt'),
+(9, 3, '2023-03-05', 'Promoted to Orange Belt'),
+(10, 4, '2023-04-20', 'Promoted to Green Belt');
+
+
+INSERT INTO Trainings (Date, Description, MemberId, ClubId, TrainingType) VALUES
+('2023-05-01', 'Morning Kickboxing', 1, 1, 1),
+('2023-05-02', 'Advanced Sparring', 2, 1, 2),
+('2023-05-03', 'Basic Techniques', 3, 1, 1),
+('2023-05-04', 'Strength Conditioning', 4, 1, 2),
+('2023-05-05', 'Flexibility Training', 5, 1, 2),
+('2023-05-06', 'Sparring Drills', 6, 1, 2),
+('2023-05-07', 'Self Defense', 7, 1, 1),
+('2023-05-08', 'Endurance Training', 8, 1, 2),
+('2023-05-09', 'Technique Refinement', 9, 1, 1),
+('2023-05-10', 'Kickboxing Practice', 10, 1, 1);
+
+
+
+
+INSERT INTO Attendaces (Date, Description, TrainingId, MemberId, Performace) VALUES
+('2023-05-01', 'Good form, improving kicks', 1, 1, 85),
+('2023-05-02', 'Strong defense', 2, 2, 88),
+('2023-05-03', 'Needs practice on footwork', 3, 3, 70),
+('2023-05-04', 'Excellent stamina', 4, 4, 90),
+('2023-05-05', 'Good flexibility', 5, 5, 80),
+('2023-05-06', 'Good sparring technique', 6, 6, 75),
+('2023-05-07', 'Solid self-defense moves', 7, 7, 82),
+('2023-05-08', 'High endurance', 8, 8, 87),
+('2023-05-09', 'Improved technique', 9, 9, 83),
+('2023-05-10', 'Great kickboxing session', 10, 10, 88);
+
+
+INSERT INTO Notes (Content, CreatedAt, FromMemberId, ToMemberId) VALUES
+('Keep up the great work on your kicks!', '2023-05-11', 1, 2),
+('Focus more on your footwork during sparring.', '2023-05-11', 1, 3),
+('Excellent stamina, but improve defense.', '2023-05-11', 1, 4),
+('Great flexibility progress!', '2023-05-11', 1, 5),
+('Practice your combinations more often.', '2023-05-11', 1, 6),
+('Good job on self-defense techniques.', '2023-05-11', 1, 7),
+('Try to increase your endurance gradually.', '2023-05-11', 1, 8),
+('Keep refining your technique.', '2023-05-11', 1, 9),
+('Awesome kickboxing session today!', '2023-05-11', 1, 10);

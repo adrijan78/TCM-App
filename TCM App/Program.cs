@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TCM_App.Data;
+using TCM_App.Models;
+using TCM_App.Repositories;
+using TCM_App.Repositories.Interfaces;
 using TCM_App.Services;
 using TCM_App.Services.Interfaces;
 
@@ -31,6 +34,14 @@ namespace TCM_App
 
             #region Our Services
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IMemberService, MemberService>();
+            #endregion
+
+            #region Repositories
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+            builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
+            builder.Services.AddScoped<INoteRepository, NoteRepository>();
             #endregion
 
             #region Authentication
@@ -51,6 +62,12 @@ namespace TCM_App
                     };
                 });
             #endregion
+
+
+            #region AutoMapper
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            #endregion
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
