@@ -1,0 +1,25 @@
+.custom-header {
+    background-color: #007bb5;
+    color: white;
+  }
+
+  ::ng-deep .mat-paginator {
+  background-color: #007bb5;
+  color: white;
+}
+
+::ng-deep .mat-paginator .mat-button,
+::ng-deep .mat-paginator .mat-icon-button {
+  color: white !important;
+}
+
+::ng-deep .mat-paginator .mat-paginator-range-label {
+  color: white;
+}
+
+::ng-deep .mat-paginator .mat-paginator-navigation-first,
+::ng-deep .mat-paginator .mat-paginator-navigation-previous,
+::ng-deep .mat-paginator .mat-paginator-navigation-next,
+::ng-deep .mat-paginator .mat-paginator-navigation-last {
+  color: white;
+}

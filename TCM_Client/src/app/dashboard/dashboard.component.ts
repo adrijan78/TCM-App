@@ -39,30 +39,10 @@ import { AcountService } from '../_services/account/acount.service';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
   public accountService = inject(AcountService);
   private router = inject(Router);
-  http = inject(HttpClient);
   title = 'TCM_Client';
-  members: any;
-
-  ngOnInit(): void {
-    this.getMembers();
-  }
-
-  getMembers() {
-    this.http.get('https://localhost:7292/api/members').subscribe({
-      next: (res) => {
-        this.members = res;
-      },
-      error: (err) => {
-        console.log(err);
-      },
-      complete: () => {
-        console.log('Request completed');
-      },
-    });
-  }
 
   logout() {
     this.accountService.logout();
