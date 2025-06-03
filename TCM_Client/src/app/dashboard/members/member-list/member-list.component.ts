@@ -11,7 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { FormsModule } from '@angular/forms';
-import { DatePipe, NgClass } from '@angular/common';
+import { DatePipe, NgClass, NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-member-list',
@@ -30,30 +30,12 @@ import { DatePipe, NgClass } from '@angular/common';
     MatSortModule,
     DatePipe,
     NgClass,
+    NgFor,
   ],
   templateUrl: './member-list.component.html',
   styleUrl: './member-list.component.css',
 })
 export class MemberListComponent implements OnInit {
-  displayedColumns: string[] = [
-    'profilePicture',
-    'firstName',
-    'lastName',
-    'email',
-    'age',
-    // 'belts',
-    'isCoach',
-    'isActive',
-    'height',
-    'weight',
-    'startedOn',
-    'actions',
-  ];
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-
-  dataSource = new MatTableDataSource<Member>();
-
   private memberService = inject(MemberService);
   members: Member[] = [];
 
@@ -64,9 +46,7 @@ export class MemberListComponent implements OnInit {
   getMembers() {
     this.memberService.getMembers().subscribe({
       next: (res) => {
-        this.dataSource.data = res;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.members = res;
       },
       error: (err) => {
         console.log(err);
@@ -75,11 +55,6 @@ export class MemberListComponent implements OnInit {
         console.log('Request completed');
       },
     });
-  }
-
-  applyFilter(event: Event) {
-    const value = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.dataSource.filter = value;
   }
 
   // openEditDialog(member: Member): void {

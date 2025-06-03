@@ -1,13 +1,11 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" class="">
     <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
     </button>
     <span routerLink="/dashboard">Taekwondo Club Management</span>
     <span class="spacer"></span>
 
-    <button mat-icon-button aria-label="Scan QR Code">
-        <mat-icon>qr_code_scanner</mat-icon>
-    </button>
+
 
     <button (click)="logout()" mat-icon-button aria-label="Logout">
         <mat-icon>logout</mat-icon>

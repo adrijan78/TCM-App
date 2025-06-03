@@ -1,3 +1,4 @@
+
 .table-responsive {
     margin: 30px 0;
 }
@@ -94,6 +95,7 @@ table.table .avatar {
     border-radius: 50%;
     vertical-align: middle;
     margin-right: 10px;
+    max-width: 80px;
 }
 .status {
     font-size: 30px;
@@ -117,13 +119,14 @@ table.table .avatar {
 .pagination {
     float: right;
     margin: 0 0 5px;
+
 }
 .pagination li a {
     border: none;
     font-size: 13px;
     min-width: 30px;
     min-height: 30px;
-    color: #999;
+    color: #0397d6;
     margin: 0 2px;
     line-height: 30px;
     border-radius: 2px !important;

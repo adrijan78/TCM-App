@@ -1,16 +1,15 @@
-<div class="container-xl">
-    <div class="table-responsive">
+<div class="d-flex justify-content-center">
+    <div class="table-responsive w-100">
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-5">
                         <h2>Club <b>Members</b></h2>
                     </div>
-                    <div class="col-sm-7">
-                        <a href="#" class="btn btn-secondary"><i class="material-icons">&#xE147;</i> <span>Add New
-                                User</span></a>
-                        <a href="#" class="btn btn-secondary"><i class="material-icons">&#xE24D;</i> <span>Export to
-                                Excel</span></a>
+                    <div class="col-sm-7 text-end">
+                        <a href="#" class="btn btn-secondary">
+                            <i class="material-icons">&#xE147;</i> <span>Add New Member</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -19,94 +18,67 @@
                     <tr>
                         <th>#</th>
                         <th>Name</th>
-                        <th>Date Created</th>
-                        <th>Role</th>
+                        <th>Joined</th>
+                        <th>Email</th>
+                        <th>Age</th>
+                        <th>Coach</th>
                         <th>Status</th>
+                        <th>Belts</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td><a href="#"><img src="/examples/images/avatar/1.jpg" class="avatar" alt="Avatar"> Michael
-                                Holz</a></td>
-                        <td>04/10/2013</td>
-                        <td>Admin</td>
-                        <td><span class="status text-success">&bull;</span> Active</td>
+                    <tr *ngFor="let member of members; let i = index">
+                        <td>{{ i + 1 }}</td>
                         <td>
-                            <a href="#" class="settings" title="Settings" data-toggle="tooltip"><i
-                                    class="material-icons">&#xE8B8;</i></a>
-                            <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i
-                                    class="material-icons">&#xE5C9;</i></a>
+                            <a href="#">
+                                <img [src]="member.profilePicture?.url +''+ member.id+'.jpg'" class="avatar"
+                                    alt="Avatar" />
+                                {{ member.firstName }} {{ member.lastName }}
+                            </a>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td><a href="#"><img src="/examples/images/avatar/2.jpg" class="avatar" alt="Avatar"> Paula
-                                Wilson</a></td>
-                        <td>05/08/2014</td>
-                        <td>Publisher</td>
-                        <td><span class="status text-success">&bull;</span> Active</td>
-                        <td>
-                            <a href="#" class="settings" title="Settings" data-toggle="tooltip"><i
-                                    class="material-icons">&#xE8B8;</i></a>
-                            <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i
-                                    class="material-icons">&#xE5C9;</i></a>
+                        <td>{{ member.startedOn | date: 'dd/MM/yyyy' }}</td>
+                        <td>{{ member.email }}</td>
+                        <td>{{ member.age }}</td>
+                        <td class="text-start">
+                            @if(member.isCoach){
+                            <i class="material-icons text-success" title="Coach">check</i>
+                            }
                         </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td><a href="#"><img src="/examples/images/avatar/3.jpg" class="avatar" alt="Avatar"> Antonio
-                                Moreno</a></td>
-                        <td>11/05/2015</td>
-                        <td>Publisher</td>
-                        <td><span class="status text-danger">&bull;</span> Suspended</td>
                         <td>
-                            <a href="#" class="settings" title="Settings" data-toggle="tooltip"><i
-                                    class="material-icons">&#xE8B8;</i></a>
-                            <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i
-                                    class="material-icons">&#xE5C9;</i></a>
+                            <span class="status" [ngClass]="{
+                    'text-success': member.isActive,
+                    'text-danger': !member.isActive
+                  }">
+                                &bull;
+                            </span>
+                            {{ member.isActive ? 'Active' : 'Inactive' }}
                         </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td><a href="#"><img src="/examples/images/avatar/4.jpg" class="avatar" alt="Avatar"> Mary
-                                Saveley</a></td>
-                        <td>06/09/2016</td>
-                        <td>Reviewer</td>
-                        <td><span class="status text-success">&bull;</span> Active</td>
                         <td>
-                            <a href="#" class="settings" title="Settings" data-toggle="tooltip"><i
-                                    class="material-icons">&#xE8B8;</i></a>
-                            <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i
-                                    class="material-icons">&#xE5C9;</i></a>
+                            <span *ngFor="let belt of member.belts" class="badge bg-primary me-1">
+                                {{ belt }}
+                            </span>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td><a href="#"><img src="/examples/images/avatar/5.jpg" class="avatar" alt="Avatar"> Martin
-                                Sommer</a></td>
-                        <td>12/08/2017</td>
-                        <td>Moderator</td>
-                        <td><span class="status text-warning">&bull;</span> Inactive</td>
                         <td>
-                            <a href="#" class="settings" title="Settings" data-toggle="tooltip"><i
-                                    class="material-icons">&#xE8B8;</i></a>
-                            <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i
-                                    class="material-icons">&#xE5C9;</i></a>
+                            <a href="#" class="settings" title="Edit" data-toggle="tooltip">
+                                <i class="material-icons">&#xE8B8;</i>
+                            </a>
+                            <a href="#" class="delete" title="Delete" data-toggle="tooltip">
+                                <i class="material-icons">&#xE5C9;</i>
+                            </a>
                         </td>
                     </tr>
                 </tbody>
             </table>
             <div class="clearfix">
-                <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                <div class="hint-text">
+                    Showing <b>{{ 5}}</b> of
+                    <b>{{ members.length }}</b> entries
+                </div>
                 <ul class="pagination">
                     <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
+                    <li class="page-item active"><a href="#" class="page-link">1</a></li>
                     <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
                     <li class="page-item"><a href="#" class="page-link">Next</a></li>
                 </ul>
             </div>

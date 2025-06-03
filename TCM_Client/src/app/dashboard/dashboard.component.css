@@ -2,6 +2,13 @@
     height: 100vh;
   }
   
+
+  
+  .content {
+    margin-top: 64px; /* Adjust based on toolbar height (usually 64px for desktop) */
+  }
+  
+  
   .example-sidenav {
     width: 20vw;
     background-color: #ffffff;
