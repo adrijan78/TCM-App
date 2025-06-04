@@ -30,7 +30,11 @@
 
             <!-- Submit Button -->
             <button mat-flat-button color="primary" class="full-width mt-3" [disabled]="loginForm.invalid">
-                Login
+                <ng-container *ngIf="!isLoading(); else loadingTpl">Login</ng-container>
+                <ng-template #loadingTpl>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="visually-hidden">Loading...</span>
+                </ng-template>
             </button>
 
             <div class="register-link">

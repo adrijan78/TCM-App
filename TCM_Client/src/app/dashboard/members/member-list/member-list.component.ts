@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { FormsModule } from '@angular/forms';
 import { DatePipe, NgClass, NgFor } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-member-list',
@@ -31,12 +32,14 @@ import { DatePipe, NgClass, NgFor } from '@angular/common';
     DatePipe,
     NgClass,
     NgFor,
+    RouterModule,
   ],
   templateUrl: './member-list.component.html',
   styleUrl: './member-list.component.css',
 })
 export class MemberListComponent implements OnInit {
   private memberService = inject(MemberService);
+  private router = inject(Router);
   members: Member[] = [];
 
   ngOnInit(): void {

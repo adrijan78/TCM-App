@@ -28,11 +28,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let member of members; let i = index">
+
+                    <tr *ngFor="let member of members; let i = index" routerLink="/members/{{member.id}}">
                         <td>{{ i + 1 }}</td>
                         <td>
                             <a href="#">
-                                <img [src]="member.profilePicture?.url +''+ member.id+'.jpg'" class="avatar"
+                                <img [src]="member.profilePicture .url +''+ member.id+'.jpg'" class="avatar"
                                     alt="Avatar" />
                                 {{ member.firstName }} {{ member.lastName }}
                             </a>
@@ -47,9 +48,9 @@
                         </td>
                         <td>
                             <span class="status" [ngClass]="{
-                    'text-success': member.isActive,
-                    'text-danger': !member.isActive
-                  }">
+                        'text-success': member.isActive,
+                        'text-danger': !member.isActive
+                      }">
                                 &bull;
                             </span>
                             {{ member.isActive ? 'Active' : 'Inactive' }}
@@ -68,6 +69,7 @@
                             </a>
                         </td>
                     </tr>
+
                 </tbody>
             </table>
             <div class="clearfix">
