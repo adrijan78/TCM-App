@@ -1,0 +1,307 @@
+/* Overall page container */
+.member-profile-container {
+  background-color: #f0f2f5; /* A light background for the whole page */
+  min-height: 100vh; /* Occupy full viewport height */
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+  border-radius: 0.75rem;
+}
+
+.main-row {
+  background-color: #fff; /* White background for the main content area */
+  border-radius: 0.75rem;
+  box-shadow: 0 0.5rem 1rem rgba(2px, 2px, 2px, 0.1); /* Subtle shadow for the main container */
+  overflow: hidden; /* Ensures rounded corners are visible */
+}
+
+.row-height{
+  height: 100%!important;
+}
+
+/* Left Profile Column Styling */
+.profile-col {
+  background-color: #23a9cf; /* Light blue background for the profile column */
+  border-top-left-radius: 0.75rem;
+  border-radius: 0.75rem;
+  padding: 2rem; /* Add some internal padding */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  /* Align content to the top */
+}
+
+.profile-card {
+  background-color: transparent; /* Make card background transparent */
+  border: none; /* Remove card border */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0; /* Remove default card padding */
+}
+
+.profile-card .card-body {
+  padding: 0; /* Remove default card-body padding */
+  width: 100%;
+}
+
+.user-details {
+  font-size: 1.1rem; /* Slightly larger text */
+  color: #333;
+  padding-left: 2rem; /* Indentation for text */
+}
+
+.user-detail-text {
+  font-weight: 500; /* Slightly bolder */
+  color: white;
+}
+
+/* Right Charts & Table Column Styling */
+.charts-table-col {
+  background-color: #fff; /* White background for this column */
+  border-top-right-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+  padding: 2rem; /* Add some internal padding */
+}
+
+.charts-card {
+  background-color: transparent; /* No background as the column itself is white */
+  border: none;
+  box-shadow: none; /* No extra shadow on the card itself */
+  overflow: visible; /* Important for tooltips */
+}
+
+.charts-card .card-body {
+  padding: 0; /* Remove default card-body padding if column already has it */
+}
+
+.card-title {
+  font-size: 1.8rem; /* Larger title */
+  font-weight: 600;
+  color: #333;
+}
+
+.chart-item {
+  background-color: transparent; /* No background on chart-item */
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  height: 300px; /* Fixed height for charts */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+/* Make ngx-charts fill their parent */
+ngx-charts-bar-vertical,
+ngx-charts-pie-chart {
+  width: 100%;
+  height: 100%;
+}
+
+.pie-chart-container {
+  max-width: 350px; /* Constrain pie chart width for better aspect ratio */
+  margin: auto; /* Center it */
+}
+
+/* Table Styling */
+.full-width-table {
+  width: 100%;
+  margin-top: 2rem; /* Space above table */
+  border-collapse: collapse; /* Ensure borders meet */
+}
+
+.table-dark,
+.table-header-row {
+  background-color: #000 !important; /* Solid black header */
+  color: #fff;
+}
+
+.full-width-table th,
+.full-width-table td {
+  border: 1px solid #000; /* Black borders for all cells */
+  padding: 0.75rem;
+  vertical-align: middle;
+}
+
+.full-width-table thead th {
+  font-weight: bold;
+  text-align: center; /* Center header text as per image */
+}
+
+
+/* Table Layout and Wrapper */
+.d-flex.justify-content-center1 {
+  width: 100%; /* Ensure it spans full width in its parent column */
+  margin-top: 2rem; /* Add some space above the table */
+}
+
+.table-responsive.w-100 {
+  margin: 0; /* Override default margin */
+}
+
+.table-wrapper {
+  min-width: 100%; /* Changed from 1000px for better responsiveness */
+  background: #fff;
+  padding: 20px 25px;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+
+/* Table Title Section */
+.table-title {
+  padding-bottom: 15px;
+  background: #299be4; /* Blue header background */
+  color: #fff;
+  padding: 16px 30px;
+  margin: -20px -25px 10px; /* Adjust margin to extend background to edges */
+  border-radius: 3px 3px 0 0;
+}
+.table-title h2 {
+  margin: 5px 0 0;
+  font-size: 24px;
+}
+
+/* Table Cells (th and td) */
+table.table tr th, table.table tr td {
+  border-color: #e9e9e9;
+  padding: 12px 15px;
+  vertical-align: middle;
+}
+table.table tr th:first-child {
+  width: 60px; /* Width for # column */
+}
+/* Adjust column widths based on your content for better layout */
+table.table tr th:nth-child(2) { /* Date */
+  width: 100px;
+}
+table.table tr th:nth-child(3) { /* Type */
+  width: 100px;
+}
+table.table tr th:nth-child(4) { /* Duration */
+  width: 80px;
+}
+table.table tr th:nth-child(5) { /* Performance */
+  width: 100px;
+}
+table.table tr th:last-child { /* Actions */
+  width: 100px;
+}
+
+/* Stripe and Hover Effects */
+table.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #fcfcfc;
+}
+table.table-striped.table-hover tbody tr:hover {
+  background: #f5f5f5;
+  cursor: pointer; /* Add cursor pointer if rows are clickable (like routerLink) */
+}
+
+/* Table Header Icons (if you add sortable headers) */
+table.table th i {
+  font-size: 13px;
+  margin: 0 5px;
+  cursor: pointer; /* Indicates sortable column */
+}
+
+/* Action Icons (Edit/Delete) */
+table.table td:last-child i {
+  opacity: 0.9;
+  font-size: 22px;
+  margin: 0 5px;
+}
+table.table td a {
+  font-weight: bold;
+  color: #566787;
+  display: inline-block;
+  text-decoration: none;
+}
+table.table td a:hover {
+  color: #2196F3;
+}
+table.table td a.settings {
+  color: #2196F3; /* Blue for settings/edit */
+}
+table.table td a.delete {
+  color: #F44336; /* Red for delete */
+}
+table.table td i {
+  font-size: 19px; /* General icon size for table cells */
+}
+
+/* Avatar in Table Rows (if your data source provides image for this table) */
+table.table .avatar {
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-right: 10px;
+  width: 40px; /* Example size for table row avatar */
+  height: 40px;
+  object-fit: cover; /* Important for images */
+}
+
+/* Status Dot Styling */
+.status {
+  font-size: 30px; /* Makes the bullet larger */
+  margin: 2px 2px 0 0;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 10px;
+}
+/* Specific colors for status */
+.text-success {
+  color: #10c469 !important; /* !important to override Bootstrap if needed */
+}
+.text-info {
+  color: #62c9e8 !important;
+}
+.text-warning {
+  color: #FFC107 !important;
+}
+.text-danger {
+  color: #ff5b5b !important;
+}
+
+/* Pagination and Hint Text */
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.pagination {
+  float: right;
+  margin: 0 0 5px;
+}
+.pagination li a {
+  border: none;
+  font-size: 13px;
+  min-width: 30px;
+  min-height: 30px;
+  color: #0397d6;
+  margin: 0 2px;
+  line-height: 30px;
+  border-radius: 2px !important;
+  text-align: center;
+  padding: 0 6px;
+}
+.pagination li a:hover {
+  color: #666;
+}
+.pagination li.active a, .pagination li.active a.page-link {
+  background: #03A9F4;
+}
+.pagination li.active a:hover {
+  background: #0397d6;
+}
+.pagination li.disabled i {
+  color: #ccc;
+}
+.pagination li i {
+  font-size: 16px;
+  padding-top: 6px
+}
+.hint-text {
+  float: left;
+  margin-top: 10px;
+  font-size: 13px;
+}

@@ -1,8 +1,8 @@
-<mat-toolbar color="primary" class="">
+<mat-toolbar color="primary" class="fixed-toolbar">
     <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
     </button>
-    <span routerLink="/dashboard">Taekwondo Club Management</span>
+    <span routerLink="/dashboard">TCM</span>
     <span class="spacer"></span>
 
 
@@ -13,7 +13,7 @@
 </mat-toolbar>
 
 <mat-sidenav-container class="example-container">
-    <mat-sidenav #sidenav mode="side" opened="false" class="example-sidenav">
+    <mat-sidenav #sidenav mode="over" opened="false" class="example-sidenav">
         <!-- Profile Section -->
         <div class="profile-container">
             <div class="profile-img-container">

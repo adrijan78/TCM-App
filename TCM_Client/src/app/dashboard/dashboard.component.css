@@ -2,6 +2,14 @@
     height: 100vh;
   }
   
+  .fixed-toolbar {
+    position: fixed; /* Makes the toolbar stay in place relative to the viewport */
+    top: 0;          /* Positions it at the very top */
+    left: 0;         /* Ensures it starts from the left edge */
+    width: 100%;     /* Makes it span the full width of the viewport */
+    z-index: 1000;   /* Ensures it stays on top of other content (adjust as needed) */
+    /* You can also add some padding-top if your mat-toolbar has a specific height */
+  }
 
   
   .content {
@@ -12,6 +20,7 @@
   .example-sidenav {
     width: 20vw;
     background-color: #ffffff;
+    padding-top:64px!important
   }
 
   @media (max-width: 768px) {
@@ -119,6 +128,7 @@
     background-color: #ffffff;
     border: 10px;
     padding: 1rem;
+    padding-top: 64px!important;
   }
   
   mat-sidenav-content{
