@@ -1,1 +1,28 @@
-<p>training-list works!</p>
+<div class="full-screen-calendar-wrapper">
+    <mat-toolbar color="primary">
+        <span>Taekwondo Training Calendar</span>
+        <span class="toolbar-spacer"></span>
+        <button mat-raised-button color="accent" (click)="openAddTrainingDialog(selectedDate)">
+            <mat-icon>add</mat-icon> Add Training
+        </button>
+    </mat-toolbar>
+
+    <div class="calendar-and-details-container">
+        <mat-calendar [(selected)]="selectedDate" (selectedChange)="onDateSelected($event)" [dateClass]="dateClass"
+            class="full-size-calendar"></mat-calendar>
+
+        <div class="selected-date-details">
+            <h3>Details for {{ selectedDate | date:'fullDate' }}</h3>
+            <div *ngIf="getTrainingsForSelectedDate().length === 0">
+                <p>No trainings scheduled for this day.</p>
+                <button mat-button color="primary" (click)="openAddTrainingDialog(selectedDate)">
+                    <mat-icon>add_circle_outline</mat-icon> Add Training
+                </button>
+            </div>
+            <div *ngFor="let training of getTrainingsForSelectedDate()" class="training-event-item">
+                <h4>{{ training.title }}</h4>
+                <p *ngIf="training.notes">{{ training.notes }}</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,135 @@
+/* Container for the entire full-screen component */
+.full-screen-calendar-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Take full viewport height */
+  width: 100vw;  /* Take full viewport width */
+  overflow: hidden; /* Prevent body scrollbars */
+  position: fixed; /* Ensures it covers everything */
+  top: 0;
+  left: 0;
+  z-index: 1; /* Keep it above other base app content */
+  background-color: var(--mdc-theme-background, #f5f5f5); /* Use Material theme background or a default */
+}
+
+/* Toolbar styling */
+.mat-toolbar {
+  flex-shrink: 0;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+              0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+              0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  z-index: 2; /* Above content */
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+/* Container for calendar and details side-by-side (on larger screens) */
+.calendar-and-details-container {
+  flex-grow: 1;
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Default to column for small screens */
+  padding: 16px;
+  overflow-y: auto; /* Allow scrolling if content overflows vertically */
+  align-items: center; /* Center items in column layout */
+}
+
+/* Make the mat-calendar fill available space and center it */
+.full-size-calendar {
+  width: 100%; /* Take full width of its container */
+  max-width: 800px; /* Max width for large displays */
+  height: auto; /* Allow height to adjust */
+  margin-bottom: 20px; /* Space between calendar and details on small screens */
+}
+
+/* Ensure calendar content itself uses full width */
+.full-size-calendar .mat-calendar-content {
+  padding: 0; /* Remove default padding inside calendar */
+  width: 100%;
+}
+
+/* Styling for the details section below the calendar */
+.selected-date-details {
+  width: 100%;
+  max-width: 800px; /* Match calendar max-width */
+  padding: 16px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-top: 0; /* No margin on top if it follows calendar directly */
+}
+
+.selected-date-details h3 {
+  color: #3f51b5;
+  margin-top: 0;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.training-event-item {
+  border-bottom: 1px dashed #e0e0e0;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.training-event-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.training-event-item h4 {
+  margin-top: 0;
+  margin-bottom: 5px;
+  color: #424242;
+}
+
+.training-event-item p {
+  margin-bottom: 0;
+  color: #616161;
+  font-size: 0.9em;
+}
+
+/* --- Responsive Layout for Larger Screens --- */
+@media (min-width: 960px) { /* Adjust breakpoint as needed */
+  .calendar-and-details-container {
+    flex-direction: row; /* Arrange items in a row */
+    align-items: flex-start; /* Align items to the top */
+    justify-content: center; /* Center the row content */
+    padding: 32px; /* More padding for larger screens */
+  }
+
+  .full-size-calendar {
+    flex-basis: 60%; /* Calendar takes 60% of available space */
+    max-width: none; /* Let flex-basis control width */
+    margin-right: 32px; /* Space between calendar and details */
+    margin-bottom: 0; /* No bottom margin in row layout */
+  }
+
+  .selected-date-details {
+    flex-basis: 40%; /* Details take 40% */
+    max-width: none; /* Let flex-basis control width */
+  }
+}
+
+/* --- Custom Calendar Styling for highlighted days --- */
+/* This needs to be global or use ViewEncapsulation.None on the component */
+/* Add this to training-list.component.css OR your global styles.css */
+.mat-calendar-body-cell.has-training {
+  background-color: #c8e6c9 !important; /* Light green background */
+  border-radius: 50% !important; /* Make it circular */
+  font-weight: bold;
+}
+
+/* Style for the current day when it has training */
+.mat-calendar-body-cell.mat-calendar-body-today.has-training {
+  background-color: #a5d6a7 !important; /* Darker green */
+  color: #3f51b5; /* Primary text color for today */
+}
+
+/* Style for selected day when it has training */
+.mat-calendar-body-cell.mat-calendar-body-selected.has-training {
+  background-color: #90caf9 !important; /* Material Blue (lighter) */
+  color: #212121; /* Darker text for contrast */
+}

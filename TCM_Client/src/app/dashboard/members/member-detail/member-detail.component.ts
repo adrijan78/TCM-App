@@ -51,6 +51,11 @@ export class MemberDetailComponent implements OnInit {
     { name: 'Attended', value: 71.4 },
   ];
 
+  pieChartDataForPayment: any[] = [
+    { name: 'Payed', value: 82 }, // Values based on image percentages
+    { name: 'Not payed', value: 18 },
+  ];
+
   // --- ngx-charts Common Options ---
   // We'll rely on CSS for responsiveness, no 'view' property needed here.
   showXAxis = true;
@@ -77,6 +82,13 @@ export class MemberDetailComponent implements OnInit {
     domain: ['#61DAFB', '#00BCD4'], // Cyan and a slightly darker cyan/teal
   };
 
+  pieChartColorSchemeForPayment = {
+    name: 'cyanScheme',
+    selectable: true,
+    group: ScaleType.Ordinal,
+    domain: ['#61DAFB', '#00BCD4'], // Cyan and a slightly darker cyan/teal
+  };
+
   // Common ngx-charts options that can be shared across charts
   commonChartOptions = {
     legendPosition: LegendPosition.Below, // Image shows legend above the chart
@@ -89,11 +101,21 @@ export class MemberDetailComponent implements OnInit {
   pieChartOptions = {
     labels: true, // Show labels (e.g., 'Skipped', 'Attended')
     doughnut: true, // Make it a doughnut chart
-    arcWidth: 0.35, // Adjust width of doughnut ring for better look
+    arcWidth: 0.55, // Adjust width of doughnut ring for better look
     labelFormatting: (value: any) => {
       return `${value.value}%`; // Format percentage TooltipLabelStyle
     },
   };
+
+  pieChartOptionsForPayment = {
+    labels: true, // Show labels (e.g., 'Skipped', 'Attended')
+    doughnut: true, // Make it a doughnut chart
+    arcWidth: 0.65, // Adjust width of doughnut ring for better look
+    labelFormatting: (value: any) => {
+      return `${value.value}%`; // Format percentage TooltipLabelStyle
+    },
+  };
+
   barChart2Options = {
     xAxisLabel: 'Training Discipline',
     yAxisLabel: 'Sessions',
@@ -109,6 +131,12 @@ export class MemberDetailComponent implements OnInit {
 
   // --- Table Data (empty as per image, but structured) ---
   dataSource = [
+    { col1: '', col2: '', col3: '' },
+    { col1: '', col2: '', col3: '' },
+    { col1: '', col2: '', col3: '' },
+    { col1: '', col2: '', col3: '' },
+  ];
+  dataSourceForPayment = [
     { col1: '', col2: '', col3: '' },
     { col1: '', col2: '', col3: '' },
     { col1: '', col2: '', col3: '' },

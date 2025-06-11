@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Add Training for {{ data.date | date:'fullDate' }}</h2>
+<mat-dialog-content class="mat-typography">
+    <mat-form-field appearance="outline" class="full-width-input">
+        <mat-label>Training Title</mat-label>
+        <input matInput [formControl]="trainingTitle" placeholder="e.g., Sparring Session">
+        <mat-error *ngIf="trainingTitle.hasError('required') && trainingTitle.touched">Title is required.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width-input">
+        <mat-label>Notes (Optional)</mat-label>
+        <textarea matInput [formControl]="trainingNotes" rows="3"></textarea>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="trainingTitle.invalid">Save</button>
+</mat-dialog-actions>
