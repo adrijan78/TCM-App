@@ -139,6 +139,8 @@ ngx-charts-pie-chart {
 
 .table-responsive.w-100 {
   margin: 0; /* Override default margin */
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .table-wrapper {

@@ -27,7 +27,7 @@ export class AcountService {
   setCurrentUser() {
     const memberString = localStorage.getItem('member');
     if (!memberString) {
-      this.router.navigate(['/login']);
+      //this.router.navigate(['/login']);
     } else {
       this.currentUser.set(JSON.parse(memberString));
     }
@@ -56,6 +56,6 @@ export class AcountService {
     localStorage.removeItem('member');
     this.currentUser.set(null);
     this.isLoggedIn.set(false);
-    this.router.navigate(['/login']);
+    //this.router.navigate(['/login']);
   }
 }

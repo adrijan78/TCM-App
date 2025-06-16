@@ -10,14 +10,14 @@
 
 // }
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import {
   Router,
   RouterLink,
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -40,11 +40,17 @@ import { AcountService } from '../_services/account/acount.service';
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent {
+  @ViewChild('sidenav') sidenav!: MatSidenav;
   public accountService = inject(AcountService);
   private router = inject(Router);
   title = 'TCM_Client';
 
   logout() {
     this.accountService.logout();
+  }
+
+
+    closeSidenav() {
+    this.sidenav.close();
   }
 }

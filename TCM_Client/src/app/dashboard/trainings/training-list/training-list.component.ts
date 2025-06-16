@@ -10,13 +10,12 @@ import {
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTrainingComponent } from '../add-training/add-training.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import {MatExpansionModule} from '@angular/material/expansion';
+import { Training } from '../../../_models/Training';
 
 // Define your Training interface for better type safety
-interface Training {
-  date: Date;
-  title: string;
-  notes?: string;
-}
+
 
 @Component({
   selector: 'app-training-list',
@@ -27,6 +26,8 @@ interface Training {
     MatIconModule,
     MatButtonModule,
     MatDatepickerModule,
+    MatTabsModule,
+    MatExpansionModule
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './training-list.component.html',
@@ -36,6 +37,7 @@ interface Training {
 export class TrainingListComponent implements OnInit {
   trainings: Training[] = [];
   selectedDate: Date | null = null;
+  
 
   constructor(private dialog: MatDialog) {}
 
@@ -46,26 +48,31 @@ export class TrainingListComponent implements OnInit {
         date: new Date('2025-06-15'),
         title: 'Kicks & Punches Basics',
         notes: 'Focus on roundhouse kicks',
+        status:'Pending'
       },
       {
         date: new Date('2025-06-18'),
         title: 'Sparring Session',
         notes: 'Light contact only',
+        status:'Active'
       },
       {
         date: new Date('2025-07-01'),
         title: 'Board Breaking Practice',
         notes: 'Focus on axe kick',
+        status:'Active'
       },
       {
         date: new Date('2025-07-01'),
         title: 'Conditioning',
         notes: '30 mins cardio',
+        status:'Active'
       },
       {
         date: new Date('2025-06-10'),
         title: 'Belt Test Prep',
         notes: 'Review patterns',
+        status:'Active'
       },
     ];
     // Set a default selected date, e.g., today
