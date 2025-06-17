@@ -35,16 +35,16 @@ VALUES
 
 INSERT INTO Photos (Url, PublicId, MemberId)
 VALUES 
-('https://example.com/photos/m1.jpg', 'photo_m1', 1),
-('https://example.com/photos/m2.jpg', 'photo_m2', 2),
-('https://example.com/photos/m3.jpg', 'photo_m3', 3),
-('https://example.com/photos/m4.jpg', 'photo_m4', 4),
-('https://example.com/photos/m5.jpg', 'photo_m5', 5),
-('https://example.com/photos/m6.jpg', 'photo_m6', 6),
-('https://example.com/photos/m7.jpg', 'photo_m7', 7),
-('https://example.com/photos/m8.jpg', 'photo_m8', 8),
-('https://example.com/photos/m9.jpg', 'photo_m9', 9),
-('https://example.com/photos/m10.jpg', 'photo_m10', 10);
+('https://randomuser.me/api/portraits/men/75.jpg', 'photo_m1', 1),
+('https://randomuser.me/api/portraits/men/25.jpg', 'photo_m2', 2),
+('https://randomuser.me/api/portraits/women/65.jpg', 'photo_m3', 3),
+('https://randomuser.me/api/portraits/women/60.jpg', 'photo_m4', 4),
+('https://randomuser.me/api/portraits/men/15.jpg', 'photo_m5', 5),
+('https://randomuser.me/api/portraits/women/15.jpg', 'photo_m6', 6),
+('https://randomuser.me/api/portraits/men/22.jpg', 'photo_m7', 7),
+('https://randomuser.me/api/portraits/men/12.jpg', 'photo_m8', 8),
+('https://randomuser.me/api/portraits/women/35.jpg', 'photo_m9', 9),
+('https://randomuser.me/api/portraits/men/1.jpg', 'photo_m10', 10);
 
 
 INSERT INTO MemberBelts (MemberId, BeltId, DateReceived, Description) VALUES

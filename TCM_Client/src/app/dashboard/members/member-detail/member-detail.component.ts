@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, signal, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   NgxChartsModule,
@@ -7,6 +7,8 @@ import {
 } from '@swimlane/ngx-charts'; // Import ScaleType
 
 import { MatTabsModule } from '@angular/material/tabs'; // Import MatTabsModule
+import { MemberService } from '../../../_services/member/member.service';
+import { Member } from '../../../_models/Member';
 
 @Component({
   selector: 'app-member-detail',
@@ -17,12 +19,20 @@ import { MatTabsModule } from '@angular/material/tabs'; // Import MatTabsModule
   styleUrls: ['./member-detail.component.css'],
 })
 export class MemberDetailComponent implements OnInit {
+  
+  memberService =inject(MemberService);
+
+  @Input() id!:number;
+  member = signal<Member|null>(null);
+  
   // --- Profile Data (from image) ---
   userName: string = 'Име и презиме:'; // As per image
   userAge: string = 'Години:'; // As per image
   userEmail: string = 'Емаил:'; // As per image
   joinDate: string = 'Во клубот од:'; // As per image
   userBelt: string = 'Појас:'; // As per image
+
+
 
   lineChartData: any[] = [];
   lineChartColorScheme = {
@@ -244,7 +254,20 @@ export class MemberDetailComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    this.getMemberById();
     this.generateLineChartData();
+  }
+
+  getMemberById(){
+    this.memberService.getMember(this.id).subscribe({
+      next:(res)=>{
+        this.member.set(res);
+        console.log("MEmber: ",this.member())
+      },
+      error:(err)=>{
+        console.log("Error: ", err)
+      },
+    })
   }
 
   generateLineChartData(): void {
