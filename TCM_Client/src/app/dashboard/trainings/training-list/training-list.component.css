@@ -2,15 +2,13 @@
 .full-screen-calendar-wrapper {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Take full viewport height */
-  width: 100vw;  /* Take full viewport width */
-  overflow: hidden; /* Prevent body scrollbars */
-  position: fixed; /* Ensures it covers everything */
-  top: 0;
-  left: 0;
+  height: 100%; /* Take full viewport height */
+  width: 100%;  /* Take full viewport width */
+  overflow:auto;
+  position: relative; /* Ensures it covers everything */
+
   z-index: 1; /* Keep it above other base app content */
   background-color: var(--mdc-theme-background, #f5f5f5); /* Use Material theme background or a default */
-  margin-top: 65px!important;
 }
 
 /* Toolbar styling */
@@ -39,7 +37,7 @@
 /* Make the mat-calendar fill available space and center it */
 .full-size-calendar {
   width: 100%; /* Take full width of its container */
-  max-width: 600px; /* Max width for large displays */
+  max-width: 63vh; /* Max width for large displays */
   height: auto; /* Allow height to adjust */
   margin-bottom: 20px; /* Space between calendar and details on small screens */
   background-color: white;

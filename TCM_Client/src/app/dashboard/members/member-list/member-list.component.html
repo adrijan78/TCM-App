@@ -32,7 +32,7 @@
                     <tr *ngFor="let member of members; let i = index" routerLink="/members/{{member.id}}">
                         <td>{{ i + 1 }}</td>
                         <td>
-                            <a href="#">
+                            <a>
                                 <img [src]="member.profilePicture .url +''+ member.id+'.jpg'" class="avatar"
                                     alt="Avatar" />
                                 {{ member.firstName }} {{ member.lastName }}
