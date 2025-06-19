@@ -11,5 +11,7 @@ namespace TCM_App.Services.Interfaces
         Task<List<Member>> GetMembers(int id);
         Task UpdateMember(Member member);
 
+        Task<List<MemberTraining>> GetMemberAttendanceAndPerformance(int member);
+
     }
 }

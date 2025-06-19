@@ -1,3 +1,4 @@
+import { Belt } from './Belt';
 import { ProfilePicture } from './ProfilePicture';
 
 export interface Member {
@@ -14,6 +15,7 @@ export interface Member {
   isCoach: boolean;
   height: number;
   weight: number;
+  currentBelt: Belt;
 }
 
 export interface LoginMember {

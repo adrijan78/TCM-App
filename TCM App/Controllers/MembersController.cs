@@ -9,36 +9,36 @@ using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Controllers
 {
+    [Authorize]
     public class MembersController(
         IMemberService _memberService,
         ILogger<MembersController> logger,
         IMapper mapper) : BaseController
     {
-        
+
         [HttpGet]
         public async Task<IActionResult> GetMembers()
         {
-            // This is where you would normally get the members from the database
             try
             {
-               // Zemi go id na club od najaveniot korisnik koga kje koristis Identity 
+                // Zemi go id na club od najaveniot korisnik koga kje koristis Identity 
                 var members = await _memberService.GetMembers(1);
-                return Ok(mapper.Map<List<MemberDto>>(members));
+                return Ok(mapper.Map<List<MemberListDto>>(members));
             }
             catch (Exception e)
             {
                 logger.LogError(e, "Error getting members");
                 throw new Exception(e.ToString());
-            } 
+            }
         }
 
-        [Authorize]
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMember(int id)
         {
             try
             {
-               var member = await _memberService.GetMember(id);
+                var member = await _memberService.GetMember(id);
                 if (member == null)
                 {
                     return NotFound();
@@ -50,7 +50,22 @@ namespace TCM_App.Controllers
                 logger.LogError(e, "Error getting member with id {Id}", id);
                 throw new Exception(e.ToString());
             }
-            
+
+        }
+
+        [HttpGet("memberTraningData/{id}")]
+        public async Task<IActionResult> GetMemberAttendanceAndPerformance(int id)
+        {
+            try
+            {
+                var attendance = await _memberService.GetMemberAttendanceAndPerformance(id);
+                return Ok(attendance);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error getting attendance and performance for member with id {MemberId}", id);
+                throw new Exception(e.ToString());
+            }
         }
     }
 }

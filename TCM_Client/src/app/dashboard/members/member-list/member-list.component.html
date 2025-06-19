@@ -1,3 +1,40 @@
+<div class="row">
+    <div class="col-12">
+        <mat-accordion>
+            <mat-expansion-panel class="mt-2">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Филтри</mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Пребарај по име или емаил</mat-label>
+                            <input matInput placeholder="Внеси име или емаил..." [(ngModel)]="searchTerm"
+                                (ngModelChange)="applyFilters()" />
+                            <mat-icon matSuffix>search</mat-icon>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Појас</mat-label>
+                            <mat-select [(ngModel)]="selectedBelt" (selectionChange)="applyFilters()">
+                                <mat-option value="">Сите</mat-option>
+                                <mat-option *ngFor="let belt of uniqueBelts" [value]="belt">{{ belt }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3 d-flex align-items-center">
+                        <button mat-button color="warn" (click)="resetFilters()">Ресетирај филтри</button>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</div>
+
 <div class="d-flex justify-content-center">
     <div class="table-responsive w-100">
         <div class="table-wrapper">
@@ -13,6 +50,7 @@
                     </div>
                 </div>
             </div>
+
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -28,12 +66,11 @@
                     </tr>
                 </thead>
                 <tbody>
-
-                    <tr *ngFor="let member of members; let i = index" routerLink="/members/{{member.id}}">
+                    <tr *ngFor="let member of filteredMembers; let i = index" routerLink="/members/{{member.id}}">
                         <td>{{ i + 1 }}</td>
                         <td>
                             <a>
-                                <img [src]="member.profilePicture .url +''+ member.id+'.jpg'" class="avatar"
+                                <img [src]="member.profilePicture.url + '' + member.id + '.jpg'" class="avatar"
                                     alt="Avatar" />
                                 {{ member.firstName }} {{ member.lastName }}
                             </a>
@@ -47,17 +84,15 @@
                             }
                         </td>
                         <td>
-                            <span class="status" [ngClass]="{
-                        'text-success': member.isActive,
-                        'text-danger': !member.isActive
-                      }">
+                            <span class="status"
+                                [ngClass]="{ 'text-success': member.isActive, 'text-danger': !member.isActive }">
                                 &bull;
                             </span>
                             {{ member.isActive ? 'Active' : 'Inactive' }}
                         </td>
                         <td>
-                            <span *ngFor="let belt of member.belts" class="badge bg-primary me-1">
-                                {{ belt }}
+                            <span class="me-1">
+                                {{ member.currentBelt? member.currentBelt.name : 'N/A' }}
                             </span>
                         </td>
                         <td>
@@ -69,13 +104,12 @@
                             </a>
                         </td>
                     </tr>
-
                 </tbody>
             </table>
+
             <div class="clearfix">
                 <div class="hint-text">
-                    Showing <b>{{ 5}}</b> of
-                    <b>{{ members.length }}</b> entries
+                    Showing <b>{{ filteredMembers.length }}</b> of <b>{{ members.length }}</b> entries
                 </div>
                 <ul class="pagination">
                     <li class="page-item disabled"><a href="#">Previous</a></li>

@@ -13,6 +13,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { FormsModule } from '@angular/forms';
 import { DatePipe, NgClass, NgFor } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-member-list',
@@ -33,6 +35,8 @@ import { Router, RouterModule } from '@angular/router';
     NgClass,
     NgFor,
     RouterModule,
+    MatExpansionModule,
+    MatSelectModule,
   ],
   templateUrl: './member-list.component.html',
   styleUrl: './member-list.component.css',
@@ -41,6 +45,10 @@ export class MemberListComponent implements OnInit {
   private memberService = inject(MemberService);
   private router = inject(Router);
   members: Member[] = [];
+  searchTerm: string = '';
+  selectedBelt: string = '';
+  filteredMembers: Member[] = [];
+  uniqueBelts: string[] = [];
 
   ngOnInit(): void {
     this.getMembers();
@@ -50,6 +58,8 @@ export class MemberListComponent implements OnInit {
     this.memberService.getMembers().subscribe({
       next: (res) => {
         this.members = res;
+        this.extractBelts();
+        this.applyFilters();
       },
       error: (err) => {
         console.log(err);
@@ -58,6 +68,33 @@ export class MemberListComponent implements OnInit {
         console.log('Request completed');
       },
     });
+  }
+  extractBelts() {
+    const belts = this.members
+      .map((m) => m.currentBelt?.name)
+      .filter((belt): belt is string => !!belt);
+    this.uniqueBelts = Array.from(new Set(belts));
+  }
+
+  applyFilters() {
+    this.filteredMembers = this.members.filter((m) => {
+      const matchesSearch =
+        !this.searchTerm ||
+        m.firstName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        m.lastName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        m.email.toLowerCase().includes(this.searchTerm.toLowerCase());
+
+      const matchesBelt =
+        !this.selectedBelt || m.currentBelt?.name === this.selectedBelt;
+
+      return matchesSearch && matchesBelt;
+    });
+  }
+
+  resetFilters() {
+    this.searchTerm = '';
+    this.selectedBelt = '';
+    this.applyFilters();
   }
 
   // openEditDialog(member: Member): void {

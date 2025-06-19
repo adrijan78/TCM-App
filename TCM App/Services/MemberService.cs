@@ -27,7 +27,7 @@ namespace TCM_App.Services
 
         public async Task<Member> GetMember(int id)
         {
-            var member = await _memberRepository.GetByIdAsync(id);
+            var member = await _memberRepository.GetMemberById(id);
             if (member == null)
             {
                 throw new Exception("Member not found!");
@@ -35,7 +35,17 @@ namespace TCM_App.Services
             return member;
         }
 
-        public async  Task<List<Member>> GetMembers(int id)
+        public async Task<List<MemberTraining>> GetMemberAttendanceAndPerformance(int memberId)
+        {
+            if (!CheckIfMemberExists(memberId))
+            {
+                throw new Exception("Member not found!");
+            }
+            return await _memberRepository.GetMemberAttendanceAndPerformance(memberId);
+
+        }
+
+        public async Task<List<Member>> GetMembers(int id)
         {
             return await _memberRepository.GetMembersByClubId(id);
         }
@@ -43,6 +53,11 @@ namespace TCM_App.Services
         public Task UpdateMember(Member member)
         {
             throw new NotImplementedException();
+        }
+
+        private bool CheckIfMemberExists(int memberId)
+        {
+            return _memberRepository.CheckIfMemberExists(memberId);
         }
     }
 }

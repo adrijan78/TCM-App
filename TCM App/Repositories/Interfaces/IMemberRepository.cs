@@ -6,5 +6,8 @@ namespace TCM_App.Repositories.Interfaces
     {
         bool CheckIfMemberExists(int memberId);
         Task <List<Member>> GetMembersByClubId(int clubId);
+        Task<Member?> GetMemberById(int memberId);
+
+        Task<List<MemberTraining>> GetMemberAttendanceAndPerformance(int member);
     }
 }

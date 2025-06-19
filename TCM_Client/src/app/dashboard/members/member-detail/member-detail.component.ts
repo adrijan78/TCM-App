@@ -1,4 +1,11 @@
-import { Component, inject, Input, OnInit, signal, Signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  OnInit,
+  signal,
+  Signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   NgxChartsModule,
@@ -9,30 +16,37 @@ import {
 import { MatTabsModule } from '@angular/material/tabs'; // Import MatTabsModule
 import { MemberService } from '../../../_services/member/member.service';
 import { Member } from '../../../_models/Member';
+import { ToastrService } from 'ngx-toastr';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { MemberTrainingData } from '../../../_models/MemberTrainingData';
 
 @Component({
   selector: 'app-member-detail',
   standalone: true,
-  imports: [CommonModule, NgxChartsModule, MatTabsModule],
+  imports: [
+    CommonModule,
+    NgxChartsModule,
+    MatTabsModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+  ],
 
   templateUrl: './member-detail.component.html',
   styleUrls: ['./member-detail.component.css'],
 })
 export class MemberDetailComponent implements OnInit {
-  
-  memberService =inject(MemberService);
+  memberService = inject(MemberService);
+  toast = inject(ToastrService);
 
-  @Input() id!:number;
-  member = signal<Member|null>(null);
-  
+  @Input() id!: number;
+  member = signal<Member | null>(null);
+
   // --- Profile Data (from image) ---
-  userName: string = 'Име и презиме:'; // As per image
   userAge: string = 'Години:'; // As per image
   userEmail: string = 'Емаил:'; // As per image
   joinDate: string = 'Во клубот од:'; // As per image
   userBelt: string = 'Појас:'; // As per image
-
-
 
   lineChartData: any[] = [];
   lineChartColorScheme = {
@@ -152,122 +166,48 @@ export class MemberDetailComponent implements OnInit {
     { col1: '', col2: '', col3: '' },
     { col1: '', col2: '', col3: '' },
   ];
-  dataSourceForLineChart: any[] = [
-    {
-      col1: '2024-01-15',
-      col2: 'Sparring',
-      col3: '1hr',
-      performanceStatus: 'good',
-      performanceScore: 85,
-      notes: 'Good session',
-    },
-    {
-      col1: '2024-02-01',
-      col2: 'Drills',
-      col3: '45min',
-      performanceStatus: 'average',
-      performanceScore: 70,
-      notes: 'Needs improvement',
-    },
-    {
-      col1: '2024-03-10',
-      col2: 'Conditioning',
-      col3: '1hr 15min',
-      performanceStatus: 'good',
-      performanceScore: 92,
-      notes: 'Strong performance',
-    },
-    {
-      col1: '2024-04-05',
-      col2: 'Sparring',
-      col3: '1hr 30min',
-      performanceStatus: 'poor',
-      performanceScore: 55,
-      notes: 'Tired, low energy',
-    },
-    {
-      col1: '2024-05-20',
-      col2: 'Technique',
-      col3: '1hr',
-      performanceStatus: 'average',
-      performanceScore: 68,
-      notes: 'Focus on fundamentals',
-    },
-    {
-      col1: '2024-06-01',
-      col2: 'Sparring',
-      col3: '1hr',
-      performanceStatus: 'good',
-      performanceScore: 78,
-      notes: 'Improved a bit',
-    },
-    {
-      col1: '2024-07-10',
-      col2: 'Drills',
-      col3: '45min',
-      performanceStatus: 'good',
-      performanceScore: 88,
-      notes: 'Very focused',
-    },
-    {
-      col1: '2024-08-05',
-      col2: 'Conditioning',
-      col3: '1hr',
-      performanceStatus: 'average',
-      performanceScore: 65,
-      notes: 'Lower energy',
-    },
-    {
-      col1: '2024-09-15',
-      col2: 'Sparring',
-      col3: '1hr 20min',
-      performanceStatus: 'good',
-      performanceScore: 95,
-      notes: 'Excellent session',
-    },
-    {
-      col1: '2024-10-01',
-      col2: 'Technique',
-      col3: '1hr',
-      performanceStatus: 'average',
-      performanceScore: 72,
-      notes: 'Consistent',
-    },
-    {
-      col1: '2024-11-20',
-      col2: 'Sparring',
-      col3: '1hr 10min',
-      performanceStatus: 'poor',
-      performanceScore: 40,
-      notes: 'Struggled a lot',
-    },
-    {
-      col1: '2024-12-05',
-      col2: 'Drills',
-      col3: '50min',
-      performanceStatus: 'good',
-      performanceScore: 80,
-      notes: 'Strong finish to the year',
-    },
+  dataSourceForLineChart: MemberTrainingData[] = [
+    // {
+    //   col1: '2024-01-15',
+    //   performanceStatus: 'good',
+    //   performanceScore: 85,
+    //   notes: 'Good session',
+    // },
+    // {
+    //   col1: '2024-02-01',
+    //   performanceStatus: 'average',
+    //   performanceScore: 70,
+    //   notes: 'Needs improvement',
+    // },
   ];
 
   constructor() {}
 
   ngOnInit(): void {
     this.getMemberById();
-    this.generateLineChartData();
+
+    this.getMemberTrainingData();
   }
 
-  getMemberById(){
+  getMemberById() {
     this.memberService.getMember(this.id).subscribe({
-      next:(res)=>{
+      next: (res) => {
         this.member.set(res);
-        console.log("MEmber: ",this.member())
       },
-      error:(err)=>{
-        console.log("Error: ", err)
+      error: (err) => {
+        console.log('Error: ', err);
+        this.toast.error(err.error.Message);
       },
-    })
+    });
+  }
+  getMemberTrainingData() {
+    this.memberService.getMemberTrainingData(this.id).subscribe({
+      next: (res) => {
+        this.dataSourceForLineChart = res;
+        this.generateLineChartData();
+      },
+      error: (err) => console.log(err),
+    });
   }
 
   generateLineChartData(): void {
@@ -275,12 +215,12 @@ export class MemberDetailComponent implements OnInit {
     // For a single member's performance, we'll have one series.
     this.lineChartData = [
       {
-        name: 'Performance Score', // Name of the series (appears in legend)
+        name: 'Оцена за перформанси', // Name of the series (appears in legend)
         series: this.dataSourceForLineChart
           .map((row) => ({
             // 'name' for line chart should be a Date object for timeline functionality
-            name: new Date(row.col1), // Convert date string (col1) to Date object
-            value: row.performanceScore, // Your performance score from the data source
+            name: new Date(row.date), // Convert date string (col1) to Date object
+            value: row.performace, // Your performance score from the data source
           }))
           .sort((a, b) => a.name.getTime() - b.name.getTime()), // Sort by date for correct line display
       },

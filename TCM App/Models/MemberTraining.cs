@@ -4,6 +4,20 @@ namespace TCM_App.Models
 {
     public class MemberTraining
     {
+        public MemberTraining()
+        {
+            // Default constructor for EF Core
+        }
+        public MemberTraining( DateTime date, string description, int trainingId, int memberId, int performace)
+        {
+
+            Date = date;
+            Description = description;
+            TrainingId = trainingId;
+            MemberId = memberId;
+            Performace = performace;
+        }
+
         public int Id { get; set; }
         public required DateTime Date { get; set; }
         public required string Description { get; set; }
