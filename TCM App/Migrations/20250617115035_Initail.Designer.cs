@@ -12,8 +12,8 @@ using TCM_App.Data;
 namespace TCM_App.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250531140233_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250617115035_Initail")]
+    partial class Initail
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

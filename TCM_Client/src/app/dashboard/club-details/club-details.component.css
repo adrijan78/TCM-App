@@ -1,0 +1,29 @@
+.card-title {
+  font-size: 1.8rem; /* Larger title */
+  font-weight: 600;
+  color: #333;
+}
+
+.chart-item {
+  background-color: transparent; /* No background on chart-item */
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  height: 350px; /* Fixed height for charts */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+.table-title {
+  padding-bottom: 15px;
+  background: #299be4; /* Blue header background */
+  color: #fff;
+  padding: 16px 30px;
+   /* Adjust margin to extend background to edges */
+  border-radius: 3px 3px 0 0;
+}
+.table-title h2 {
+  margin: 5px 0 0;
+  font-size: 24px;
+}

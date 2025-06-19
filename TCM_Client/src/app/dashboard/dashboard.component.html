@@ -27,6 +27,11 @@
 
         <!-- Navigation List -->
         <mat-nav-list>
+  <a [routerLink]="['club-details']" routerLinkActive="active-link" mat-list-item class="d-flex mb-1 text-center"
+     (click)="closeSidenav()">
+    <mat-icon class="nav-icon">house</mat-icon>
+    <span class="nav-text">Дома</span>
+  </a>
   <a [routerLink]="['members']" routerLinkActive="active-link" mat-list-item class="d-flex mb-1 text-center"
      (click)="closeSidenav()">
     <mat-icon class="nav-icon">group</mat-icon>
@@ -60,7 +65,8 @@
                 <li>{{member.id}} - {{member.firstName}} {{member.lastName}}</li>
                 }
             </ul> -->
-            <router-outlet></router-outlet>
+            <router-outlet>
+            </router-outlet>
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>
