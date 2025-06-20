@@ -24,7 +24,7 @@ namespace TCM_App.MappingProfiles
                 .ForMember(d =>d.EarnedOn,o=> o.MapFrom(s=>s.DateReceived));
             CreateMap<MemberTraining, MemberTrainingDto>();
             CreateMap<Training, TrainingDto>()
-                .ForMember(d=>d.TrainingType, o=> o.MapFrom(s=>s.TrainingType.ToString()));
+                .ForMember(d=>d.TrainingType, o=> o.MapFrom(s=>s.TrainingType.GetDescription()));
                 
         }
 

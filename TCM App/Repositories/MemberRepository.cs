@@ -17,15 +17,6 @@ namespace TCM_App.Repositories
             var membersAp = await _context.Attendaces
                 .Where(a => a.MemberId == memberId)
                 .Include(a => a.Training)
-                //.Select(a => new MemberTraining() 
-                //{ 
-                //  Date = a.Date,
-                //  Description=a.Description,
-                //  MemberId = a.MemberId,
-                //  TrainingId = a.TrainingId,
-                  
-                //  Performace=a.Performace
-                //})
                 .ToListAsync();
 
             return membersAp;

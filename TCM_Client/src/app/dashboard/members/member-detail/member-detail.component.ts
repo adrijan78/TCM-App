@@ -20,6 +20,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MemberTrainingData } from '../../../_models/MemberTrainingData';
+import { TrainingService } from '../../../_services/training/training.service';
 
 @Component({
   selector: 'app-member-detail',
@@ -37,10 +38,14 @@ import { MemberTrainingData } from '../../../_models/MemberTrainingData';
 })
 export class MemberDetailComponent implements OnInit {
   memberService = inject(MemberService);
+  trainingService = inject(TrainingService)
   toast = inject(ToastrService);
+
 
   @Input() id!: number;
   member = signal<Member | null>(null);
+  trainingsByMonth = signal<[]|null>(null);
+  memberTrainingAttendanceByMonth=signal<Record<number, number>|null>(null);
 
   // --- Profile Data (from image) ---
   userAge: string = 'Години:'; // As per image
@@ -63,21 +68,21 @@ export class MemberDetailComponent implements OnInit {
   // --- ngx-charts Data ---
   // Bar Chart Data (matching "Item 1, 2, 3, 4" from image)
   barChartData: any[] = [
-    { name: 'January', value: 5 },
-    { name: 'February', value: 12 },
-    { name: 'March', value: 8 },
-    { name: 'April', value: 12 },
+    // { name: 'January', value: 5 },
+    // { name: 'February', value: 12 },
+    // { name: 'March', value: 8 },
+    // { name: 'April', value: 12 },
   ];
 
   // Pie Chart Data (matching "Skipped" and "Attended" from image)
   pieChartData: any[] = [
-    { name: 'Skipped', value: 28.6 }, // Values based on image percentages
-    { name: 'Attended', value: 71.4 },
+    { name: 'Отсутство', value: 28.6 }, // Values based on image percentages
+    { name: 'Присуство', value: 71.4 },
   ];
 
   pieChartDataForPayment: any[] = [
-    { name: 'Payed', value: 82 }, // Values based on image percentages
-    { name: 'Not payed', value: 18 },
+    { name: 'Платено', value: 82 }, // Values based on image percentages
+    { name: 'Не платено', value: 18 },
   ];
 
   // --- ngx-charts Common Options ---
@@ -182,7 +187,7 @@ export class MemberDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMemberById();
-
+    this.getNumberOfTrainingsForEveryMonth();
     this.getMemberTrainingData();
   }
 
@@ -193,7 +198,7 @@ export class MemberDetailComponent implements OnInit {
       },
       error: (err) => {
         console.log('Error: ', err);
-        this.toast.error(err.error.Message);
+        this.toast.error(err.error.Message?err.error.Message:"Се случи грешка");
       },
     });
   }
@@ -203,10 +208,35 @@ export class MemberDetailComponent implements OnInit {
         this.dataSourceForLineChart = res;
         this.dataSource=res;
         this.generateLineChartData();
+        this.countTrainingsByMonth();
       },
       error: (err) => console.log(err),
     });
   }
+  getNumberOfTrainingsForEveryMonth(){
+    this.trainingService.getNumberOfTrainingsForEveryMonth().subscribe({
+      next:(res:any)=>{
+        this.trainingsByMonth.set(res);
+
+      },
+      error:err=>{}
+    })
+  }
+
+   countTrainingsByMonth() {
+    var tmp = [...this.dataSourceForLineChart]
+  this.memberTrainingAttendanceByMonth.set(tmp.reduce((counts, training) => {
+    const month = new Date(training.date).getMonth() + 1;
+    counts[month] = (counts[month] || 0) + 1;
+    return counts;
+  }, {} as Record<number, number>));
+
+  const tmp2=this.memberTrainingAttendanceByMonth();
+  for(let item in tmp2){
+    //console.log("Test",item, tmp2[item]);
+  }
+
+}
 
   generateLineChartData(): void {
     // Ngx-charts line chart expects data as an array of series.

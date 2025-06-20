@@ -35,6 +35,7 @@ namespace TCM_App
             #region Our Services
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IMemberService, MemberService>();
+            builder.Services.AddScoped<ITrainingService, TrainingService>();
             #endregion
 
             #region Repositories

@@ -59,7 +59,7 @@ namespace TCM_App.Controllers
             try
             {
                     var attendance = await _memberService.GetMemberAttendanceAndPerformance(id);
-                return Ok(mapper.Map<List<MemberTrainingDto>>(attendance));
+                    return Ok(mapper.Map<List<MemberTrainingDto>>(attendance));
             }
             catch (Exception e)
             {

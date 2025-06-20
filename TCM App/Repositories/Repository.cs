@@ -39,6 +39,11 @@ namespace TCM_App.Repositories
             return await _context.Set<T>().FindAsync(id);
         }
 
+        public  IQueryable<T> Query()
+        {
+            return  _context.Set<T>().AsQueryable();
+        }
+
         public async Task SaveChangesAsync()
         {
              await _context.SaveChangesAsync();
