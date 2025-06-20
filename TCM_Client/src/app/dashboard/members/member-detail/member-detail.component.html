@@ -156,21 +156,23 @@
                                                     <thead>
                                                         <tr>
                                                             <th>#</th>
-                                                            <th>Date</th>
-                                                            <th>Type</th>
-                                                            <th>Duration</th>
-                                                            <th>Performance</th>
-                                                            <th>Notes</th>
-                                                            <th>Actions</th>
+                                                            <th>Датум</th>
+                                                            <th>Тип</th>
+                                                            <th>Перформанс</th>
+                                                            <th>Опис</th>
+                                                            <th>Акции</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr *ngFor="let row of dataSource; let i = index">
                                                             <td>{{ i + 1 }}</td>
-                                                            <td>{{ row.col1 }}</td>
-                                                            <td>{{ row.col2 }}</td>
-                                                            <td>{{ row.col3 }}</td>
-                                                            <td>
+                                                            <td>{{row.training.date | date}}</td>
+                                                            <td>{{row.training.trainingType}}</td>
+                                                            <td>{{row.performace}}</td>
+                                                            <td>{{row.description}}</td>
+
+                                                           
+                                                            <!-- <td>
                                                                 <span class="status" [ngClass]="{
                                                                     'text-success': 'good' === 'good',
                                                                     
@@ -180,7 +182,8 @@
                                                                 {{ 5 }}
                                                             </td>
                                                             <td>{{ 'Note 1' }}</td>
-                                                            <td>
+                                                             -->
+                                                        <td>
                                                                 <a href="#" class="settings" title="Edit"
                                                                     data-toggle="tooltip">
                                                                     <i class="material-icons">&#xE8B8;</i>
@@ -273,9 +276,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr *ngFor="let row of dataSource; let i = index">
-                                                        <td>{{ row.col1 }}</td>
-                                                        <td>{{ row.col2 }}</td>
-                                                        <td>{{ row.col3 }}</td>
+                                                        
                                                         <td>
                                                             <span class="status" [ngClass]="{
                                                                     'text-success': 'good' === 'good',

@@ -154,11 +154,8 @@ export class MemberDetailComponent implements OnInit {
   };
 
   // --- Table Data (empty as per image, but structured) ---
-  dataSource = [
-    { col1: '', col2: '', col3: '' },
-    { col1: '', col2: '', col3: '' },
-    { col1: '', col2: '', col3: '' },
-    { col1: '', col2: '', col3: '' },
+  dataSource : MemberTrainingData[] = [
+    // { col1: '', col2: '', col3: '' },
   ];
   dataSourceForPayment = [
     { col1: '', col2: '', col3: '' },
@@ -204,6 +201,7 @@ export class MemberDetailComponent implements OnInit {
     this.memberService.getMemberTrainingData(this.id).subscribe({
       next: (res) => {
         this.dataSourceForLineChart = res;
+        this.dataSource=res;
         this.generateLineChartData();
       },
       error: (err) => console.log(err),

@@ -44,36 +44,7 @@ export class TrainingListComponent implements OnInit {
   ngOnInit(): void {
     // Load dummy training data. In a real app, you'd fetch this from a service.
     this.trainings = [
-      {
-        date: new Date('2025-06-15'),
-        title: 'Kicks & Punches Basics',
-        notes: 'Focus on roundhouse kicks',
-        status:'Pending'
-      },
-      {
-        date: new Date('2025-06-18'),
-        title: 'Sparring Session',
-        notes: 'Light contact only',
-        status:'Active'
-      },
-      {
-        date: new Date('2025-07-01'),
-        title: 'Board Breaking Practice',
-        notes: 'Focus on axe kick',
-        status:'Active'
-      },
-      {
-        date: new Date('2025-07-01'),
-        title: 'Conditioning',
-        notes: '30 mins cardio',
-        status:'Active'
-      },
-      {
-        date: new Date('2025-06-10'),
-        title: 'Belt Test Prep',
-        notes: 'Review patterns',
-        status:'Active'
-      },
+      
     ];
     // Set a default selected date, e.g., today
     this.selectedDate = new Date();

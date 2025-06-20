@@ -1,6 +1,7 @@
 ﻿using TCM_App.Helpers;
 using TCM_App.Models;
 using TCM_App.Models.DTOs;
+using TCM_App.Models.Enums;
 
 namespace TCM_App.MappingProfiles
 {
@@ -21,6 +22,10 @@ namespace TCM_App.MappingProfiles
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Belt.BeltName))
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.BeltId))
                 .ForMember(d =>d.EarnedOn,o=> o.MapFrom(s=>s.DateReceived));
+            CreateMap<MemberTraining, MemberTrainingDto>();
+            CreateMap<Training, TrainingDto>()
+                .ForMember(d=>d.TrainingType, o=> o.MapFrom(s=>s.TrainingType.ToString()));
+                
         }
 
     }

@@ -3,4 +3,5 @@ export interface Training {
   title: string;
   status:string;
   notes?: string;
+  trainingType:string;
 }
