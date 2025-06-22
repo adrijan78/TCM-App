@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { Note } from '../../../_models/Note';
 import { MatDialog } from '@angular/material/dialog';
+import { NoteComponent } from '../note/note.component';
 
 @Component({
   selector: 'app-note-list',
-  imports: [],
+  imports: [NoteComponent],
   templateUrl: './note-list.component.html',
-  styleUrl: './note-list.component.css'
+  styleUrl: './note-list.component.css',
 })
 export class NoteListComponent {
-   
   notes: Note[] = [
     {
       title: 'Kicks Practice',
@@ -17,8 +17,8 @@ export class NoteListComponent {
       category: 'Technique',
       createdAt: new Date('2023-05-11'),
       fromMemberId: 1,
-      toMemberId: 2
-    }
+      toMemberId: 2,
+    },
     // Add more notes here or load from API
   ];
 
@@ -29,7 +29,6 @@ export class NoteListComponent {
     //   width: '400px',
     //   data: {}
     // });
-
     // dialogRef.afterClosed().subscribe(result => {
     //   if (result) {
     //     this.notes.push({
@@ -39,5 +38,4 @@ export class NoteListComponent {
     //   }
     // });
   }
-
 }

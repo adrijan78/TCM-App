@@ -4,11 +4,13 @@
   color: #333;
 }
 
+
+
 .chart-item {
   background-color: transparent; /* No background on chart-item */
   padding: 0.5rem;
   border-radius: 0.5rem;
-  height: 350px; /* Fixed height for charts */
+  height: 300px!important; /* Fixed height for charts */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,4 +28,8 @@
 .table-title h2 {
   margin: 5px 0 0;
   font-size: 24px;
+}
+
+.dashboard-top-cards{
+  max-width: 315px!important;
 }

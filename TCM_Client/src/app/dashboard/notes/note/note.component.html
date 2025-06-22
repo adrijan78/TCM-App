@@ -1,0 +1,19 @@
+<div class="container mt-4">
+    <div class="mb-3 input-group">
+        <input type="text" class="form-control" placeholder="Add a new note..." [(ngModel)]="newNote">
+        <button mat-flat-button color="primary" (click)="addNote()">Add</button>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6 col-lg-4" *ngFor="let note of notes; let i = index">
+            <mat-card class="note-card mat-elevation-z2">
+                <mat-card-content>{{ note }}</mat-card-content>
+                <div class="text-end mt-2">
+                    <button mat-icon-button color="warn" (click)="deleteNote(i)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+</div>
