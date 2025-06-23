@@ -1,71 +1,75 @@
-<div class="row">
-    <div class="col-sm-12 col-md-4 col-lg-4">
-        <mat-card class="example-card app-info-card" appearance="outlined">
-        <div class="d-flex">
-            <div class="w-50 text-center p-1">
-                <img src="assets/images/members.png"  style="max-width: 200px;" alt="Club Members" />
-            </div>
-            
-            <div class="w-50 text-center p-3">
-                <h2>Членови</h2>
-                <h4 class="pt-3">10</h4>
+<div class="row mx-1">
+    <div class="table-title app-info-title mb-3">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <h2 class="m-0">Информации</h2>
             </div>
         </div>
+    </div>
+    <div class="col-sm-12 col-md-4 col-lg-4 justify-content-center d-flex">
+        <mat-card class="example-card dashboard-top-cards app-info-card" appearance="outlined">
+            <div class="d-flex">
+                <div class="w-50 text-center p-1">
+                    <img src="assets/images/members.png" style="max-width: 138px;" alt="Club Members" />
+                </div>
+
+                <div class="w-50 text-center p-3">
+                    <h4>Членови</h4>
+                    <h4 class="pt-3">10</h4>
+                </div>
+            </div>
         </mat-card>
     </div>
-    <div class="col-sm-12 col-md-4 col-lg-4">
-        <mat-card class="example-card app-info-card" appearance="outlined">
-        <div class="d-flex">
-            <div class="w-50 text-center p-1">
-                <img src="assets/images/trainings-number.png" style="max-width: 200px;" alt="Trainings" />
+    <div class="col-sm-12 col-md-4 col-lg-4  justify-content-center d-flex">
+        <mat-card class="example-card dashboard-top-cards app-info-card" appearance="outlined">
+            <div class="d-flex">
+                <div class="w-50 text-center p-1">
+                    <img src="assets/images/trainings-number.png" style="max-width: 138px;" alt="Trainings" />
+                </div>
+
+                <div class="w-50 text-center p-3">
+                    <h4>Тренинзи</h4>
+                    <h4 class="pt-3">5</h4>
+                </div>
             </div>
-            
-            <div class="w-50 text-center p-3">
-                <h2>Тренинзи</h2>
-                <h4 class="pt-3">5</h4>
-            </div>
-        </div>
         </mat-card>
     </div>
-    <div class="col-sm-12 col-md-4 col-lg-4">
-        <mat-card class="example-card app-info-card" appearance="outlined">
-        <div class="d-flex">
-            <div class="w-50 text-center p-1">
-                <img src="assets/images/attendance-percentage.png" style="max-width: 200px;" alt="Attendence Percentage" />
+    <div class="col-sm-12 col-md-4 col-lg-4 justify-content-center d-flex ">
+        <mat-card class="example-card dashboard-top-cards app-info-card" appearance="outlined">
+            <div class="d-flex">
+                <div class="w-50 text-center p-1">
+                    <img src="assets/images/attendance-percentage.png" style="max-width: 128px;"
+                        alt="Attendence Percentage" />
+                </div>
+
+                <div class="w-50 text-center p-3">
+                    <h4>Присутност</h4>
+                    <h4 class="pt-3">73%</h4>
+                </div>
             </div>
-            
-            <div class="w-50 text-center p-3">
-                <h2>Просечна присутност</h2>
-                <h4 class="pt-3">73%</h4>
-            </div>
-        </div>
         </mat-card>
     </div>
 </div>
 
-<div class="row mt-3">
-    <div class="col-lg-10 col-sm-12 table-title app-info-card">
-        
-                                        <div class="">
-                                            <div class="row">
-                                                <div class="col-sm-8 text-center ">
-                                                    <h2>Присутсво по месеци</h2>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="chart-item w-100">
+<div class="row mt-3 mx-1">
 
-                                            <ngx-charts-bar-vertical [scheme]="barChartColorScheme"
-                                                [results]="barChartData" [gradient]="gradient" [xAxis]="showXAxis"
-                                                [yAxis]="showYAxis" [legend]="showLegend"
-                                                [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
-                                                [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
-                                                [barPadding]="barChart1Options.barPadding"
-                                                [roundDomains]="barChart1Options.roundDomains"
-                                                [legendPosition]="commonChartOptions.legendPosition"
-                                                >
-                                            </ngx-charts-bar-vertical>
-                                        </div>
+    <div class="col-lg-8 col-sm-12  ">
+        <div class="table-title app-info-title">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h2 class="m-0">Присутсво по месеци</h2>
+                </div>
+            </div>
+        </div>
+        <div class="chart-item  w-100 my-3  app-info-card ">
+
+            <ngx-charts-bar-vertical [scheme]="barChartColorScheme" [results]="barChartData" [gradient]="gradient"
+                [xAxis]="showXAxis" [yAxis]="showYAxis" [showXAxisLabel]="showXAxisLabel"
+                [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+                [barPadding]="barChart1Options.barPadding" [roundDomains]="barChart1Options.roundDomains"
+                [legendPosition]="commonChartOptions.legendPosition">
+            </ngx-charts-bar-vertical>
+        </div>
 
     </div>
     <div class="col-2"></div>

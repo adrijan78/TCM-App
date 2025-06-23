@@ -33,3 +33,20 @@ body {
     border-radius: 0.75rem !important;
   }
 
+.chart-legend .legend-label {
+padding: 3px;
+color:black!important
+}
+
+.app-info-title{
+  
+   background: #299be4; /* Blue header background */
+    color: #fff;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5)!important;
+    border-radius: 0.75rem !important;
+    padding:10px!important
+}
+
+.horizontal-legend{
+  overflow: auto!important;
+}
