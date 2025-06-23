@@ -156,3 +156,22 @@ table.table .avatar {
     margin-top: 10px;
     font-size: 13px;
 }
+.table-paginator{
+    background-color: #0397d6!important;
+    color: white;
+    font-size: medium;
+}
+
+/* styles.scss */
+
+.table-paginator .mat-select-panel {
+  background-color: #f0f0f0 !important;
+}
+
+.table-paginator .mat-option {
+  color: #333333 !important;
+}
+
+.table-paginator .mat-icon-button {
+  color: #007bff !important;
+}

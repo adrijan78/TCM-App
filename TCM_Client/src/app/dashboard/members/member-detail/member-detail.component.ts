@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   inject,
   Input,
   OnInit,
@@ -46,6 +47,9 @@ export class MemberDetailComponent implements OnInit {
   member = signal<Member | null>(null);
   trainingsByMonth = signal<[]|null>(null);
   memberTrainingAttendanceByMonth=signal<Record<number, number>|null>(null);
+  memberTotalNumOfTrainings=signal<number>(0);
+  clubTotalNumOfTrainings=signal<number>(0);
+  attendancePercentage=signal<number | null>(null);
 
   // --- Profile Data (from image) ---
   userAge: string = 'Години:'; // As per image
@@ -68,18 +72,10 @@ export class MemberDetailComponent implements OnInit {
   // --- ngx-charts Data ---
   // Bar Chart Data (matching "Item 1, 2, 3, 4" from image)
   barChartData: any[] = [
-    // { name: 'January', value: 5 },
-    // { name: 'February', value: 12 },
-    // { name: 'March', value: 8 },
-    // { name: 'April', value: 12 },
   ];
 
   // Pie Chart Data (matching "Skipped" and "Attended" from image)
-  pieChartData: any[] = [
-    { name: 'Отсутство', value: 28.6 }, // Values based on image percentages
-    { name: 'Присуство', value: 71.4 },
-  ];
-
+  
   pieChartDataForPayment: any[] = [
     { name: 'Платено', value: 82 }, // Values based on image percentages
     { name: 'Не платено', value: 18 },
@@ -158,6 +154,7 @@ export class MemberDetailComponent implements OnInit {
     roundDomains: true,
   };
 
+  pieChartData: any[]=[]
   // --- Table Data (empty as per image, but structured) ---
   dataSource : MemberTrainingData[] = [
     // { col1: '', col2: '', col3: '' },
@@ -187,8 +184,9 @@ export class MemberDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMemberById();
-    this.getNumberOfTrainingsForEveryMonth();
+    
     this.getMemberTrainingData();
+
   }
 
   getMemberById() {
@@ -207,8 +205,10 @@ export class MemberDetailComponent implements OnInit {
       next: (res) => {
         this.dataSourceForLineChart = res;
         this.dataSource=res;
+        this.getNumberOfTrainingsForEveryMonth();
         this.generateLineChartData();
-        this.countTrainingsByMonth();
+        this.countMemberAttendanceByMonth();
+        
       },
       error: (err) => console.log(err),
     });
@@ -217,25 +217,50 @@ export class MemberDetailComponent implements OnInit {
     this.trainingService.getNumberOfTrainingsForEveryMonth().subscribe({
       next:(res:any)=>{
         this.trainingsByMonth.set(res);
+            this.getTotalNumberOfTrainings();
 
       },
       error:err=>{}
     })
   }
 
-   countTrainingsByMonth() {
+   countMemberAttendanceByMonth() {
     var tmp = [...this.dataSourceForLineChart]
   this.memberTrainingAttendanceByMonth.set(tmp.reduce((counts, training) => {
     const month = new Date(training.date).getMonth() + 1;
     counts[month] = (counts[month] || 0) + 1;
+    
+    this.memberTotalNumOfTrainings.update(value=>value+1);
     return counts;
   }, {} as Record<number, number>));
 
+
+
   const tmp2=this.memberTrainingAttendanceByMonth();
   for(let item in tmp2){
-    //console.log("Test",item, tmp2[item]);
+    let it=+item;
+    let record = { name: this.getMonthName(it), value: tmp2[it] };
+    this.barChartData.push(record)
+  
   }
 
+}
+
+getTotalNumberOfTrainings(){
+  let tmp=this.trainingsByMonth();
+  for (let item in tmp) {
+    let it=+item;
+    this.clubTotalNumOfTrainings.update(value=>value+it);
+    
+  }
+  let perc=+(this.memberTotalNumOfTrainings()/this.clubTotalNumOfTrainings())*100.0;
+  this.attendancePercentage.set(+perc.toFixed(1))
+   this.pieChartData= [
+    { name: 'Отсутство', value:this.attendancePercentage()!=null?100-this.attendancePercentage()! :10}, // Values based on image percentages
+    { name: 'Присуство', value:this.attendancePercentage()!=null?this.attendancePercentage()! :90},
+  ];
+
+  
 }
 
   generateLineChartData(): void {
@@ -256,6 +281,11 @@ export class MemberDetailComponent implements OnInit {
 
     console.log('Generated lineChartData:', this.lineChartData); // For debugging
   }
+
+ getMonthName(monthNumber: number): string {
+  const date = new Date(2000, monthNumber - 1); // Months are 0-indexed in JavaScript
+  return date.toLocaleString('en-US', { month: 'long' });
+}
 
   // --- ngx-charts Event Handlers (Optional, retained for interactivity) ---
   onSelect(event: any): void {

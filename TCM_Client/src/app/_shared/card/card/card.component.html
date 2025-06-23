@@ -1,0 +1,12 @@
+<mat-card [routerLink]="['',routePath()]" routerLinkActive="router-link-active"  class="example-card dashboard-top-cards app-info-card" appearance="outlined">
+            <div class="d-flex">
+                <div class="w-50 text-center p-1">
+                    <img [src]="image()" style="max-width: 138px;" alt="Club Members" />
+                </div>
+
+                <div class="w-50 text-center p-3">
+                    <h4>{{title()}}</h4>
+                    <h4 class="pt-3">{{cardValue()}}</h4>
+                </div>
+            </div>
+</mat-card>

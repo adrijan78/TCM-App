@@ -78,7 +78,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="chart-item">
+                                        @if(barChartData.length>0){
+                                               <div class="chart-item">
 
                                             <ngx-charts-bar-vertical [scheme]="barChartColorScheme"
                                                 [results]="barChartData" [gradient]="gradient" [xAxis]="showXAxis"
@@ -91,6 +92,8 @@
                                                 (select)="onSelect($event)">
                                             </ngx-charts-bar-vertical>
                                         </div>
+                                        }
+                                     
                                     </div>
 
                                     <div class="col-lg-6 col-md-6 col-12 mb-3 pb-5 ">
@@ -102,7 +105,9 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                        @if(attendancePercentage())
+                                        {
+                                        
                                         <div class="chart-item pie-chart-container">
                                             <ngx-charts-pie-chart [scheme]="pieChartColorScheme"
                                                 [results]="pieChartData" [gradient]="gradient" [legend]="showLegend"
@@ -113,6 +118,7 @@
                                                 (select)="onSelect($event)">
                                             </ngx-charts-pie-chart>
                                         </div>
+                                        }
                                     </div>
 
                                     <div class="col-12 pt-5">

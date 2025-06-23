@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import { LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
+import { CardComponent } from '../../_shared/card/card/card.component';
+import { NoteComponent } from "../notes/note/note.component";
 
 @Component({
   selector: 'app-club-details',
-  imports: [MatCardModule,MatIconModule,NgxChartsModule],
+  imports: [MatIconModule, NgxChartsModule, CardComponent, NoteComponent],
   templateUrl: './club-details.component.html',
   styleUrl: './club-details.component.css'
 })

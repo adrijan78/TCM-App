@@ -40,7 +40,7 @@ export class LoginComponent {
         next: (response) => {
           console.log(response);
           this.accountService.isLoggedIn.set(true);
-          this.router.navigate(['/']);
+          this.router.navigate(['/club-details']);
         },
         error: (err) => {
           if (err.status == 0) {

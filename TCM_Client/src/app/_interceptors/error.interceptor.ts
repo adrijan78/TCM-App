@@ -39,7 +39,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             toast.error('System error occured', error.status);
             break;
           default:
-            console.log('Something unexpected went wrong!');
+            toast.error("Настана грешка.")
             break;
         }
       }

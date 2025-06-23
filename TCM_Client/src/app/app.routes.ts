@@ -21,6 +21,7 @@ export const routes: Routes = [
     path: '',
     component: DashboardComponent,
     canActivate: [authGuard],
+    
     children: [
       { path: 'register-member', component: RegisterMemberComponent },
       { path: 'club-details', component: ClubDetailsComponent },

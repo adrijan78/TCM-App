@@ -30,6 +30,9 @@
   font-size: 24px;
 }
 
-.dashboard-top-cards{
-  max-width: 315px!important;
+
+
+.notes-section{
+  max-height: 320px!important;
+  overflow-y: scroll;
 }

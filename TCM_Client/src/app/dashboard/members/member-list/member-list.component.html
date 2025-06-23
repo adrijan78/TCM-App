@@ -50,7 +50,7 @@
                     </div>
                 </div>
             </div>
-
+             @if(members &&members.length>0){
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -65,6 +65,7 @@
                         <th>Акции</th>
                     </tr>
                 </thead>
+               
                 <tbody>
                     <tr *ngFor="let member of filteredMembers; let i = index" routerLink="/members/{{member.id}}">
                         <td>{{ i + 1 }}</td>
@@ -105,19 +106,26 @@
                         </td>
                     </tr>
                 </tbody>
+            
             </table>
+        }
+        @else {
+                <div class="w-100 d-flex justify-content-center my-5">
 
-            <div class="clearfix">
-                <div class="hint-text">
-                    Showing <b>{{ filteredMembers.length }}</b> of <b>{{ members.length }}</b> entries
+                    <mat-spinner></mat-spinner>
+
                 </div>
-                <ul class="pagination">
-                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                </ul>
-            </div>
+                
+            }
+            <mat-paginator
+            class="table-paginator"
+            [length]="totalMembers"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            (page)="onPageChange($event)">
+            </mat-paginator>
+
+                        
         </div>
     </div>
 </div>

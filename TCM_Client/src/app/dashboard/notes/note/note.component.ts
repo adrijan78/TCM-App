@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
+import { Note } from '../../../_models/Note';
 
 @Component({
   selector: 'app-note',
@@ -19,22 +20,6 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./note.component.css'],
 })
 export class NoteComponent {
-  notes: string[] = [
-    'Stretch before training',
-    'Prepare grading materials',
-    'Remind team: sparring gear',
-  ];
+  note=input<Note>();
 
-  newNote: string = '';
-
-  addNote() {
-    if (this.newNote.trim()) {
-      this.notes.unshift(this.newNote.trim());
-      this.newNote = '';
-    }
-  }
-
-  deleteNote(index: number) {
-    this.notes.splice(index, 1);
-  }
 }

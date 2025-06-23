@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { MemberService } from '../../../_services/member/member.service';
 import { Member } from '../../../_models/Member';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -15,6 +15,8 @@ import { DatePipe, NgClass, NgFor } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectModule } from '@angular/material/select';
+import { ToastrService } from 'ngx-toastr';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-member-list',
@@ -37,6 +39,9 @@ import { MatSelectModule } from '@angular/material/select';
     RouterModule,
     MatExpansionModule,
     MatSelectModule,
+    MatProgressSpinner,
+    MatPaginatorModule,
+    MatPaginator
   ],
   templateUrl: './member-list.component.html',
   styleUrl: './member-list.component.css',
@@ -44,11 +49,16 @@ import { MatSelectModule } from '@angular/material/select';
 export class MemberListComponent implements OnInit {
   private memberService = inject(MemberService);
   private router = inject(Router);
+  private toast = inject(ToastrService);
   members: Member[] = [];
   searchTerm: string = '';
   selectedBelt: string = '';
   filteredMembers: Member[] = [];
   uniqueBelts: string[] = [];
+   paginator = signal<MatPaginator | null>(null);
+  totalMembers = 100; // вкупен број на членови
+  pageSize = 10; // број на членови по страница
+  pageSizeOptions = [5, 10, 20, 50]; // опции за број на членови по страница
 
   ngOnInit(): void {
     this.getMembers();
@@ -62,7 +72,6 @@ export class MemberListComponent implements OnInit {
         this.applyFilters();
       },
       error: (err) => {
-        console.log(err);
       },
       complete: () => {
         console.log('Request completed');
@@ -95,6 +104,9 @@ export class MemberListComponent implements OnInit {
     this.searchTerm = '';
     this.selectedBelt = '';
     this.applyFilters();
+  }
+  onPageChange(ev:any){
+
   }
 
   // openEditDialog(member: Member): void {

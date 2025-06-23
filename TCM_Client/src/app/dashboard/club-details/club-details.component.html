@@ -7,53 +7,19 @@
         </div>
     </div>
     <div class="col-sm-12 col-md-4 col-lg-4 justify-content-center d-flex">
-        <mat-card class="example-card dashboard-top-cards app-info-card" appearance="outlined">
-            <div class="d-flex">
-                <div class="w-50 text-center p-1">
-                    <img src="assets/images/members.png" style="max-width: 138px;" alt="Club Members" />
-                </div>
-
-                <div class="w-50 text-center p-3">
-                    <h4>Членови</h4>
-                    <h4 class="pt-3">10</h4>
-                </div>
-            </div>
-        </mat-card>
+        <app-card title="Членови" routePath="members" routerLinkActive="router-link-active"  image="assets/images/members.png" cardValue="10"/>
     </div>
     <div class="col-sm-12 col-md-4 col-lg-4  justify-content-center d-flex">
-        <mat-card class="example-card dashboard-top-cards app-info-card" appearance="outlined">
-            <div class="d-flex">
-                <div class="w-50 text-center p-1">
-                    <img src="assets/images/trainings-number.png" style="max-width: 138px;" alt="Trainings" />
-                </div>
-
-                <div class="w-50 text-center p-3">
-                    <h4>Тренинзи</h4>
-                    <h4 class="pt-3">5</h4>
-                </div>
-            </div>
-        </mat-card>
+        <app-card title="Тренинзи" routePath="trainings" image="assets/images/trainings-number.png" cardValue="5"/>
     </div>
     <div class="col-sm-12 col-md-4 col-lg-4 justify-content-center d-flex ">
-        <mat-card class="example-card dashboard-top-cards app-info-card" appearance="outlined">
-            <div class="d-flex">
-                <div class="w-50 text-center p-1">
-                    <img src="assets/images/attendance-percentage.png" style="max-width: 128px;"
-                        alt="Attendence Percentage" />
-                </div>
-
-                <div class="w-50 text-center p-3">
-                    <h4>Присутност</h4>
-                    <h4 class="pt-3">73%</h4>
-                </div>
-            </div>
-        </mat-card>
+        <app-card title="Присутност" image="assets/images/attendance-percentage.png" cardValue="73%"/>
     </div>
 </div>
 
 <div class="row mt-3 mx-1">
 
-    <div class="col-lg-8 col-sm-12  ">
+    <div class="col-lg-9 col-sm-12  ">
         <div class="table-title app-info-title">
             <div class="row">
                 <div class="col-sm-12 text-center">
@@ -72,5 +38,32 @@
         </div>
 
     </div>
-    <div class="col-2"></div>
+    <div class="col-lg-3 col-sm-12">
+        <div class="table-title app-info-title col-12">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h2 class="m-0">Белешки</h2>
+                </div>
+            </div>
+           
+        </div>
+        <div class="row mt-2 app-info-card p-3 notes-section">
+            <div class="col-12 mb-2">
+                <app-note/>
+            </div>
+            <div class="col-12 mb-2">
+                <app-note/>
+            </div>
+            <div class="col-12 mb-2">
+                <app-note/>
+            </div>
+            <div class="col-12 mb-2">
+                <app-note/>
+            </div>
+            <div class="col-12 mb-2">
+                <app-note/>
+            </div>
+        </div>
+        
+    </div>
 </div>
