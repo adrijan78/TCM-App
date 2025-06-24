@@ -1,4 +1,6 @@
-﻿using TCM_App.Models;
+﻿using TCM_App.Helpers;
+using TCM_App.Models;
+using TCM_App.Models.DTOs;
 using TCM_App.Repositories.Interfaces;
 using TCM_App.Services.Interfaces;
 
@@ -45,9 +47,9 @@ namespace TCM_App.Services
 
         }
 
-        public async Task<List<Member>> GetMembers(int id)
+        public async Task<PagedList<MemberListDto>> GetMembers(int id, UserParams userParams)
         {
-            return await _memberRepository.GetMembersByClubId(id);
+            return await _memberRepository.GetMembersByClubId(id,userParams);
         }
 
         public Task UpdateMember(Member member)

@@ -1,11 +1,13 @@
-﻿using TCM_App.Models;
+﻿using TCM_App.Helpers;
+using TCM_App.Models;
+using TCM_App.Models.DTOs;
 
 namespace TCM_App.Repositories.Interfaces
 {
     public interface IMemberRepository : IRepository<Member>
     {
         bool CheckIfMemberExists(int memberId);
-        Task <List<Member>> GetMembersByClubId(int clubId);
+        Task <PagedList<MemberListDto>> GetMembersByClubId(int clubId,UserParams memberParams);
         Task<Member?> GetMemberById(int memberId);
 
         Task<List<MemberTraining>> GetMemberAttendanceAndPerformance(int member);

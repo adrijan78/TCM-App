@@ -30,9 +30,37 @@
   font-size: 24px;
 }
 
+.ngx-charts-bar-vertical{
+  height: 100%!important;
+  width: 100%!important;
+}
 
 
 .notes-section{
   max-height: 320px!important;
   overflow-y: scroll;
+}
+
+mat-calendar,.mat-datepicker-content  
+{
+  width: 100%!important; /* 300px */
+  height: 100% !important; /* 300px */
+}
+
+.mobile-only {
+  display: block;
+}
+
+.desktop-only {
+  display: none;
+}
+
+/* For screens wider than 768px, show table and hide accordion */
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+  .desktop-only {
+    display: flex;
+  }
 }

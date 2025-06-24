@@ -16,6 +16,7 @@ export interface Member {
   height: number;
   weight: number;
   currentBelt: Belt;
+  belt:Belt;
 }
 
 export interface LoginMember {

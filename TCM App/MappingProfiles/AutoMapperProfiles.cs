@@ -15,7 +15,7 @@ namespace TCM_App.MappingProfiles
                 .ForMember(d=>d.CurrentBelt,o=>o.MapFrom(s=> s.Belts.MaxBy(x => x.DateReceived)));
             CreateMap<Member, MemberListDto>()
                 .ForMember(d => d.Age, o => o.MapFrom(s => CalculateAgeHelper.CalculateAge(s.DateOfBirth)))
-                .ForMember(d => d.Belt, o => o.MapFrom(s => s.Belts.MaxBy(x=>x.DateReceived)));
+                .ForMember(d => d.Belt, o => o.MapFrom(s => s.Belts.OrderByDescending(b=>b.DateReceived).Select(x=>new BeltDto { Id=x.BeltId,Name=x.Belt.BeltName,EarnedOn=x.DateReceived}).FirstOrDefault()));
 
             CreateMap<Photo, PhotoDto>();
             CreateMap<MemberBelt, BeltDto>()

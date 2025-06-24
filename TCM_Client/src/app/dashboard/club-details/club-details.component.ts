@@ -1,16 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, model } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import { LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { CardComponent } from '../../_shared/card/card/card.component';
 import { NoteComponent } from "../notes/note/note.component";
+import { MatCardModule } from '@angular/material/card';
+import {  MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-club-details',
-  imports: [MatIconModule, NgxChartsModule, CardComponent, NoteComponent],
+   providers: [provideNativeDateAdapter()],
+  imports: [MatIconModule,MatTabsModule, NgxChartsModule, CardComponent, NoteComponent,MatCardModule,MatDatepickerModule],
   templateUrl: './club-details.component.html',
   styleUrl: './club-details.component.css'
 })
 export class ClubDetailsComponent {
+
+    selected = model<Date | null>(null);
+
 
     barChartColorScheme = {
       name: 'blueGradientScheme',

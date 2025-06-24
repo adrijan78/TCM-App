@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TCM_App.Data;
+using TCM_App.Helpers;
 using TCM_App.Models.DTOs;
 using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Controllers
 {
-    [Authorize]
     public class MembersController(
         IMemberService _memberService,
         ILogger<MembersController> logger,
@@ -17,13 +17,14 @@ namespace TCM_App.Controllers
     {
 
         [HttpGet]
-        public async Task<IActionResult> GetMembers()
+        public async Task<IActionResult> GetMembers([FromQuery]UserParams userParams)
         {
             try
             {
                 // Zemi go id na club od najaveniot korisnik koga kje koristis Identity 
-                var members = await _memberService.GetMembers(1);
-                return Ok(mapper.Map<List<MemberListDto>>(members));
+                var members = await _memberService.GetMembers(1,userParams);
+                Response.AddPaginationHeader(members);
+                return Ok(members);
             }
             catch (Exception e)
             {

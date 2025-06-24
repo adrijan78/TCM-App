@@ -1,25 +1,48 @@
 <div class="row mx-1">
-    <div class="table-title app-info-title mb-3">
-        <div class="row">
-            <div class="col-sm-12 text-center">
-                <h2 class="m-0">Информации</h2>
+    <div class="col-lg-9 col-md-12 col-sm-12">
+        <div class="table-title app-info-title mb-3">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h2 class="m-0">Информации</h2>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-12 col-md-4 col-lg-4 justify-content-center d-flex">
-        <app-card title="Членови" routePath="members" routerLinkActive="router-link-active"  image="assets/images/members.png" cardValue="10"/>
-    </div>
-    <div class="col-sm-12 col-md-4 col-lg-4  justify-content-center d-flex">
-        <app-card title="Тренинзи" routePath="trainings" image="assets/images/trainings-number.png" cardValue="5"/>
-    </div>
-    <div class="col-sm-12 col-md-4 col-lg-4 justify-content-center d-flex ">
-        <app-card title="Присутност" image="assets/images/attendance-percentage.png" cardValue="73%"/>
-    </div>
-</div>
+    
+        <div class="row desktop-only">
+            <div class="col-sm-12 col-md-6 col-lg-4 justify-content-center d-flex">
+                <app-card title="Членови" routePath="members" routerLinkActive="router-link-active"  image="assets/images/members.png" cardValue="10"/>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4  justify-content-center d-flex">
+                <app-card title="Тренинзи" routePath="trainings" image="assets/images/trainings-number.png" cardValue="5"/>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4 justify-content-center d-flex ">
+                <app-card title="Присутност" image="assets/images/attendance-percentage.png" cardValue="73%"/>
+            </div>
 
-<div class="row mt-3 mx-1">
+        </div>
+        <div class="row mobile-only">
+            <mat-tab-group>
+                    <mat-tab label="Членови">
+                        <div class="col-sm-12 my-2 col-md-4 col-lg-4 justify-content-center d-flex">
+                            <app-card title="Членови" routePath="members" routerLinkActive="router-link-active"  image="assets/images/members.png" cardValue="10"/>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Тренинзи">
+                        <div class="col-sm-12 my-2 col-md-4 col-lg-4  justify-content-center d-flex">
+                <app-card title="Тренинзи" routePath="trainings" image="assets/images/trainings-number.png" cardValue="5"/>
+            </div>
+                    </mat-tab>
+                    <mat-tab label="Присутност">
+                    <div class="col-sm-12 my-2 col-md-4 col-lg-4 justify-content-center d-flex ">
+                <app-card title="Присутност" image="assets/images/attendance-percentage.png" cardValue="73%"/>
+            </div>
+                    </mat-tab>
+            </mat-tab-group>
+            
+            
 
-    <div class="col-lg-9 col-sm-12  ">
+        </div>
+    <div class=" mt-5">
         <div class="table-title app-info-title">
             <div class="row">
                 <div class="col-sm-12 text-center">
@@ -38,8 +61,33 @@
         </div>
 
     </div>
-    <div class="col-lg-3 col-sm-12">
-        <div class="table-title app-info-title col-12">
+
+    </div>
+    <div class="col-lg-3 col-md-12 col-sm-12">
+         <div class="table-title app-info-title col-12">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h2 class="m-0">Календар</h2>
+                </div>
+            </div>
+           
+        </div>
+        <div class="row mt-2  p-3 justify-content-center ">
+            <div class="col-12 app-info-card p-5 ">
+
+                <mat-calendar  class="" [(selected)]="selected"></mat-calendar>
+
+            </div>    
+
+        </div>
+    </div>
+
+    
+    <div class="col-lg-9 col-sm-12">
+        <p>PLACEHOLDER</p>
+    </div>
+    <div class="col-lg-3 col-md-12 col-sm-12">
+         <div class="table-title app-info-title col-12">
             <div class="row">
                 <div class="col-sm-12 text-center">
                     <h2 class="m-0">Белешки</h2>
@@ -47,7 +95,7 @@
             </div>
            
         </div>
-        <div class="row mt-2 app-info-card p-3 notes-section">
+        <div class="row mt-2 app-info-card p-3 m-0 notes-section">
             <div class="col-12 mb-2">
                 <app-note/>
             </div>
@@ -64,6 +112,6 @@
                 <app-note/>
             </div>
         </div>
-        
     </div>
+    
 </div>

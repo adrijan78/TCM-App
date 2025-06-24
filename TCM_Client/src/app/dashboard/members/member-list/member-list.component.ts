@@ -17,6 +17,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectModule } from '@angular/material/select';
 import { ToastrService } from 'ngx-toastr';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { Pagination, PaginationResult } from '../../../_models/Pagination';
 
 @Component({
   selector: 'app-member-list',
@@ -57,7 +58,8 @@ export class MemberListComponent implements OnInit {
   uniqueBelts: string[] = [];
    paginator = signal<MatPaginator | null>(null);
   totalMembers = 100; // вкупен број на членови
-  pageSize = 10; // број на членови по страница
+  pageSize = 4; // број на членови по страница
+  pageNumber=1;
   pageSizeOptions = [5, 10, 20, 50]; // опции за број на членови по страница
 
   ngOnInit(): void {
@@ -65,9 +67,13 @@ export class MemberListComponent implements OnInit {
   }
 
   getMembers() {
-    this.memberService.getMembers().subscribe({
+    this.memberService.getMembers(this.pageNumber,this.pageSize).subscribe({
       next: (res) => {
-        this.members = res;
+        this.members = res.body as Member[];
+        let pagination: Pagination = JSON.parse(res.headers.get('Pagination')!)
+        this.pageNumber=pagination.currentPage!;
+        this.pageSize = pagination.itemsPerPage!;
+        this.totalMembers=pagination.totalItems!;
         this.extractBelts();
         this.applyFilters();
       },
@@ -75,7 +81,7 @@ export class MemberListComponent implements OnInit {
       },
       complete: () => {
         console.log('Request completed');
-      },
+      }, 
     });
   }
   extractBelts() {
@@ -106,7 +112,11 @@ export class MemberListComponent implements OnInit {
     this.applyFilters();
   }
   onPageChange(ev:any){
-
+    if(this.pageNumber !== ev.pageIndex+1 ||this.pageSize!==ev.pageSize){
+      this.pageNumber=ev.pageIndex+1;
+      this.pageSize=ev.pageSize;
+      this.getMembers();
+    }
   }
 
   // openEditDialog(member: Member): void {
