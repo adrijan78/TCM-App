@@ -55,11 +55,11 @@ namespace TCM_App.Controllers
         }
 
         [HttpGet("memberTraningData/{id}")]
-        public async Task<IActionResult> GetMemberAttendanceAndPerformance(int id)
+        public async Task<IActionResult> GetMemberAttendanceAndPerformance(int id,[FromQuery] UserParams userParams)
         {
             try
             {
-                    var attendance = await _memberService.GetMemberAttendanceAndPerformance(id);
+                    var attendance = await _memberService.GetMemberAttendanceAndPerformance(id, userParams);
                     return Ok(mapper.Map<List<MemberTrainingDto>>(attendance));
             }
             catch (Exception e)

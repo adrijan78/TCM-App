@@ -1,4 +1,6 @@
-﻿using TCM_App.Models;
+﻿using TCM_App.Helpers;
+using TCM_App.Models;
+using TCM_App.Models.DTOs;
 using TCM_App.Repositories.Interfaces;
 using TCM_App.Services.Interfaces;
 
@@ -27,9 +29,9 @@ namespace TCM_App.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<Training>> GetTrainings(int clubId)
+        public async Task<PagedList<TrainingDto>> GetTrainingsByClubId(int clubId, TrainingParams trainingParams)
         {
-            throw new NotImplementedException();
+            return await _trainingRepository.GetTrainingsByClubId(clubId, trainingParams);
         }
 
         public Task<Training> UpdateTraining(Training training)

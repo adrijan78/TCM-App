@@ -37,13 +37,13 @@ namespace TCM_App.Services
             return member;
         }
 
-        public async Task<List<MemberTraining>> GetMemberAttendanceAndPerformance(int memberId)
+        public async Task<PagedList<MemberTrainingDto>> GetMemberAttendanceAndPerformance(int memberId, UserParams userParams)
         {
             if (!CheckIfMemberExists(memberId))
             {
                 throw new Exception("Member not found!");
             }
-            return await _memberRepository.GetMemberAttendanceAndPerformance(memberId);
+            return await _memberRepository.GetMemberAttendanceAndPerformance(memberId,userParams);
 
         }
 

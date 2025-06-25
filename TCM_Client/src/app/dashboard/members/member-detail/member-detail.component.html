@@ -68,7 +68,6 @@
                         <div class="card charts-card pt-3 h-100">
                             <div class="card-body">
 
-
                                 <div class="row charts-row pt-3  mb-4 justify-content-center pb-4">
                                     <div class="col-lg-6 col-md-6 col-12 mb-3">
                                         <div class="table-title">
@@ -78,11 +77,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @if(barChartData.length>0){
+                                        
+                                        @if(barChartData().length>0){
                                                <div class="chart-item">
-
+                                                
                                             <ngx-charts-bar-vertical [scheme]="barChartColorScheme"
-                                                [results]="barChartData" [gradient]="gradient" [xAxis]="showXAxis"
+                                                [results]="barChartData()" [gradient]="gradient" [xAxis]="showXAxis"
                                                 [yAxis]="showYAxis" [legend]="showLegend"
                                                 [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
                                                 [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
@@ -170,9 +170,9 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr *ngFor="let row of dataSource; let i = index">
+                                                        <tr *ngFor="let row of dataSource; let i = index"> 
                                                             <td>{{ i + 1 }}</td>
-                                                            <td>{{row.training.date | date}}</td>
+                                                            <td>{{row.date | date }}</td>
                                                             <td>{{row.training.trainingType}}</td>
                                                             <td>{{row.performace}}</td>
                                                             <td>{{row.description}}</td>
@@ -207,19 +207,13 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                                <div class="clearfix">
-                                                    <div class="hint-text">
-                                                        Showing <b>{{ dataSource ? dataSource.length : 0}}</b> entries
-                                                    </div>
-                                                    <ul class="pagination">
-                                                        <li class="page-item disabled"><a href="#">Previous</a></li>
-                                                        <li class="page-item active"><a href="#" class="page-link">1</a>
-                                                        </li>
-                                                        <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                                        <li class="page-item"><a href="#" class="page-link">Next</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                <mat-paginator
+                                                class="table-paginator"
+                                                [length]="100"
+                                                [pageSize]="pageSize"
+                                                [pageSizeOptions]="pageSizeOptions"
+                                                (page)="onPageChange($event)">
+                                                </mat-paginator>
                                             </div>
                                         </div>
                                     </div>

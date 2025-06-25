@@ -1,12 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using TCM_App.Data;
+using TCM_App.Helpers;
 using TCM_App.Models;
+using TCM_App.Models.DTOs;
+using TCM_App.Models.Enums;
 using TCM_App.Repositories.Interfaces;
 
 namespace TCM_App.Repositories
 {
-    public class TrainingRepository(DataContext _context) : Repository<Training>(_context), ITrainingRepository
+    public class TrainingRepository(DataContext _context,IMapper mapper) : Repository<Training>(_context), ITrainingRepository
     {
         public async Task<Dictionary<int, int>> GetNumberOfTrainingsForEveryMonth(int clubId)
         {
@@ -15,6 +20,30 @@ namespace TCM_App.Repositories
 
             return numOfTrainingsInMonths;
 
+        }
+
+        public Task<PagedList<TrainingDto>> GetTrainingsByClubId(int clubId,TrainingParams trainingParams)
+        {
+            var query = _context.Trainings.Where(x=>x.ClubId==clubId).OrderByDescending(x=>x.Date.Month).AsQueryable();
+                
+            if (trainingParams.TrainingType.HasValue)
+            {
+
+                switch (trainingParams.TrainingType.Value)
+                {
+                    case (int)TrainingType.Regular:
+                        query.Where(x => x.TrainingType == TrainingType.Regular);
+                        break;
+                    case (int)TrainingType.Sparing:
+                        query.Where(x => x.TrainingType == TrainingType.Sparing);
+                        break;
+                }
+            }
+
+            
+
+            return PagedList<TrainingDto>
+                .CreateAsync(query.ProjectTo<TrainingDto>(mapper.ConfigurationProvider), trainingParams.PageNumber, trainingParams.PageSize);
         }
     }
 }

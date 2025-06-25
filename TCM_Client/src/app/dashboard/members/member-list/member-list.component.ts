@@ -51,14 +51,15 @@ export class MemberListComponent implements OnInit {
   private memberService = inject(MemberService);
   private router = inject(Router);
   private toast = inject(ToastrService);
-  members: Member[] = [];
+  members: Member[]|null = null;
   searchTerm: string = '';
   selectedBelt: string = '';
+  selectedAgeCategory: number|null = null;
   filteredMembers: Member[] = [];
   uniqueBelts: string[] = [];
    paginator = signal<MatPaginator | null>(null);
   totalMembers = 100; // вкупен број на членови
-  pageSize = 4; // број на членови по страница
+  pageSize = 5; // број на членови по страница
   pageNumber=1;
   pageSizeOptions = [5, 10, 20, 50]; // опции за број на членови по страница
 
@@ -67,15 +68,16 @@ export class MemberListComponent implements OnInit {
   }
 
   getMembers() {
-    this.memberService.getMembers(this.pageNumber,this.pageSize).subscribe({
+    this.memberService.getMembers(this.pageNumber,this.pageSize,
+      this.selectedBelt,this.selectedAgeCategory,this.searchTerm).subscribe({
       next: (res) => {
         this.members = res.body as Member[];
         let pagination: Pagination = JSON.parse(res.headers.get('Pagination')!)
         this.pageNumber=pagination.currentPage!;
         this.pageSize = pagination.itemsPerPage!;
         this.totalMembers=pagination.totalItems!;
-        this.extractBelts();
-        this.applyFilters();
+        //this.extractBelts();
+        //this.applyFilters();
       },
       error: (err) => {
       },
@@ -84,31 +86,24 @@ export class MemberListComponent implements OnInit {
       }, 
     });
   }
-  extractBelts() {
-    const belts = this.members
-      .map((m) => m.currentBelt?.name)
-      .filter((belt): belt is string => !!belt);
-    this.uniqueBelts = Array.from(new Set(belts));
-  }
+
 
   applyFilters() {
-    this.filteredMembers = this.members.filter((m) => {
-      const matchesSearch =
-        !this.searchTerm ||
-        m.firstName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        m.lastName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        m.email.toLowerCase().includes(this.searchTerm.toLowerCase());
+    
+    this.getMembers();
+  }
 
-      const matchesBelt =
-        !this.selectedBelt || m.currentBelt?.name === this.selectedBelt;
+  searchBySearchTerm(){
+    if(this.searchTerm.length>=3 || this.searchTerm.length==0){
+      this.getMembers();
+    }
 
-      return matchesSearch && matchesBelt;
-    });
   }
 
   resetFilters() {
     this.searchTerm = '';
     this.selectedBelt = '';
+    this.selectedAgeCategory=null;
     this.applyFilters();
   }
   onPageChange(ev:any){

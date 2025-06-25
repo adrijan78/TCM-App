@@ -13,7 +13,7 @@ namespace TCM_App.Services.Interfaces
         Task<PagedList<MemberListDto>> GetMembers(int id,UserParams userParams);
         Task UpdateMember(Member member);
 
-        Task<List<MemberTraining>> GetMemberAttendanceAndPerformance(int member);
+        Task<PagedList<MemberTrainingDto>> GetMemberAttendanceAndPerformance(int member, UserParams userParams);
 
     }
 }

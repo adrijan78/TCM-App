@@ -22,6 +22,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MemberTrainingData } from '../../../_models/MemberTrainingData';
 import { TrainingService } from '../../../_services/training/training.service';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-member-detail',
@@ -32,6 +33,7 @@ import { TrainingService } from '../../../_services/training/training.service';
     MatTabsModule,
     MatProgressSpinnerModule,
     MatIconModule,
+    MatPaginatorModule
   ],
 
   templateUrl: './member-detail.component.html',
@@ -41,8 +43,6 @@ export class MemberDetailComponent implements OnInit {
   memberService = inject(MemberService);
   trainingService = inject(TrainingService)
   toast = inject(ToastrService);
-
-
   @Input() id!: number;
   member = signal<Member | null>(null);
   trainingsByMonth = signal<[]|null>(null);
@@ -50,6 +50,9 @@ export class MemberDetailComponent implements OnInit {
   memberTotalNumOfTrainings=signal<number>(0);
   clubTotalNumOfTrainings=signal<number>(0);
   attendancePercentage=signal<number | null>(null);
+  pageSizeOptions = [5, 10, 20, 50];
+  pageSize = 5; // број на членови по страница
+  pageNumber=1;
 
   // --- Profile Data (from image) ---
   userAge: string = 'Години:'; // As per image
@@ -71,8 +74,7 @@ export class MemberDetailComponent implements OnInit {
 
   // --- ngx-charts Data ---
   // Bar Chart Data (matching "Item 1, 2, 3, 4" from image)
-  barChartData: any[] = [
-  ];
+  barChartData= signal<any[]>([])
 
   // Pie Chart Data (matching "Skipped" and "Attended" from image)
   
@@ -201,14 +203,13 @@ export class MemberDetailComponent implements OnInit {
     });
   }
   getMemberTrainingData() {
-    this.memberService.getMemberTrainingData(this.id).subscribe({
+    this.memberService.getMemberTrainingData(this.id,this.pageNumber,this.pageSize).subscribe({
       next: (res) => {
-        this.dataSourceForLineChart = res;
-        this.dataSource=res;
+        this.dataSourceForLineChart = res.body as MemberTrainingData[];
+        this.dataSource=res.body as MemberTrainingData[];
         this.getNumberOfTrainingsForEveryMonth();
         this.generateLineChartData();
         this.countMemberAttendanceByMonth();
-        
       },
       error: (err) => console.log(err),
     });
@@ -225,6 +226,7 @@ export class MemberDetailComponent implements OnInit {
   }
 
    countMemberAttendanceByMonth() {
+    this.barChartData.set([]);
     var tmp = [...this.dataSourceForLineChart]
   this.memberTrainingAttendanceByMonth.set(tmp.reduce((counts, training) => {
     const month = new Date(training.date).getMonth() + 1;
@@ -240,7 +242,8 @@ export class MemberDetailComponent implements OnInit {
   for(let item in tmp2){
     let it=+item;
     let record = { name: this.getMonthName(it), value: tmp2[it] };
-    this.barChartData.push(record)
+    
+    this.barChartData.update((prev:any)=>[...prev,record])
   
   }
 
@@ -298,5 +301,13 @@ getTotalNumberOfTrainings(){
 
   onDeactivate(data: any): void {
     console.log('Deactivate:', JSON.parse(JSON.stringify(data)));
+  }
+
+  onPageChange(ev:any){
+    if(this.pageNumber !== ev.pageIndex+1 ||this.pageSize!==ev.pageSize){
+      this.pageNumber=ev.pageIndex+1;
+      this.pageSize=ev.pageSize;
+      this.getMemberTrainingData();
+    }
   }
 }

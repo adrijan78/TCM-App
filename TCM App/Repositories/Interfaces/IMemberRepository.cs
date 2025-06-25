@@ -10,6 +10,6 @@ namespace TCM_App.Repositories.Interfaces
         Task <PagedList<MemberListDto>> GetMembersByClubId(int clubId,UserParams memberParams);
         Task<Member?> GetMemberById(int memberId);
 
-        Task<List<MemberTraining>> GetMemberAttendanceAndPerformance(int member);
+        Task<PagedList<MemberTrainingDto>> GetMemberAttendanceAndPerformance (int member, UserParams memberParams);
     }
 }

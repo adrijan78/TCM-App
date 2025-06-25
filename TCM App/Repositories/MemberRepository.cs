@@ -7,6 +7,7 @@ using TCM_App.Models;
 using TCM_App.Models.DTOs;
 using TCM_App.Models.Enums;
 using TCM_App.Repositories.Interfaces;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TCM_App.Repositories
 {
@@ -17,14 +18,14 @@ namespace TCM_App.Repositories
             return _context.Members.Any(x=>x.Id == memberId);
         }
 
-        public async Task<List<MemberTraining>> GetMemberAttendanceAndPerformance(int memberId)
+        public async Task<PagedList<MemberTrainingDto>> GetMemberAttendanceAndPerformance(int memberId, UserParams userParams)
         {
-            var membersAp = await _context.Attendaces
+            var query =  _context.Attendaces
                 .Where(a => a.MemberId == memberId)
-                .Include(a => a.Training)
-                .ToListAsync();
+                .OrderByDescending(x=>x.Date)
+                .AsQueryable();
 
-            return membersAp;
+            return await PagedList<MemberTrainingDto>.CreateAsync(query.ProjectTo<MemberTrainingDto>(mapper.ConfigurationProvider), userParams.PageNumber, userParams.PageSize);
         }
 
         public Task<Member?> GetMemberById(int memberId)
@@ -40,6 +41,13 @@ namespace TCM_App.Repositories
         {
             var query= _context.Members.AsQueryable();
 
+            if(userParams.SearchTerm!=null && userParams.SearchTerm !="")
+            {
+                query = query.Where(x => x.FirstName.Contains(userParams.SearchTerm!) 
+                || x.LastName.Contains(userParams.SearchTerm!)
+                || x.Email.Contains(userParams.SearchTerm!));
+            }
+
             if(userParams.Belt != null)
             {
                query= query.Where(x =>x.Belts.Any(y=>y.IsCurrentBelt && y.Belt.BeltName== userParams.Belt));
@@ -47,30 +55,29 @@ namespace TCM_App.Repositories
 
             if (userParams.MemberAgeCategorie.HasValue) 
             {
-                var today = DateTime.Today;
+                
                 switch (userParams.MemberAgeCategorie)
                 {
                     case (int)MemberCategoryEnum.Tiny_Tots:
-                        query = query.Where(x => x.DateOfBirth <= new DateTime() || CalculateAgeHelper.CalculateAge(x.DateOfBirth) >= 3);
+                        query = GetQueryWithAgeParams(query, 3, 5);
                         break;
                     case (int)MemberCategoryEnum.Kids:
-                        query = query.Where(x => CalculateAgeHelper.CalculateAge(x.DateOfBirth) <= 11 || CalculateAgeHelper.CalculateAge(x.DateOfBirth) >= 6);
+                        query = GetQueryWithAgeParams(query, 6, 11);
                         break;
+                      
                     case (int)MemberCategoryEnum.Cadets:
-                        query = query.Where(x => CalculateAgeHelper.CalculateAge(x.DateOfBirth) <= 14 || CalculateAgeHelper.CalculateAge(x.DateOfBirth) >= 12);
+                        query = GetQueryWithAgeParams(query, 12, 14);
                         break;
+                       
                     case (int)MemberCategoryEnum.Juniors:
-                        query = query.Where(x => CalculateAgeHelper.CalculateAge(x.DateOfBirth) <= 17 || CalculateAgeHelper.CalculateAge(x.DateOfBirth) >= 15);
+                        query = GetQueryWithAgeParams(query, 15, 17);
+                     
                         break;
                     case (int)MemberCategoryEnum.Adults:
-                        query = query.Select(m => new
-                        {
-                            Member = m,
-                            Age = today.Year - m.DateOfBirth.Year- (m.DateOfBirth.Date > today.AddYears(-(today.Year - m.DateOfBirth.Year)) ? 1 : 0)
-                        }).Where(x => x.Age <= 29 || x.Age >= 18).Select(x=>x.Member);
+                        query = GetQueryWithAgeParams(query,18,39);
                         break;
                     case (int)MemberCategoryEnum.Seniors:
-                        query = query.Where(x => CalculateAgeHelper.CalculateAge(x.DateOfBirth) >= 40);
+                        query = GetQueryWithAgeParams(query, 40, 150);
                         break;
                 }
             }
@@ -80,7 +87,17 @@ namespace TCM_App.Repositories
             return await PagedList<MemberListDto>.CreateAsync(query.ProjectTo<MemberListDto>(mapper.ConfigurationProvider), userParams.PageNumber, userParams.PageSize);
         }
 
-        
+        private static IQueryable<Member> GetQueryWithAgeParams(IQueryable<Member> query,int moreThan,int lessThan)
+        {
+            var today = DateTime.Today;
+            query = query.Select(m => new
+            {
+                Member = m,
+                Age = today.Year - m.DateOfBirth.Year
+                                        - ((today.Month < m.DateOfBirth.Month || (today.Month == m.DateOfBirth.Month && today.Day < m.DateOfBirth.Day)) ? 1 : 0)
+            }).Where(z => z.Age >= moreThan && z.Age <= lessThan).Select(x => x.Member);
+            return query;
+        }
 
     }
 }
