@@ -46,7 +46,6 @@ namespace TCM_App.Repositories
                 query = query.Where(x => x.FirstName.Contains(userParams.SearchTerm!) 
                 || x.LastName.Contains(userParams.SearchTerm!)
                 || x.Email.Contains(userParams.SearchTerm!));
-                //Comment
             }
 
             if(userParams.Belt != null)
