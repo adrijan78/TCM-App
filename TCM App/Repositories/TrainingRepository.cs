@@ -27,17 +27,8 @@ namespace TCM_App.Repositories
             var query = _context.Trainings.Where(x=>x.ClubId==clubId).OrderByDescending(x=>x.Date.Month).AsQueryable();
                 
             if (trainingParams.TrainingType.HasValue)
-            {
-
-                switch (trainingParams.TrainingType.Value)
-                {
-                    case (int)TrainingType.Regular:
-                        query.Where(x => x.TrainingType == TrainingType.Regular);
-                        break;
-                    case (int)TrainingType.Sparing:
-                        query.Where(x => x.TrainingType == TrainingType.Sparing);
-                        break;
-                }
+            { 
+                query=query.Where(x => (int)x.TrainingType == trainingParams.TrainingType.Value);
             }
 
             
