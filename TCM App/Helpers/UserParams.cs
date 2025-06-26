@@ -32,6 +32,7 @@ namespace TCM_App.Helpers
     public class TrainingParams:BaseParams
     {
         public int? TrainingType { get; set; }
+        public int? TrainingStatus { get; set; }
         public int? TrainingMonth { get; set; }
 
     }

@@ -1,6 +1,8 @@
 import { Member } from "./Member";
 
-export class UserParams{
+
+
+export class MembersParams{
     belt:string;
     ageCategory:number;
     pageNumber=1;

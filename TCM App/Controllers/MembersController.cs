@@ -10,6 +10,7 @@ using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Controllers
 {
+    [Authorize]
     public class MembersController(
         IMemberService _memberService,
         ILogger<MembersController> logger,

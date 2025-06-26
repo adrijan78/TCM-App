@@ -26,12 +26,27 @@ namespace TCM_App.Repositories
         {
             var query = _context.Trainings.Where(x=>x.ClubId==clubId).OrderByDescending(x=>x.Date.Month).AsQueryable();
                 
+            if(trainingParams.SearchTerm !=null && trainingParams.SearchTerm != "")
+            {
+                query = query.Where(x => x.Description.Contains(trainingParams.SearchTerm));
+            }
+
+
             if (trainingParams.TrainingType.HasValue)
             { 
                 query=query.Where(x => (int)x.TrainingType == trainingParams.TrainingType.Value);
             }
 
-            
+            if(trainingParams.TrainingStatus.HasValue)
+            {
+                query = query.Where(x => x.Status == trainingParams.TrainingStatus.Value);
+            }
+
+
+
+
+
+
 
             return PagedList<TrainingDto>
                 .CreateAsync(query.ProjectTo<TrainingDto>(mapper.ConfigurationProvider), trainingParams.PageNumber, trainingParams.PageSize);

@@ -11,6 +11,7 @@ namespace TCM_App.Models.DTOs
         //This will be the coach
         public int MemberId { get; set; }
 
+        public string? Status { get; set; }
 
         public int ClubId { get; set; }
 

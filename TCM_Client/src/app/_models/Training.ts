@@ -1,6 +1,6 @@
 export interface Training {
   date: Date;
-  title: string;
+  description: string;
   status:string;
   notes?: string;
   trainingType:string;

@@ -139,18 +139,18 @@
 }
 
 
-.mat-expansion-panel-header,
+/* .mat-expansion-panel-header,
 .mat-expansion-panel-header.mat-expanded:hover {
   background: #007bb5 !important;
   
-}
+} */
 
 .mat-expansion-panel-header-title{
-color: white!important;
+color: black!important;
 }
 
 .mat-expansion-indicator svg{
-  fill: white!important;
+  fill: black!important;
 }
 
 .mobile-only {
@@ -291,45 +291,32 @@ table.table .avatar {
 .text-danger {
     color: #ff5b5b;
 }
-.pagination {
-    float: right;
-    margin: 0 0 5px;
 
-}
-.pagination li a {
-    border: none;
-    font-size: 13px;
-    min-width: 30px;
-    min-height: 30px;
-    color: #0397d6;
-    margin: 0 2px;
-    line-height: 30px;
-    border-radius: 2px !important;
-    text-align: center;
-    padding: 0 6px;
-}
-.pagination li a:hover {
-    color: #666;
-}	
-.pagination li.active a, .pagination li.active a.page-link {
-    background: #03A9F4;
-}
-.pagination li.active a:hover {        
-    background: #0397d6;
-}
-.pagination li.disabled i {
-    color: #ccc;
-}
-.pagination li i {
-    font-size: 16px;
-    padding-top: 6px
-}
-.hint-text {
-    float: left;
-    margin-top: 10px;
-    font-size: 13px;
+.table-paginator{
+    background-color: #0397d6!important;
+    color: white !important;
+    font-size: medium;
 }
 
+/* styles.scss */
+
+.table-paginator .mat-select-panel {
+  background-color: #f0f0f0 !important;
+}
+
+.table-paginator .mat-option {
+  color: #333333 !important;
+  color: #333333 !important;
+}
+
+.mat-mdc-select{
+  color: white !important;
+}
+
+
+.table-paginator .mat-icon-button {
+  color: #007bff !important;
+}
 
 }
 

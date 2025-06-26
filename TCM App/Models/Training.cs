@@ -12,6 +12,8 @@ namespace TCM_App.Models
         public int MemberId { get; set; }
         public Member Member { get; set; } = null!; // Ensure Member is not null
 
+        public int Status { get; set; }
+
 
         public int ClubId { get; set; }
         public Club Club { get; set; } = null!; // Ensure Club is not null

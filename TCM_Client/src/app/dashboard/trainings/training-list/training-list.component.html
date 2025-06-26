@@ -3,13 +3,60 @@
     <div class="row mx-5">
         <mat-tab-group class="mt-2">
             <mat-tab label="Табеларен приказ">
+            <div class="row">
+    <div class="col-12">
+        <mat-accordion>
+            <mat-expansion-panel class="mt-2">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Филтри</mat-panel-title>
+                </mat-expansion-panel-header>
 
+                <div class="row mt-3">
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Пребарај по наслов</mat-label>
+                            <input matInput placeholder="Внеси наслов" [ngModel]="searchTerm()"
+                                (ngModelChange)="searchBySearchTerm($event)" />
+                            <mat-icon matSuffix>search</mat-icon>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Статус</mat-label>
+                            <mat-select [(ngModel)]="selectedStatus" (selectionChange)="applyFilters()">
+                                <mat-option value="">Сите</mat-option>
+                                <mat-option value="1">Активни</mat-option>
+                                <mat-option value="2">Завршени</mat-option>
+                                <mat-option value="3">Откажани</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Тип</mat-label>
+                            <mat-select [(ngModel)]="selectedType" (selectionChange)="applyFilters()">
+                                <mat-option value="">Сите</mat-option>
+                                <mat-option value="1">Регуларен тренинг</mat-option>
+                                <mat-option value="2">Спаринг</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3 d-flex align-items-center">
+                        <button mat-button color="primary" (click)="resetFilters()">Ресетирај филтри</button>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</div>
                 <div class="mt-3 mobile-only">
-                    <mat-accordion *ngFor="let training of trainings">
+                    <mat-accordion *ngFor="let training of trainings()">
 
                         <mat-expansion-panel class="mt-2">
                             <mat-expansion-panel-header>
-                                <mat-panel-title> Тренинг {{training.date.toDateString()}} </mat-panel-title>
+                                <mat-panel-title> Тренинг {{training.date}} </mat-panel-title>
                             </mat-expansion-panel-header>
                             <p>{{training.notes}}</p>
                         </mat-expansion-panel>
@@ -39,53 +86,60 @@
                                             <th>#</th>
                                             <th>Наслов</th>
                                             <th>Датум</th>
+                                            <th>Тип</th>
                                             <th>Статус</th>
                                             <th>Акции</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @if(trainings()!=null){
+                                            <tr *ngFor="let training of trainings(); let i = index">
+                                                <td>{{ i + 1 }}</td>
+    
+                                                <td>{{ training.description }}</td>
+                                                <td>{{ training.date| date: 'dd/MM/yyyy' }}</td>
+                                                <td>{{ training.trainingType}}</td>
+                                                <td>
+    
+                                                    <span class="status" [ngClass]="{
+                                                        'text-success': training.status ==finishedTraining,
+                                                        'text-warning': training.status==activeTraining,
+                                                        'text-danger':training.status==canceledTraining
 
-                                        <tr *ngFor="let training of trainings; let i = index">
-                                            <td>{{ i + 1 }}</td>
+                                                    }">
+                                                        &bull;
+    
+                                                    </span>
+                                                    <span class="">{{ training.status }}</span>
+                                                </td>
+    
+                                                <td>
+                                                    <a href="#" class="settings" title="Edit" data-toggle="tooltip">
+                                                        <i class="material-icons">&#xE8B8;</i>
+                                                    </a>
+                                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip">
+                                                        <i class="material-icons">&#xE5C9;</i>
+                                                    </a>
+                                                </td>
+                                            </tr>
 
-                                            <td>{{ training.title }}</td>
-                                            <td>{{ training.date| date: 'dd/MM/yyyy' }}</td>
-                                            <td>
-
-                                                <span class="status" [ngClass]="{
-                        'text-success': training.status =='Active',
-                        'text-warning': training.status=='Pending'
-                      }">
-                                                    &bull;
-
-                                                </span>
-                                                <span class="">{{ training.status }}</span>
-                                            </td>
-
-                                            <td>
-                                                <a href="#" class="settings" title="Edit" data-toggle="tooltip">
-                                                    <i class="material-icons">&#xE8B8;</i>
-                                                </a>
-                                                <a href="#" class="delete" title="Delete" data-toggle="tooltip">
-                                                    <i class="material-icons">&#xE5C9;</i>
-                                                </a>
-                                            </td>
-                                        </tr>
+                                        }@else {
+                                            <div class="d-flex justify-content-center w-100">
+                                                Spinner here
+                                            </div>
+                                        }
 
                                     </tbody>
                                 </table>
-                                <div class="clearfix">
-                                    <div class="hint-text">
-                                        Showing <b>{{ 5}}</b> of
-                                        <b>{{ trainings.length }}</b> entries
-                                    </div>
-                                    <ul class="pagination">
-                                        <li class="page-item disabled"><a href="#">Previous</a></li>
-                                        <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                                        <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                        <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                                    </ul>
-                                </div>
+                                <mat-paginator
+                                    class="table-paginator"
+                                    [pageIndex]="pageNumber"
+                                    
+                                    [length]="totalTrainings"
+                                    [pageSize]="pageSize"
+                                    [pageSizeOptions]="pageSizeOptions"
+                                    (page)="onPageChange($event)">
+                                    </mat-paginator>
                             </div>
                         </div>
                     </div>
@@ -94,24 +148,27 @@
 
             </mat-tab>
             <mat-tab label="Календар">
-                <div class="calendar-and-details-container">
+                @if(trainings()){
+                    <div class="calendar-and-details-container">
                     <mat-calendar [(selected)]="selectedDate" (selectedChange)="onDateSelected($event)"
                         [dateClass]="dateClass" class="full-size-calendar"></mat-calendar>
 
                     <div class="selected-date-details">
                         <h3>Details for {{ selectedDate | date:'fullDate' }}</h3>
-                        <div *ngIf="getTrainingsForSelectedDate().length === 0">
+                        <div *ngIf="getTrainingsForSelectedDate()?.length === 0">
                             <p>No trainings scheduled for this day.</p>
                             <button mat-button color="primary" (click)="openAddTrainingDialog(selectedDate)">
                                 <mat-icon>add_circle_outline</mat-icon> Add Training
                             </button>
                         </div>
                         <div *ngFor="let training of getTrainingsForSelectedDate()" class="training-event-item">
-                            <h4>{{ training.title }}</h4>
+                            <h4>{{ training }}</h4>
                             <p *ngIf="training.notes">{{ training.notes }}</p>
                         </div>
                     </div>
                 </div>
+                }
+                
             </mat-tab>
         </mat-tab-group>
     </div>

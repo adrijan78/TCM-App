@@ -7,16 +7,18 @@ using TCM_App.Services.Interfaces;
 namespace TCM_App.Controllers
 {
 
-  
+    [Authorize]
     public class TrainingsController(ITrainingService _trainingService, ILogger<TrainingsController> _logger) :BaseController
     {
 
-        [HttpGet("trainings")]
+        [HttpGet("")]
         public async Task<IActionResult> GetTrainings([FromQuery]TrainingParams trainingParams)
         {
             try
             {
-                return Ok(await _trainingService.GetTrainingsByClubId(1,trainingParams));
+                var trainings= await _trainingService.GetTrainingsByClubId(1, trainingParams); // Replace 1 with the actual clubId from the authenticated user context
+                Response.AddPaginationHeader(trainings);
+                return Ok(trainings);
             }
             catch (Exception ex)
             {
