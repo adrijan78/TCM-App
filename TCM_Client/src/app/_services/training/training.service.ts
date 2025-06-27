@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {  inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
-import { Training } from '../../_models/Training';
+import { Training, TrainingDetails } from '../../_models/Training';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class TrainingService {
     selectedStatus?:number|null,
     selectedType?:number|null,searchTerm?:string)
     
-    {
+  {
 
     let params = new HttpParams();
     
@@ -42,6 +42,10 @@ export class TrainingService {
 
 
     return this.http.get<Training>(this.baseUrl+'trainings',{observe:'response',params});
+  }
+
+  getTraining(id:number){
+    return this.http.get<TrainingDetails>(this.baseUrl+'trainings/training-details/'+id)
   }
   
 }

@@ -1,4 +1,5 @@
-﻿using TCM_App.Helpers;
+﻿using Microsoft.EntityFrameworkCore;
+using TCM_App.Helpers;
 using TCM_App.Models;
 using TCM_App.Models.DTOs;
 using TCM_App.Repositories.Interfaces;
@@ -24,9 +25,9 @@ namespace TCM_App.Services
            return await _trainingRepository.GetNumberOfTrainingsForEveryMonth(clubId);
         }
 
-        public Task<Training> GetTraining(int trainingId, int clubId)
+        public async Task<TrainingDetailsDto> GetTraining(int trainingId, int clubId)
         {
-            throw new NotImplementedException();
+            return await _trainingRepository.GetTraining(trainingId);
         }
 
         public async Task<PagedList<TrainingDto>> GetTrainingsByClubId(int clubId, TrainingParams trainingParams)

@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddTrainingComponent } from '../add-training/add-training.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import {MatExpansionModule} from '@angular/material/expansion';
-import { Training } from '../../../_models/Training';
+import { Training, TrainingDetails } from '../../../_models/Training';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { TrainingService } from '../../../_services/training/training.service';
 import { TrainingStatus } from '../../../_models/_enums/TrainingStatus';
@@ -62,13 +62,15 @@ export class TrainingListComponent implements OnInit {
 
   trainings= signal<Training[]|null>(null);
   selectedDate: Date | null = null;
+  searchTermCalendar:string='';
   totalTrainings = 0;
   pageSize = 5; 
   pageNumber=1;
   pageSizeOptions = [5, 10, 20, 50];
-  selectedStatus=signal<number|null>(null);
+  selectedStatus=<number|null>(null);
   selectedType=signal<number|null>(null);
   searchTerm=signal<string>('');
+  selectedTraining=signal<TrainingDetails|null>(null);
   
 
   constructor(private dialog: MatDialog) {}
@@ -81,7 +83,7 @@ export class TrainingListComponent implements OnInit {
   getTrainings(){
     this.trainingService.getTrainingsByMoths(this.pageNumber,
       this.pageSize,
-      this.selectedStatus(),
+      this.selectedStatus,
       this.selectedType(),
       this.searchTerm()).subscribe({
       next:(res)=>{
@@ -91,11 +93,21 @@ export class TrainingListComponent implements OnInit {
                 this.pageNumber=pagination.currentPage!;
                 this.pageSize = pagination.itemsPerPage!;
                 this.totalTrainings=pagination.totalItems!;
-        this.getTrainingsForSelectedDate()
+                this.forceReloadCalendarSelectedDates()
+        //this.getTrainingsForSelectedDate()
 
       }
     })
   }
+
+  getTrainingDetails(id:number){
+    this.trainingService.getTraining(id).subscribe({
+      next:(res:TrainingDetails)=>{
+        this.selectedTraining.set(res);
+      }
+    })
+  }
+
 
 
   dateClass: MatCalendarCellClassFunction<Date> = (
@@ -127,6 +139,17 @@ export class TrainingListComponent implements OnInit {
    * Handles date selection on the calendar.
    */
   onDateSelected(date: Date | null): void {
+    
+    for (let training of this.trainings()!) {
+      if(date !=null && new Date(training.date).toDateString() == date?.toDateString()){
+
+        this.getTrainingDetails(training.id);
+        break;
+
+      }
+      this.selectedTraining.set(null);
+    }
+
     this.selectedDate = date;
   }
 
@@ -171,33 +194,45 @@ export class TrainingListComponent implements OnInit {
    * Used to display details below the calendar.
    */
 getTrainingsForSelectedDate(): Training[] | null {
-  if (!this.selectedDate) {
-    return null; // Return null if no date is selected
-  }
+return null
+}
 
-  const currentTrainings = this.trainings(); // Get the current value of the signal
+forceReloadCalendarSelectedDates(){
+  this.dateClass = (
+    date: Date,
+    view: 'month' | 'year' | 'multi-year'
+  ) => {
+    // Only apply custom classes for the 'month' view
+    if (view === 'month') {
+      let hasTraining = false;
+      // this.trainings()?.some(
+      //   (training) => { 
+      //     new Date(training.date).toDateString() == date.toDateString()
+      //   }
+      // );
+      for (let training of this.trainings()!) {
 
-  if (!currentTrainings) {
-    return null; // Return null if no current trainings are available
-  }
-
-  const filtered = currentTrainings.filter(training =>{
-
-    new Date(training.date).toDateString() === new Date(this.selectedDate!).toDateString()
-  }
-  );
-
-  return filtered.length > 0 ? filtered : null;
+        if(new Date(training.date).toDateString() == date.toDateString()){
+          hasTraining=true;
+          break;
+        }
+        
+      }
+      return hasTraining ? 'has-training' : '';
+    }
+    return ''; // No custom class for 'year' or 'multi-year' views
+  };
 }
 
 
 
   applyFilters(){
     this.getTrainings();
+
   }
 
   resetFilters(){
-    this.selectedStatus.set(null);
+    this.selectedStatus=null;
     this.selectedType.set(null);
     this.searchTerm.set('');
 
@@ -212,4 +247,17 @@ getTrainingsForSelectedDate(): Training[] | null {
     }
 
   }
+
+  getFilteredMembers() {
+  const training = this.selectedTraining();
+  if (!training || !training.memberTrainings) return [];
+
+  const term = this.searchTermCalendar.toLowerCase().trim();
+  if (!term) return training.memberTrainings;
+
+  return training.memberTrainings.filter(m => {
+    const fullName = (m.member.firstName + ' ' + m.member.lastName).toLowerCase();
+    return fullName.includes(term);
+  });
+}
 }

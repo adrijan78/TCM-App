@@ -9,7 +9,7 @@ namespace TCM_App.Services.Interfaces
         Task<Training> AddTraining(Training training);
         Task<Training> UpdateTraining(Training training);
         Task<Training> DeleteTraining(Training training);
-        Task<Training> GetTraining(int trainingId,int clubId);
+        Task<TrainingDetailsDto> GetTraining(int trainingId,int clubId);
         Task<Dictionary<int,int>> GetNumberOfTrainingsForEveryMonth(int clubId);
         Task<PagedList<TrainingDto>> GetTrainingsByClubId(int clubId, TrainingParams trainingParams);
 

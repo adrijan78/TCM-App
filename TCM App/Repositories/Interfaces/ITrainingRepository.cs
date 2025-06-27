@@ -8,5 +8,6 @@ namespace TCM_App.Repositories.Interfaces
     {
         Task<Dictionary<int, int>> GetNumberOfTrainingsForEveryMonth(int clubId);
         Task<PagedList<TrainingDto>> GetTrainingsByClubId(int clubId, TrainingParams userParams);
+        Task<TrainingDetailsDto> GetTraining(int trainingId);
     }
 }

@@ -22,9 +22,10 @@ namespace TCM_App.Repositories
 
         }
 
+
         public Task<PagedList<TrainingDto>> GetTrainingsByClubId(int clubId,TrainingParams trainingParams)
         {
-            var query = _context.Trainings.Where(x=>x.ClubId==clubId).OrderByDescending(x=>x.Date.Month).AsQueryable();
+            var query = _context.Trainings.Where(x=>x.ClubId==clubId).OrderByDescending(x=>x.Date).AsQueryable();
                 
             if(trainingParams.SearchTerm !=null && trainingParams.SearchTerm != "")
             {
@@ -43,13 +44,22 @@ namespace TCM_App.Repositories
             }
 
 
-
-
-
-
-
             return PagedList<TrainingDto>
                 .CreateAsync(query.ProjectTo<TrainingDto>(mapper.ConfigurationProvider), trainingParams.PageNumber, trainingParams.PageSize);
+        }
+
+
+
+
+        public async Task<TrainingDetailsDto> GetTraining(int trainingId)
+        {
+            var training = await _context.Trainings
+                .Where(x => x.Id == trainingId)   
+                .ProjectTo<TrainingDetailsDto>(mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+
+            return training ?? throw new KeyNotFoundException($"Training with id {trainingId} not found.");
+
         }
     }
 }

@@ -7,16 +7,16 @@ using TCM_App.Services.Interfaces;
 namespace TCM_App.Controllers
 {
 
-    [Authorize]
-    public class TrainingsController(ITrainingService _trainingService, ILogger<TrainingsController> _logger) :BaseController
+  
+    public class TrainingsController(ITrainingService _trainingService, ILogger<TrainingsController> _logger) : BaseController
     {
 
         [HttpGet("")]
-        public async Task<IActionResult> GetTrainings([FromQuery]TrainingParams trainingParams)
+        public async Task<IActionResult> GetTrainings([FromQuery] TrainingParams trainingParams)
         {
             try
             {
-                var trainings= await _trainingService.GetTrainingsByClubId(1, trainingParams); // Replace 1 with the actual clubId from the authenticated user context
+                var trainings = await _trainingService.GetTrainingsByClubId(1, trainingParams); // Replace 1 with the actual clubId from the authenticated user context
                 Response.AddPaginationHeader(trainings);
                 return Ok(trainings);
             }
@@ -38,13 +38,32 @@ namespace TCM_App.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex,"Cannot get number of trainings for every month");
-                throw new Exception("Cannot get number of trainings for every month",ex);
+                _logger.LogError(ex, "Cannot get number of trainings for every month");
+                throw new Exception("Cannot get number of trainings for every month", ex);
             }
-           
+
         }
 
-        
+        [HttpGet("training-details/{id}")]
+        public async Task<IActionResult> GetTraining(int id, [FromQuery] int clubId)
+        {
+            try
+            {
+                var training = await _trainingService.GetTraining(id, clubId);
+                if (training == null)
+                {
+                    return NotFound();
+                }
+                return Ok(training);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Cannot get training with id {Id}", id);
+                throw new Exception($"Cannot get training with id {id}", ex);
+            }
+        }
+
+
 
 
     }

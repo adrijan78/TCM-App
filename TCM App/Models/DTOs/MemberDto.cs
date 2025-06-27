@@ -3,12 +3,12 @@
     public class MemberDto
     {
         public int Id { get; set; }
-        public  string FirstName { get; set; }
-        public  string LastName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public PhotoDto ProfilePicture { get; set; }
-        public  int Age { get; set; }
+        public int Age { get; set; }
         public List<BeltDto>? Belts { get; set; }
-        public  string Email { get; set; }
+        public string Email { get; set; }
         public required bool IsActive { get; set; }
         public DateTime StartedOn { get; set; }
         public bool IsCoach { get; set; }
@@ -35,4 +35,13 @@
         public float Weight { get; set; }
     }
 
+    public class MemberSimpleDto
+    {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public PhotoDto ProfilePicture { get; set; }
+        public int Age { get; set; }
+
+    }
 }

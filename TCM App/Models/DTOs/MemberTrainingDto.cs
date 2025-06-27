@@ -14,5 +14,6 @@ namespace TCM_App.Models.DTOs
         public int ClubId { get; set; }
         public int Performace { get; set; }
         public TrainingDto? Training { get; set; }
+        public MemberSimpleDto? Member { get; set; }
     }
 }

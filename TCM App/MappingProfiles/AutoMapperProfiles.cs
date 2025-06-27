@@ -13,6 +13,11 @@ namespace TCM_App.MappingProfiles
                 .ForMember(d=>d.Age,o=>o.MapFrom(s=>CalculateAgeHelper.CalculateAge(s.DateOfBirth)))
                 .ForMember(d=>d.Belts,o=>o.MapFrom(s=>s.Belts))
                 .ForMember(d=>d.CurrentBelt,o=>o.MapFrom(s=> s.Belts.MaxBy(x => x.DateReceived)));
+
+            CreateMap<Member, MemberSimpleDto>()
+                .ForMember(d => d.Age, o => o.MapFrom(s => CalculateAgeHelper.CalculateAge(s.DateOfBirth)));
+
+
             CreateMap<Member, MemberListDto>()
                 .ForMember(d => d.Age, o => o.MapFrom(s => CalculateAgeHelper.CalculateAge(s.DateOfBirth)))
                 .ForMember(d => d.Belt, o => o.MapFrom(s => s.Belts.OrderByDescending(b=>b.DateReceived).Select(x=>new BeltDto { Id=x.BeltId,Name=x.Belt.BeltName,EarnedOn=x.DateReceived}).FirstOrDefault()));
@@ -25,8 +30,15 @@ namespace TCM_App.MappingProfiles
             CreateMap<MemberTraining, MemberTrainingDto>();
             CreateMap<Training, TrainingDto>()
                 .ForMember(d=>d.TrainingType, o=> o.MapFrom(s=>s.TrainingType.GetDescription()))
-                .ForMember(d=>d.Status,o=>o.MapFrom(s=>((TrainingStatusesEnum)s.Status).GetDescription()));
+                .ForMember(d => d.Status, o => o.MapFrom(s => ((TrainingStatusesEnum)s.Status).GetDescription()));
                 
+
+            CreateMap<Training, TrainingDetailsDto>()
+                .ForMember(d => d.TrainingType, o => o.MapFrom(s => s.TrainingType.GetDescription()))
+                .ForMember(d => d.Status, o => o.MapFrom(s => ((TrainingStatusesEnum)s.Status).GetDescription()))
+                .ForMember(d=>d.MemberTrainings,o=>o.MapFrom(s=>s.MemberTrainings));
+            
+
         }
 
     }

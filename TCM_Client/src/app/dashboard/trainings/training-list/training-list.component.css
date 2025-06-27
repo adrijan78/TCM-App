@@ -318,5 +318,18 @@ table.table .avatar {
   color: #007bff !important;
 }
 
+.mat-mdc-select{
+  color: black !important;
 }
 
+}
+
+.accordion-img{
+  border-radius: 50%!important;
+  max-width: 80px;
+  margin-right: .5rem;
+}
+mat-expansion-panel-header {
+  min-height: 100px;  /* default is ~48px */
+  max-height: 500px;
+}
