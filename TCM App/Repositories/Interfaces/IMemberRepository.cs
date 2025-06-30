@@ -11,5 +11,6 @@ namespace TCM_App.Repositories.Interfaces
         Task<Member?> GetMemberById(int memberId);
 
         Task<PagedList<MemberTrainingDto>> GetMemberAttendanceAndPerformance (int member, UserParams memberParams);
+        Task DeactivateMember(int memberId);
     }
 }

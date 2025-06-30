@@ -1,8 +1,16 @@
 .register-form-wrapper {
-    padding: 1rem;
+    padding: 3rem;
     max-width: 800px;
     margin: auto;
+    background-color: white!important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+    border-radius: 0.75rem;
   }
+
+  .section-text{
+  color:#007bb5 !important;
+}
+ 
   
   .form-group {
     display: flex;
@@ -13,7 +21,7 @@
     mat-form-field {
       flex: 1 1 300px;
     }
-  
+ 
     .upload-field {
         display: flex;
         flex-direction: column;

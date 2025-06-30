@@ -2,9 +2,9 @@
 
     <div class="row mx-5">
         <mat-tab-group class="mt-2">
-             <mat-tab label="Календар">
+            <mat-tab label="Календар">
                 @if(trainings()){
-                    <div class="calendar-and-details-container">
+                <div class="calendar-and-details-container">
                     <mat-calendar [(selected)]="selectedDate" (selectedChange)="onDateSelected($event)"
                         [dateClass]="dateClass" class="full-size-calendar"></mat-calendar>
 
@@ -12,7 +12,7 @@
                         <h3>Детали за тренингот одржан на {{ selectedDate | date }}</h3>
                         <hr>
                         @if(!selectedTraining()){
-                            <div >
+                        <div>
                             <div class="px-5">
                                 <p>Нема тренинзи за овој ден!</p>
                                 <button mat-button color="primary" (click)="openAddTrainingDialog(selectedDate)">
@@ -22,106 +22,109 @@
                             </div>
                         </div>
                         }@else{
-                            <div  class="training-event-item">
+                        <div class="training-event-item">
                             <div class="px-5">
                                 <h4>Наслов: {{ selectedTraining()?.description }}</h4>
-                               
+
                                 <h5 class="mt-3">Тип на тренинг: {{ selectedTraining()?.trainingType }}</h5>
                                 <h5 class="mt-3">Присутни членови:</h5>
                                 <div class="row" style="max-height: 600px; overflow-x: auto;">
-                                    
+
                                     <mat-form-field appearance="outline" class="w-100 my-2">
                                         <mat-label>Пребарај по име и презиме</mat-label>
-                                            <input matInput placeholder="Внеси име и презиме" [(ngModel)]="searchTermCalendar"
-                                         />
+                                        <input matInput placeholder="Внеси име и презиме"
+                                            [(ngModel)]="searchTermCalendar" />
                                         <mat-icon matSuffix>search</mat-icon>
                                     </mat-form-field>
-                                    
+
                                     @for ( memberTraining of getFilteredMembers(); track $index) {
-                                        <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <mat-accordion>
-                                           
-                                            <mat-expansion-panel disabled  class="mt-3 mb-2">
-                                            <mat-expansion-panel-header>
-                                        <mat-panel-title class="h-100 w-100">
-                                           
-                                            <img [src]="memberTraining.member.profilePicture.url+memberTraining.member.id+'.jpg'" class="accordion-img">
-                                            {{memberTraining.member.firstName}} {{memberTraining.member.lastName}}
-                                            <div class="w-75 justify-content-end d-flex">
-                                                	<mat-icon>timeline</mat-icon>
-                                                    <span>{{memberTraining.performace}}%</span>
-                                            </div>
-                                        </mat-panel-title>
-                                        </mat-expansion-panel-header>
-                                        </mat-expansion-panel>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <mat-accordion [routerLink]="['/members/'+memberTraining.member.id]"
+                                            routerLinkActive="router-link-active">
+
+                                            <mat-expansion-panel disabled class="mt-3 mb-2">
+                                                <mat-expansion-panel-header>
+                                                    <mat-panel-title class="h-100 w-100">
+
+                                                        <img [src]="memberTraining.member.profilePicture.url+memberTraining.member.id+'.jpg'"
+                                                            class="accordion-img">
+                                                        {{memberTraining.member.firstName}}
+                                                        {{memberTraining.member.lastName}}
+                                                        <div class="w-75 justify-content-end d-flex">
+                                                            <mat-icon>timeline</mat-icon>
+                                                            <span>{{memberTraining.performace}}%</span>
+                                                        </div>
+                                                    </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                            </mat-expansion-panel>
                                         </mat-accordion>
                                     </div>
-                                     }
-                                    
+                                    }
+
                                 </div>
 
 
                             </div>
                         </div>
                         }
-                        
-                        
+
+
                     </div>
                 </div>
                 }
-                
+
             </mat-tab>
             <mat-tab label="Табеларен приказ">
-            <div class="row">
-    <div class="col-12">
-        <mat-accordion>
-            <mat-expansion-panel class="mt-2">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>Филтри</mat-panel-title>
-                </mat-expansion-panel-header>
+                <div class="row">
+                    <div class="col-12">
+                        <mat-accordion>
+                            <mat-expansion-panel class="mt-2">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>Филтри</mat-panel-title>
+                                </mat-expansion-panel-header>
 
-                <div class="row mt-3">
-                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>Пребарај по наслов</mat-label>
-                            <input matInput placeholder="Внеси наслов" [ngModel]="searchTerm()"
-                                (ngModelChange)="searchBySearchTerm($event)" />
-                            <mat-icon matSuffix>search</mat-icon>
-                        </mat-form-field>
-                    </div>
+                                <div class="row mt-3">
+                                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                        <mat-form-field appearance="outline" class="w-100">
+                                            <mat-label>Пребарај по наслов</mat-label>
+                                            <input matInput placeholder="Внеси наслов" [ngModel]="searchTerm()"
+                                                (ngModelChange)="searchBySearchTerm($event)" />
+                                            <mat-icon matSuffix>search</mat-icon>
+                                        </mat-form-field>
+                                    </div>
 
-                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>Статус</mat-label>
-                            <mat-select [(ngModel)]="selectedStatus"
-                            name="ageCategory" (selectionChange)="applyFilters()"
-                            >
-                                <mat-option [value]="">Сите</mat-option>
-                                <mat-option [value]="1">Активни</mat-option>
-                                <mat-option [value]="2">Завршени</mat-option>
-                                <mat-option [value]="3">Откажани</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>Тип</mat-label>
-                            <mat-select [(ngModel)]="selectedType" (selectionChange)="applyFilters()">
-                                <mat-option value="">Сите</mat-option>
-                                <mat-option value="1">Регуларен тренинг</mat-option>
-                                <mat-option value="2">Спаринг</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
+                                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                        <mat-form-field appearance="outline" class="w-100">
+                                            <mat-label>Статус</mat-label>
+                                            <mat-select [(ngModel)]="selectedStatus" name="ageCategory"
+                                                (selectionChange)="applyFilters()">
+                                                <mat-option [value]="">Сите</mat-option>
+                                                <mat-option [value]="1">Активни</mat-option>
+                                                <mat-option [value]="2">Завршени</mat-option>
+                                                <mat-option [value]="3">Откажани</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                        <mat-form-field appearance="outline" class="w-100">
+                                            <mat-label>Тип</mat-label>
+                                            <mat-select [(ngModel)]="selectedType" (selectionChange)="applyFilters()">
+                                                <mat-option value="">Сите</mat-option>
+                                                <mat-option value="1">Регуларен тренинг</mat-option>
+                                                <mat-option value="2">Спаринг</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
 
-                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3 d-flex align-items-center">
-                        <button mat-button color="primary" (click)="resetFilters()">Ресетирај филтри</button>
+                                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3 d-flex align-items-center">
+                                        <button mat-button color="primary" (click)="resetFilters()">Ресетирај
+                                            филтри</button>
+                                    </div>
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
                     </div>
                 </div>
-            </mat-expansion-panel>
-        </mat-accordion>
-    </div>
-</div>
                 <div class="mt-3 mobile-only">
                     <mat-accordion *ngFor="let training of trainings()">
 
@@ -146,7 +149,7 @@
                                         <div class="col-sm-7 text-end">
                                             <button mat-raised-button color="accent"
                                                 (click)="openAddTrainingDialog(selectedDate)">
-                                                <mat-icon>add</mat-icon> Add Training
+                                                <mat-icon>add</mat-icon> Додади тренинг
                                             </button>
                                         </div>
                                     </div>
@@ -164,53 +167,49 @@
                                     </thead>
                                     <tbody>
                                         @if(trainings()!=null){
-                                            <tr *ngFor="let training of trainings(); let i = index">
-                                                <td>{{ i + 1 }}</td>
-    
-                                                <td>{{ training.description }}</td>
-                                                <td>{{ training.date| date: 'dd/MM/yyyy' }}</td>
-                                                <td>{{ training.trainingType}}</td>
-                                                <td>
-    
-                                                    <span class="status" [ngClass]="{
+                                        <tr [routerLink]="[training.id]"
+                                            *ngFor="let training of trainings(); let i = index">
+                                            <td>{{ i + 1 }}</td>
+
+                                            <td>{{ training.description }}</td>
+                                            <td>{{ training.date| date: 'dd/MM/yyyy' }}</td>
+                                            <td>{{ training.trainingType}}</td>
+                                            <td>
+
+                                                <span class="status" [ngClass]="{
                                                         'text-success': training.status ==finishedTraining,
                                                         'text-warning': training.status==activeTraining,
                                                         'text-danger':training.status==canceledTraining
 
                                                     }">
-                                                        &bull;
-    
-                                                    </span>
-                                                    <span class="">{{ training.status }}</span>
-                                                </td>
-    
-                                                <td>
-                                                    <a href="#" class="settings" title="Edit" data-toggle="tooltip">
-                                                        <i class="material-icons">&#xE8B8;</i>
-                                                    </a>
-                                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip">
-                                                        <i class="material-icons">&#xE5C9;</i>
-                                                    </a>
-                                                </td>
-                                            </tr>
+                                                    &bull;
+
+                                                </span>
+                                                <span class="">{{ training.status }}</span>
+                                            </td>
+
+                                            <td>
+                                                <a href="#" class="settings" title="Edit" data-toggle="tooltip">
+                                                    <i class="material-icons">&#xE8B8;</i>
+                                                </a>
+                                                <a href="#" class="delete" title="Delete" data-toggle="tooltip">
+                                                    <i class="material-icons">&#xE5C9;</i>
+                                                </a>
+                                            </td>
+                                        </tr>
 
                                         }@else {
-                                            <div class="d-flex justify-content-center w-100">
-                                                Spinner here
-                                            </div>
+                                        <div class="d-flex justify-content-center w-100">
+                                            Spinner here
+                                        </div>
                                         }
 
                                     </tbody>
                                 </table>
-                                <mat-paginator
-                                    class="table-paginator"
-                                    [pageIndex]="pageNumber"
-                                    
-                                    [length]="totalTrainings"
-                                    [pageSize]="pageSize"
-                                    [pageSizeOptions]="pageSizeOptions"
+                                <mat-paginator class="table-paginator" [pageIndex]="pageNumber"
+                                    [length]="totalTrainings" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
                                     (page)="onPageChange($event)">
-                                    </mat-paginator>
+                                </mat-paginator>
                             </div>
                         </div>
                     </div>
@@ -218,7 +217,7 @@
 
 
             </mat-tab>
-           
+
         </mat-tab-group>
     </div>
 

@@ -18,6 +18,7 @@ namespace TCM_App.Controllers
     {
 
         [HttpGet]
+        [Authorize (Roles ="Admin")]
         public async Task<IActionResult> GetMembers([FromQuery]UserParams userParams)
         {
             try
@@ -36,6 +37,7 @@ namespace TCM_App.Controllers
 
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Member")]
         public async Task<IActionResult> GetMember(int id)
         {
             try
@@ -66,6 +68,21 @@ namespace TCM_App.Controllers
             catch (Exception e)
             {
                 logger.LogError(e, "Error getting attendance and performance for member with id {MemberId}", id);
+                throw new Exception(e.ToString());
+            }
+        }
+
+        [HttpDelete("deactivate-member/{id}")]
+        public async Task<IActionResult> DeactivateMember(int id)
+        {
+            try
+            {
+                await _memberService.DeactivateMember(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error deleting member with id {Id}", id);
                 throw new Exception(e.ToString());
             }
         }

@@ -4,7 +4,7 @@ namespace TCM_App.Services.Interfaces
 {
     public interface ITokenService
     {
-        string CreateToken(Member member);
+        Task<string> CreateToken(Member member);
 
     }
 }

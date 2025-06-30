@@ -7,7 +7,7 @@
                     <div class="card-body text-center d-flex flex-column align-items-center">
                         <div class="profile-container">
                             <div class="profile-img-container">
-                                @if (member()) {
+                                @if (member()?.profilePicture!=null) {
 
                                 <img [src]="member()?.profilePicture?.url+''+ member()?.id+'.jpg'" alt="Profile"
                                     class="profile-img">
@@ -77,10 +77,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         @if(barChartData().length>0){
-                                               <div class="chart-item">
-                                                
+                                        <div class="chart-item">
+
                                             <ngx-charts-bar-vertical [scheme]="barChartColorScheme"
                                                 [results]="barChartData()" [gradient]="gradient" [xAxis]="showXAxis"
                                                 [yAxis]="showYAxis" [legend]="showLegend"
@@ -92,8 +92,13 @@
                                                 (select)="onSelect($event)">
                                             </ngx-charts-bar-vertical>
                                         </div>
+                                        }@else {
+                                        <div class="d-flex w-100 justify-content-center ">
+                                            <h3>Не постојат податоци</h3>
+
+                                        </div>
                                         }
-                                     
+
                                     </div>
 
                                     <div class="col-lg-6 col-md-6 col-12 mb-3 pb-5 ">
@@ -107,7 +112,7 @@
                                         </div>
                                         @if(attendancePercentage())
                                         {
-                                        
+
                                         <div class="chart-item pie-chart-container">
                                             <ngx-charts-pie-chart [scheme]="pieChartColorScheme"
                                                 [results]="pieChartData" [gradient]="gradient" [legend]="showLegend"
@@ -117,6 +122,12 @@
                                                 [tooltipText]="pieChartOptions.labelFormatting"
                                                 (select)="onSelect($event)">
                                             </ngx-charts-pie-chart>
+                                        </div>
+                                        }
+                                        @else {
+                                        <div class="d-flex w-100 justify-content-center ">
+                                            <h3>Не постојат податоци</h3>
+
                                         </div>
                                         }
                                     </div>
@@ -131,6 +142,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12 mb-3">
+                                            @if(lineChartData.length>1){
                                             <div class="chart-item">
                                                 <ngx-charts-line-chart [scheme]="lineChartColorScheme"
                                                     [results]="lineChartData" [gradient]="gradient" [xAxis]="showXAxis"
@@ -142,6 +154,14 @@
                                                     (select)="onSelect($event)">
                                                 </ngx-charts-line-chart>
                                             </div>
+
+                                            }
+                                            @else {
+                                            <div class="d-flex w-100 justify-content-center ">
+                                                <h3>Не постојат податоци</h3>
+
+                                            </div>
+                                            }
                                         </div>
                                     </div>
 
@@ -170,14 +190,14 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr *ngFor="let row of dataSource; let i = index"> 
+                                                        <tr *ngFor="let row of dataSource; let i = index">
                                                             <td>{{ i + 1 }}</td>
                                                             <td>{{row.date | date }}</td>
                                                             <td>{{row.training.trainingType}}</td>
                                                             <td>{{row.performace}}</td>
                                                             <td>{{row.description}}</td>
 
-                                                           
+
                                                             <!-- <td>
                                                                 <span class="status" [ngClass]="{
                                                                     'text-success': 'good' === 'good',
@@ -189,7 +209,7 @@
                                                             </td>
                                                             <td>{{ 'Note 1' }}</td>
                                                              -->
-                                                        <td>
+                                                            <td>
                                                                 <a href="#" class="settings" title="Edit"
                                                                     data-toggle="tooltip">
                                                                     <i class="material-icons">&#xE8B8;</i>
@@ -207,12 +227,9 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                                <mat-paginator
-                                                class="table-paginator"
-                                                [length]="100"
-                                                [pageSize]="pageSize"
-                                                [pageSizeOptions]="pageSizeOptions"
-                                                (page)="onPageChange($event)">
+                                                <mat-paginator class="table-paginator" [length]="100"
+                                                    [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+                                                    (page)="onPageChange($event)">
                                                 </mat-paginator>
                                             </div>
                                         </div>
@@ -276,7 +293,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr *ngFor="let row of dataSource; let i = index">
-                                                        
+
                                                         <td>
                                                             <span class="status" [ngClass]="{
                                                                     'text-success': 'good' === 'good',

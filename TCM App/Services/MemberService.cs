@@ -22,6 +22,11 @@ namespace TCM_App.Services
 
         }
 
+        public Task DeactivateMember(int memberId)
+        {
+           return _memberRepository.DeactivateMember(memberId);
+        }
+
         public Task DeleteMember(Member member)
         {
             throw new NotImplementedException();

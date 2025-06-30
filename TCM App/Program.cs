@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -36,6 +37,7 @@ namespace TCM_App
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IMemberService, MemberService>();
             builder.Services.AddScoped<ITrainingService, TrainingService>();
+            builder.Services.AddScoped<INoteService, NoteService>();
             #endregion
 
             #region Repositories
@@ -46,6 +48,23 @@ namespace TCM_App
             #endregion
 
             #region Authentication
+
+
+            builder.Services.AddIdentityCore<Member>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+            })
+                .AddRoles<AppRole>()
+                .AddRoleManager<RoleManager<AppRole>>()
+                .AddEntityFrameworkStores<DataContext>();
+
+
+
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -62,6 +81,14 @@ namespace TCM_App
                         ValidateAudience = false
                     };
                 });
+
+
+            builder.Services.AddAuthorizationBuilder()
+                .AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"))
+                .AddPolicy("RequireCoachRole", policy => policy.RequireRole("Coach"))
+                .AddPolicy("RequireMemberRole", policy => policy.RequireRole("Member"));
+
+
             #endregion
 
 

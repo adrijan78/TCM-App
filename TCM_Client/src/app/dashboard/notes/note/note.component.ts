@@ -20,6 +20,5 @@ import { Note } from '../../../_models/Note';
   styleUrls: ['./note.component.css'],
 })
 export class NoteComponent {
-  note=input<Note>();
-
+  note = input<Note | null>(null);
 }

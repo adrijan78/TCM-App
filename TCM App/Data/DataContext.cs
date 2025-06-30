@@ -1,13 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TCM_App.Models;
 
 namespace TCM_App.Data
 {
-    public class DataContext: DbContext
+    public class DataContext 
+        : IdentityDbContext<Member,AppRole,int,IdentityUserClaim<int>,
+            AppMemberRole,IdentityUserLogin<int>,IdentityRoleClaim<int>,
+            IdentityUserToken<int>>
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
-        {
-        }
+        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+
         public DbSet<Member> Members { get; set; }
         public DbSet<Belt> Belts { get; set; }
         public DbSet<MemberBelt> MemberBelts { get; set; }
@@ -53,6 +57,22 @@ namespace TCM_App.Data
                 .WithMany(m => m.MemberTrainings)
                 .HasForeignKey(mt => mt.MemberId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Member>()
+                .HasMany(m => m.MemberRoles)
+                .WithOne(mr => mr.Member)
+                .HasForeignKey(mr => mr.MemberId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AppRole>()
+                .HasMany(m => m.AppMemberRoles)
+                .WithOne(mr => mr.Role)
+                .HasForeignKey(mr => mr.RoleId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+
 
         }
     }

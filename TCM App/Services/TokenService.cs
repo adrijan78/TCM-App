@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -8,9 +9,9 @@ using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Services
 {
-    public class TokenService(IConfiguration configuration): ITokenService
+    public class TokenService(IConfiguration configuration, UserManager<Member> _userManager,RoleManager<AppRole> roleManager): ITokenService
     {
-        public string CreateToken(Member member)
+        public async Task<string> CreateToken(Member member)
         {
             var tokenKey = configuration["TokenKey"] ?? throw new Exception("Token key not found");
             if(tokenKey.Length<64)
@@ -26,6 +27,19 @@ namespace TCM_App.Services
                 new Claim(ClaimTypes.Name, member.FirstName + " " + member.LastName),
                 new Claim(ClaimTypes.Email, member.Email),
             };
+
+            var memberr = await _userManager.FindByIdAsync(member.Id.ToString());
+
+            
+
+            var roles = await _userManager.GetRolesAsync(memberr!);
+
+
+                foreach (var role in roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+                }
+
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

@@ -46,6 +46,8 @@ export class RegisterMemberComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
+      height: ['', Validators.required],
+      weight: ['', Validators.required],
     });
   }
 
@@ -68,11 +70,13 @@ export class RegisterMemberComponent {
       //   this.registerForm.value.dateOfBirth.toISOString()
       // );
 
-      this.memberToRegister.FirstName = this.registerForm.value.firstName;
-      this.memberToRegister.LastName = this.registerForm.value.lastName;
-      this.memberToRegister.Email = this.registerForm.value.email;
-      this.memberToRegister.Password = this.registerForm.value.password;
-      this.memberToRegister.DateOfBirth = this.registerForm.value.dateOfBirth;
+      this.memberToRegister.firstName = this.registerForm.value.firstName;
+      this.memberToRegister.lastName = this.registerForm.value.lastName;
+      this.memberToRegister.email = this.registerForm.value.email;
+      this.memberToRegister.password = this.registerForm.value.password;
+      this.memberToRegister.dateOfBirth = this.registerForm.value.dateOfBirth;
+      this.memberToRegister.weight = this.registerForm.value.weight;
+      this.memberToRegister.height = this.registerForm.value.height;
 
       // if (this.selectedFile) {
       //   formData.append('profilePicture', this.selectedFile);

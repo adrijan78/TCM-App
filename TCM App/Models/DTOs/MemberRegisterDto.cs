@@ -17,8 +17,12 @@ namespace TCM_App.Models.DTOs
 
         public required string Password { get; set; }
 
-        //public required bool IsActive { get; set; }
-        //public required DateTime StartedOn { get; set; }
+
+
+        public  bool? IsActive { get; set; } = true;
+        public  DateTime? StartedOn { get; set; }=DateTime.UtcNow;
+
+        public bool? IsCoach { get; set; } 
 
         public float Height { get; set; }
         public float Weight { get; set; }

@@ -1,19 +1,17 @@
-﻿using System.Reflection.Metadata;
+﻿using Microsoft.AspNetCore.Identity;
+using System.Reflection.Metadata;
 using TCM_App.Helpers;
 
 namespace TCM_App.Models
 {
-    public class Member
+    public class Member:IdentityUser<int>
     {
-        public int Id { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public int PhotoId { get; set; }
         public Photo ProfilePicture { get; set; } 
         public required DateTime DateOfBirth { get; set; }
         public List<MemberBelt> Belts { get; set; } = [];
-        public required string Email { get; set; }
-        public byte[] PasswordHash { get; set; } = [];
         public byte[] PasswordSalt { get; set; } = [];
         public required bool IsActive { get; set; }
         public DateTime StartedOn { get; set; }
@@ -29,6 +27,8 @@ namespace TCM_App.Models
         public List<Note> NotesSent { get; set; } = [];
 
         public List<Note> NotesReceived { get; set; }= [];
+
+        public List<AppMemberRole> MemberRoles { get; set; } = [];
 
         //public int GetAge()
         //{

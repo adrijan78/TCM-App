@@ -14,6 +14,10 @@ namespace TCM_App.MappingProfiles
                 .ForMember(d=>d.Belts,o=>o.MapFrom(s=>s.Belts))
                 .ForMember(d=>d.CurrentBelt,o=>o.MapFrom(s=> s.Belts.MaxBy(x => x.DateReceived)));
 
+            CreateMap<MemberRegisterDto, Member>()
+                .ForMember(d=>d.UserName,o=>o.MapFrom(s=>s.Email));
+                 
+
             CreateMap<Member, MemberSimpleDto>()
                 .ForMember(d => d.Age, o => o.MapFrom(s => CalculateAgeHelper.CalculateAge(s.DateOfBirth)));
 
@@ -37,8 +41,8 @@ namespace TCM_App.MappingProfiles
                 .ForMember(d => d.TrainingType, o => o.MapFrom(s => s.TrainingType.GetDescription()))
                 .ForMember(d => d.Status, o => o.MapFrom(s => ((TrainingStatusesEnum)s.Status).GetDescription()))
                 .ForMember(d=>d.MemberTrainings,o=>o.MapFrom(s=>s.MemberTrainings));
-            
 
+            CreateMap<Note, NoteDto>();
         }
 
     }

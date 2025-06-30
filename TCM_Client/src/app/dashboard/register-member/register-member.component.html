@@ -1,36 +1,63 @@
 <div class="register-form-wrapper">
+    <h3 class="mb-5 section-text">Регистрирај нов член</h3>
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
         <div class="form-group">
             <mat-form-field appearance="outline">
-                <mat-label>First Name</mat-label>
+                <mat-label>Име</mat-label>
                 <input matInput formControlName="firstName" maxlength="50" required />
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-                <mat-label>Last Name</mat-label>
+                <mat-label>Презиме</mat-label>
                 <input matInput formControlName="lastName" maxlength="50" required />
             </mat-form-field>
         </div>
 
         <div class="form-group">
             <mat-form-field appearance="outline">
-                <mat-label>Email</mat-label>
+                <mat-label>Емаил</mat-label>
                 <input matInput type="email" formControlName="email" required />
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-                <mat-label>Password</mat-label>
+                <mat-label>Лозинка</mat-label>
                 <input matInput type="password" formControlName="password" required />
             </mat-form-field>
         </div>
+        <div class="form-group">
+            <mat-form-field appearance="outline">
+                <mat-label>Висина</mat-label>
+                <input matInput type="password" formControlName="height" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Тежина</mat-label>
+                <input matInput type="email" formControlName="weight" required />
+            </mat-form-field>
+
+
+        </div>
+
 
         <div class="form-group">
             <mat-form-field appearance="outline">
-                <mat-label>Date of Birth</mat-label>
+                <mat-label>Датум на раѓање</mat-label>
                 <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" required />
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
+
+
+
             </mat-form-field>
+
+            <div class="w-50 d-flex justify-content-end">
+                <button mat-raised-button color="primary" (click)="onSubmit()" class="submit-btn" type="button"
+                    [disabled]="registerForm.invalid">
+                    Register Member
+                </button>
+
+            </div>
+
 
             <!-- <div class="upload-field"> 
                 <label>Profile Picture</label>
@@ -54,9 +81,6 @@
 
         </div>
 
-        <button mat-raised-button color="primary" (click)="onSubmit()" class="submit-btn" type="button"
-            [disabled]="registerForm.invalid">
-            Register Member
-        </button>
+
     </form>
 </div>

@@ -11,5 +11,7 @@
         public int ToMemberId { get; set; }
         public required Member ToMember { get; set; }
 
+        public bool CreatedForTraining { get; set; }
+
     }
 }

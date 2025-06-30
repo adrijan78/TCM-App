@@ -1,1 +1,102 @@
-<p>training-detail works!</p>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 full-size-calendar py-4">
+        <div class="row justify-content-center d-flex">
+            <div class="col-lg-5 col-md-5 col-sm-5 justify-content-center d-flex">
+                <h3 class="training-text">{{training()?.description}}</h3>
+            </div>
+
+        </div>
+        <hr style="color:gray" class="mx-5">
+        <div class="row mt-5">
+
+            <div class="col-lg-4 col-md-6 col-sm-12 d-flex justify-content-center">
+
+                <span>
+                    <mat-icon>event</mat-icon>
+
+                    <strong>
+                        {{training()?.date |date}}
+                    </strong>
+                </span>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 d-flex justify-content-center">
+                <span>
+                    <mat-icon>sports_mma</mat-icon>
+                    <strong>
+                        {{training()?.trainingType}}
+                    </strong>
+                </span>
+
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 d-flex justify-content-center">
+                <span *ngIf="training()?.status">
+                    <span>
+                        <mat-icon *ngIf="training()?.status == 'Завршен'">check_circle</mat-icon>
+                        <mat-icon *ngIf="training()?.status == 'Активен'">schedule</mat-icon>
+                        <mat-icon *ngIf="training()?.status == 'Откажан'">cancel</mat-icon>
+                        <strong>
+                            {{training()?.status}}
+                        </strong>
+                    </span>
+
+                </span>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 app-card-style">
+        <h5 class="mt-3">Присутни членови:</h5>
+        <div class="row" style="max-height: 500px; overflow-x: auto;">
+
+            <mat-form-field appearance="outline" class="w-100 my-2">
+                <mat-label>Пребарај по име и презиме</mat-label>
+                <input matInput placeholder="Внеси име и презиме" [(ngModel)]="searchTermCalendar" />
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+
+            @for ( memberTraining of getFilteredMembers(); track $index) {
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <mat-accordion (click)="onMemberSelect(memberTraining)" routerLinkActive="router-link-active">
+
+                    <mat-expansion-panel disabled class="mt-3 mb-2">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="h-100 w-100">
+
+                                <img [src]="memberTraining.member.profilePicture.url+memberTraining.member.id+'.jpg'"
+                                    class="accordion-img">
+                                {{memberTraining.member.firstName}}
+                                {{memberTraining.member.lastName}}
+                                <div class="w-75 justify-content-end d-flex">
+                                    <mat-icon>timeline</mat-icon>
+                                    <span>{{memberTraining.performace}}%</span>
+                                </div>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+            }
+
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-5 col-sm-12 app-card-style">
+        <h5 class="mt-3">Белешки за членот:</h5>
+        <div class="row" style="max-height: 500px; overflow-x: auto;">
+
+            <mat-form-field appearance="outline" class="w-100 my-2">
+                <mat-label>Пребарај по наслов</mat-label>
+                <input matInput placeholder="Внеси име и презиме" [(ngModel)]="searchTermNotes" />
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+
+            @for (note of getFilteredNotes(); track $index) {
+            <div class="col-lg-12 col-md-12 col-sm-12 px-5">
+                <app-note [note]="note"></app-note>
+            </div>
+            }
+
+        </div>
+    </div>
+</div>

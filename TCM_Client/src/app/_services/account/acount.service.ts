@@ -49,7 +49,7 @@ export class AcountService {
   }
 
   registerMember(model: any) {
-    return this.http.post(this.baseUrl + 'account/register-member', model);
+    return this.http.post(this.baseUrl + 'account/register', model);
   }
 
   logout() {

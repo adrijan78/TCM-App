@@ -101,7 +101,7 @@ table.table .avatar {
 }
 .status {
     font-size: 30px;
-    margin: 2px 2px 0 0;
+    margin-bottom: .5rem;
     display: inline-block;
     vertical-align: middle;
     line-height: 10px;
@@ -175,4 +175,8 @@ table.table .avatar {
 
 .table-paginator .mat-icon-button {
   color: #007bff !important;
+}
+
+.big-icon {
+  font-size: 29px !important;
 }

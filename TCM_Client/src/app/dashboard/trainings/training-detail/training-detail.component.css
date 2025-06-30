@@ -1,0 +1,44 @@
+.full-size-calendar {
+  width: 100%; /* Take full width of its container */
+  height: auto; /* Allow height to adjust */
+  margin-bottom: 20px; /* Space between calendar and details on small screens */
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 15px;
+}
+
+.app-card-style{
+  
+  
+  height: auto; /* Allow height to adjust */
+  margin-bottom: 20px; /* Space between calendar and details on small screens */
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 15px;
+
+}
+
+mat-icon {
+    font-size: 24px;
+    vertical-align: middle;
+    margin-right: 12px;
+    color: #007bb5; 
+  }
+
+.training-text{
+    color: #007bb5;
+  }
+
+.accordion-img{
+  border-radius: 50%!important;
+  max-width: 80px;
+  margin-right: .5rem;
+}
+mat-expansion-panel-header {
+  min-height: 100px;  /* default is ~48px */
+  max-height: 500px;
+}
+
+

@@ -99,5 +99,17 @@ namespace TCM_App.Repositories
             return query;
         }
 
+        public Task DeactivateMember(int memberId)
+        {
+            Member? member = _context.Members.FirstOrDefault(x => x.Id == memberId);
+            if (member == null)
+            {
+                throw new Exception("Member not found");
+            }
+            member.IsActive = false;
+            _context.Members.Update(member);
+            return _context.SaveChangesAsync();
+
+        }
     }
 }

@@ -1,7 +1,9 @@
 export interface RegisterMember {
-  FirstName: string;
-  LastName: string;
-  Email: string;
-  Password: string;
-  DateOfBirth: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  dateOfBirth: Date;
+  email: string;
+  height: number;
+  weight: number;
 }
