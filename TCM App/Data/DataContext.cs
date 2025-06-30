@@ -61,7 +61,7 @@ namespace TCM_App.Data
             modelBuilder.Entity<Member>()
                 .HasMany(m => m.MemberRoles)
                 .WithOne(mr => mr.Member)
-                .HasForeignKey(mr => mr.MemberId)
+                .HasForeignKey(mr => mr.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 

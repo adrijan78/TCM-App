@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using TCM_App.Data;
 using TCM_App.Helpers;
 using TCM_App.Models.DTOs;
@@ -18,7 +19,7 @@ namespace TCM_App.Controllers
     {
 
         [HttpGet]
-        [Authorize (Roles ="Admin")]
+        [Authorize (Policy = "RequireCoachRole")]
         public async Task<IActionResult> GetMembers([FromQuery]UserParams userParams)
         {
             try
@@ -37,11 +38,23 @@ namespace TCM_App.Controllers
 
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Member")]
+        [Authorize(Policy = "RequireMemberAndCoachRole")]
         public async Task<IActionResult> GetMember(int id)
         {
             try
             {
+                var userClaimsRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                var userClaimsId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+                if(userClaimsRole == "Member")
+                {
+                    var claimId= int.Parse(userClaimsId!);
+                    if (userClaimsId != id.ToString())
+                    {
+                        claimId = int.Parse(userClaimsId!);
+                    }
+                }
+
                 var member = await _memberService.GetMember(id);
                 if (member == null)
                 {

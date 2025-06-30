@@ -6,4 +6,5 @@ export interface RegisterMember {
   email: string;
   height: number;
   weight: number;
+  rolesIds:number[];
 }

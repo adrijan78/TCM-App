@@ -9,7 +9,7 @@ using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Services
 {
-    public class TokenService(IConfiguration configuration, UserManager<Member> _userManager,RoleManager<AppRole> roleManager): ITokenService
+    public class TokenService(IConfiguration configuration, UserManager<Member> _userManager): ITokenService
     {
         public async Task<string> CreateToken(Member member)
         {
@@ -28,14 +28,19 @@ namespace TCM_App.Services
                 new Claim(ClaimTypes.Email, member.Email),
             };
 
-            var memberr = await _userManager.FindByIdAsync(member.Id.ToString());
+            var memberr = await _userManager.
+                FindByIdAsync(member.Id.ToString());
 
-            
+            if(memberr == null)
+            {
+                throw new Exception("Member not found");
+            }
 
-            var roles = await _userManager.GetRolesAsync(memberr!);
+
+            var roles = await _userManager.GetRolesAsync(memberr);
 
 
-                foreach (var role in roles)
+            foreach (var role in roles)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, role));
                 }

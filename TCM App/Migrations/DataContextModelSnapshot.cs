@@ -118,12 +118,7 @@ namespace TCM_App.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
-
                     b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("MemberId");
 
                     b.HasIndex("RoleId");
 
@@ -505,20 +500,14 @@ namespace TCM_App.Migrations
 
             modelBuilder.Entity("TCM_App.Models.AppMemberRole", b =>
                 {
-                    b.HasOne("TCM_App.Models.Member", "Member")
-                        .WithMany("MemberRoles")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TCM_App.Models.AppRole", "Role")
                         .WithMany("AppMemberRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TCM_App.Models.Member", null)
-                        .WithMany()
+                    b.HasOne("TCM_App.Models.Member", "Member")
+                        .WithMany("MemberRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

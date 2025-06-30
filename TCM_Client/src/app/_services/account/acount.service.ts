@@ -37,11 +37,12 @@ export class AcountService {
 
   login(model: any) {
     return this.http
-      .post<LoginMember>(this.baseUrl + 'account/login', model)
+      .post(this.baseUrl + 'account/login', model)
       .pipe(
-        map((member) => {
+        map((member:any) => {
+          debugger
           if (member) {
-            localStorage.setItem('member', JSON.stringify(member));
+            localStorage.setItem('member', JSON.stringify(member.data));
             this.currentUser.set(member);
           }
         })

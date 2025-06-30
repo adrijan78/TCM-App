@@ -1,11 +1,12 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
+  const route =inject(ActivatedRoute);
   const toast = inject(ToastrService);
   return next(req).pipe(
     catchError((error) => {
@@ -28,15 +29,20 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             break;
 
           case 401:
-            toast.error('Unauthorised', error.status);
+            toast.error('Неавторизиран пристап', error.status);
             break;
-
+          
+          case 403:
+            toast.error("Немате пристап до оваа страна");
+            router.navigate(['/club-details'], { relativeTo: route });
+            break;
           case 404:
+            toast.error("Записот кои го барате не постои");
             router.navigateByUrl('/not found');
             break;
 
           case 500:
-            toast.error('System error occured', error.status);
+            toast.error('Настана грешка', error.status);
             break;
           default:
             toast.error("Настана грешка.")

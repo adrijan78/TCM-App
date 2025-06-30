@@ -6,6 +6,10 @@
   border-radius: 0.75rem;
 }
 
+.profle-btn{
+  background-color: white!important ;
+}
+
 .main-row {
   background-color: #fff; /* White background for the main content area */
   border-radius: 0.75rem;

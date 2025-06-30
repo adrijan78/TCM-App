@@ -23,6 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MemberTrainingData } from '../../../_models/MemberTrainingData';
 import { TrainingService } from '../../../_services/training/training.service';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-member-detail',
@@ -33,7 +34,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatTabsModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatButtonModule
   ],
 
   templateUrl: './member-detail.component.html',
@@ -198,7 +200,6 @@ export class MemberDetailComponent implements OnInit {
       },
       error: (err) => {
         console.log('Error: ', err);
-        this.toast.error(err.error.Message?err.error.Message:"Се случи грешка");
       },
     });
   }

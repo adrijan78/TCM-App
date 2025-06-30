@@ -34,12 +34,13 @@ namespace TCM_App.Repositories
                 .Include(m => m.ProfilePicture)
                 .Include(m => m.Belts)
                 .ThenInclude(m => m.Belt)
+                .Include(m => m.MemberRoles).ThenInclude(mr => mr.Role)
                 .FirstOrDefaultAsync(m => m.Id == memberId);
         }
 
         public async Task<PagedList<MemberListDto>> GetMembersByClubId(int clubId,UserParams userParams)
         {
-            var query= _context.Members.AsQueryable();
+            var query= _context.Members.Include(x=>x.MemberRoles).AsQueryable();
 
             if(userParams.SearchTerm!=null && userParams.SearchTerm !="")
             {

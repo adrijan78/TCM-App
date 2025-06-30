@@ -10,21 +10,28 @@ namespace TCM_App.MappingProfiles
         public AutoMapperProfiles()
         {
             CreateMap<Member, MemberDto>()
-                .ForMember(d=>d.Age,o=>o.MapFrom(s=>CalculateAgeHelper.CalculateAge(s.DateOfBirth)))
-                .ForMember(d=>d.Belts,o=>o.MapFrom(s=>s.Belts))
-                .ForMember(d=>d.CurrentBelt,o=>o.MapFrom(s=> s.Belts.MaxBy(x => x.DateReceived)));
+                .ForMember(d => d.Age, o => o.MapFrom(s => CalculateAgeHelper.CalculateAge(s.DateOfBirth)))
+                .ForMember(d => d.Belts, o => o.MapFrom(s => s.Belts))
+                .ForMember(d => d.CurrentBelt, o => o.MapFrom(s => s.Belts.MaxBy(x => x.DateReceived)))
+                .ForMember(d => d.MemberRoles, o => o.MapFrom(s => s.MemberRoles
+                .Select(x => new MemberRoleDto { Id = x.RoleId, RoleName = x.Role != null ? x.Role.Name : "" })));
+
+
 
             CreateMap<MemberRegisterDto, Member>()
                 .ForMember(d=>d.UserName,o=>o.MapFrom(s=>s.Email));
                  
 
             CreateMap<Member, MemberSimpleDto>()
-                .ForMember(d => d.Age, o => o.MapFrom(s => CalculateAgeHelper.CalculateAge(s.DateOfBirth)));
+                .ForMember(d => d.Age, o => o.MapFrom(s => CalculateAgeHelper.CalculateAge(s.DateOfBirth)))
+                .ForMember(d => d.Roles, o => o.MapFrom(s => s.MemberRoles.Select(x => new MemberRoleDto { Id = x.RoleId, RoleName = x.Role != null ? x.Role.Name : "" })));
+            ;
 
 
             CreateMap<Member, MemberListDto>()
                 .ForMember(d => d.Age, o => o.MapFrom(s => CalculateAgeHelper.CalculateAge(s.DateOfBirth)))
-                .ForMember(d => d.Belt, o => o.MapFrom(s => s.Belts.OrderByDescending(b=>b.DateReceived).Select(x=>new BeltDto { Id=x.BeltId,Name=x.Belt.BeltName,EarnedOn=x.DateReceived}).FirstOrDefault()));
+                .ForMember(d => d.Belt, o => o.MapFrom(s => s.Belts.OrderByDescending(b=>b.DateReceived).Select(x=>new BeltDto { Id=x.BeltId,Name=x.Belt.BeltName,EarnedOn=x.DateReceived}).FirstOrDefault()))
+                .ForMember(d => d.Roles, o => o.MapFrom(s => s.MemberRoles.Select(x => new MemberRoleDto { Id = x.RoleId, RoleName = x.Role != null ? x.Role.Name : "" })));
 
             CreateMap<Photo, PhotoDto>();
             CreateMap<MemberBelt, BeltDto>()

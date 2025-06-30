@@ -15,6 +15,7 @@
         public float Height { get; set; }
         public float Weight { get; set; }
         public BeltDto? CurrentBelt { get; set; }
+        public List<MemberRoleDto> MemberRoles { get; set; }= new List<MemberRoleDto>();
 
     }
 
@@ -33,6 +34,8 @@
         public bool IsCoach { get; set; }
         public float Height { get; set; }
         public float Weight { get; set; }
+        public List<MemberRoleDto> Roles { get; set; } = new List<MemberRoleDto>();
+
     }
 
     public class MemberSimpleDto
@@ -42,6 +45,7 @@
         public string LastName { get; set; }
         public PhotoDto ProfilePicture { get; set; }
         public int Age { get; set; }
+        public List<MemberRoleDto> Roles { get; set; } = new List<MemberRoleDto>();
 
     }
 }

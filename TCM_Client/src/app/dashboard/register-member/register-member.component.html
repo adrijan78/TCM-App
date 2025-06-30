@@ -27,12 +27,12 @@
         <div class="form-group">
             <mat-form-field appearance="outline">
                 <mat-label>Висина</mat-label>
-                <input matInput type="password" formControlName="height" required />
+                <input matInput type="number" min="0" max="250" formControlName="height" required />
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>Тежина</mat-label>
-                <input matInput type="email" formControlName="weight" required />
+                <input matInput type="text" formControlName="weight" required />
             </mat-form-field>
 
 
@@ -50,7 +50,17 @@
 
             </mat-form-field>
 
-            <div class="w-50 d-flex justify-content-end">
+            <mat-form-field>
+                 <mat-label>Улога</mat-label>
+                            <mat-select formControlName="role" [(ngModel)]="selectedRole">
+                                <mat-option value="1">Член</mat-option>
+                                <mat-option value="2">Тренер</mat-option>
+                             
+
+                            </mat-select>
+            </mat-form-field>
+
+            <div class="w-100 d-flex justify-content-end">
                 <button mat-raised-button color="primary" (click)="onSubmit()" class="submit-btn" type="button"
                     [disabled]="registerForm.invalid">
                     Register Member

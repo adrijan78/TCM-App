@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -16,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { AcountService } from '../../_services/account/acount.service';
 import { ToastrService } from 'ngx-toastr';
 import { RegisterMember } from '../../_models/RegisterMember';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-register-member',
@@ -28,6 +30,8 @@ import { RegisterMember } from '../../_models/RegisterMember';
     MatDatepickerModule,
     MatNativeDateModule,
     MatIconModule,
+    MatSelectModule,
+    FormsModule
   ],
   templateUrl: './register-member.component.html',
   styleUrl: './register-member.component.css',
@@ -37,7 +41,8 @@ export class RegisterMemberComponent {
   toastr = inject(ToastrService);
   registerForm: FormGroup;
   // selectedFile: File | null = null;
-  memberToRegister: RegisterMember = {} as RegisterMember;
+  memberToRegister: RegisterMember={} as RegisterMember;
+  selectedRole: string='';
 
   constructor(private fb: FormBuilder) {
     this.registerForm = this.fb.group({
@@ -48,6 +53,7 @@ export class RegisterMemberComponent {
       dateOfBirth: ['', Validators.required],
       height: ['', Validators.required],
       weight: ['', Validators.required],
+      role: ['', Validators.required],
     });
   }
 
@@ -77,6 +83,9 @@ export class RegisterMemberComponent {
       this.memberToRegister.dateOfBirth = this.registerForm.value.dateOfBirth;
       this.memberToRegister.weight = this.registerForm.value.weight;
       this.memberToRegister.height = this.registerForm.value.height;
+      debugger;
+      this.memberToRegister.rolesIds=[]
+      this.memberToRegister.rolesIds.push(+this.selectedRole)
 
       // if (this.selectedFile) {
       //   formData.append('profilePicture', this.selectedFile);
