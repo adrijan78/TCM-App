@@ -1,4 +1,6 @@
-﻿namespace TCM_App.Models.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TCM_App.Models.DTOs
 {
     public class MemberDto
     {
@@ -46,6 +48,28 @@
         public PhotoDto ProfilePicture { get; set; }
         public int Age { get; set; }
         public List<MemberRoleDto> Roles { get; set; } = new List<MemberRoleDto>();
+
+    }
+
+    public class MemberEditDto
+    {
+        [MaxLength(50)]
+        public required string FirstName { get; set; }
+
+        [MaxLength(50)]
+        public required string LastName { get; set; }
+        public required DateTime DateOfBirth { get; set; }
+
+        public bool? IsActive { get; set; } = true;
+
+        public bool? IsCoach { get; set; }
+
+        public float Height { get; set; }
+        public float Weight { get; set; }
+
+        public int[]? RolesIds { get; set; }
+
+        public IFormFile? ProfilePicture { get; set; }
 
     }
 }
