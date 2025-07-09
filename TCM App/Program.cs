@@ -1,9 +1,8 @@
-using FirebaseAdmin;
-using Google.Apis.Auth.OAuth2;
-using Google.Cloud.Storage.V1;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TCM_App.Data;
@@ -21,44 +20,21 @@ namespace TCM_App
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            #region Firebase
-            var keyPath = Environment.GetEnvironmentVariable("FIREBASE_CREDENTIALS");
-
-            if (string.IsNullOrWhiteSpace(keyPath) || !File.Exists(keyPath))
-                throw new Exception("FIREBASE_CREDENTIALS not set or file not found");
-
-            // Create the GoogleCredential once
-            var credential = GoogleCredential.FromFile(keyPath);
-
-            // Initialize FirebaseApp with the credential
-            FirebaseApp.Create(new AppOptions
-            {
-                Credential = credential
-            });
-
-            // Register credential instance for DI
-            builder.Services.AddSingleton(credential);
-
-            // Register StorageClient with the credential
-            builder.Services.AddSingleton(s =>
-            {
-                var cred = s.GetRequiredService<GoogleCredential>();
-                return StorageClient.Create(cred);
-            });
-            #endregion
-
             // Add services to the container.
-            builder.Services.AddControllers();
 
+            builder.Services.AddControllers();
             #region DbContext
             builder.Services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
             #endregion
+
 
             builder.Services.AddCors();
 
+
             #region Our Services
-            builder.Services.AddSingleton<IFirebaseStorageService, FirebaseStorageService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IMemberService, MemberService>();
             builder.Services.AddScoped<ITrainingService, TrainingService>();
@@ -74,6 +50,8 @@ namespace TCM_App
             #endregion
 
             #region Authentication
+
+
             builder.Services.AddIdentityCore<Member>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -85,6 +63,8 @@ namespace TCM_App
                 .AddRoles<AppRole>()
                 .AddRoleManager<RoleManager<AppRole>>()
                 .AddEntityFrameworkStores<DataContext>();
+
+
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -101,12 +81,17 @@ namespace TCM_App
                         ValidateIssuer = false,
                         ValidateAudience = false,
                     };
+
                 });
+
 
             builder.Services.AddAuthorizationBuilder()
                 .AddPolicy("RequireCoachRole", policy => policy.RequireRole("Coach"))
-                .AddPolicy("RequireMemberAndCoachRole", policy => policy.RequireRole("Member", "Coach"));
+                .AddPolicy("RequireMemberAndCoachRole", policy => policy.RequireRole(["Member","Coach"]));
+
+
             #endregion
+
 
             #region AutoMapper
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -123,13 +108,13 @@ namespace TCM_App
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
             #region CORS
             app.UseCors(x =>
             {
                 x.AllowAnyOrigin();
                 x.AllowAnyMethod();
                 x.AllowAnyHeader();
+                
             });
             #endregion 
 
@@ -140,6 +125,7 @@ namespace TCM_App
             app.UseAuthentication();
 
             app.UseAuthorization();
+
 
             app.MapControllers();
 

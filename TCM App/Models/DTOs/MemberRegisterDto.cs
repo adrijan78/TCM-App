@@ -28,9 +28,7 @@ namespace TCM_App.Models.DTOs
         public float Weight { get; set; }
 
         public int[]? RolesIds { get; set; }
-
-
-
+        
 
     }
 }

@@ -11,7 +11,7 @@ using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Controllers
 {
-    [Authorize(Roles ="Coach")]
+    [Authorize]
     public class MembersController(
         IMemberService _memberService,
         ILogger<MembersController> logger,
@@ -19,13 +19,13 @@ namespace TCM_App.Controllers
     {
 
         [HttpGet]
-        [Authorize(Policy = "RequireCoachRole")]
-        public async Task<IActionResult> GetMembers([FromQuery] UserParams userParams)
+        [Authorize (Policy = "RequireCoachRole")]
+        public async Task<IActionResult> GetMembers([FromQuery]UserParams userParams)
         {
             try
             {
                 // Zemi go id na club od najaveniot korisnik koga kje koristis Identity 
-                var members = await _memberService.GetMembers(1, userParams);
+                var members = await _memberService.GetMembers(1,userParams);
                 Response.AddPaginationHeader(members);
                 return Ok(members);
             }
@@ -46,9 +46,9 @@ namespace TCM_App.Controllers
                 var userClaimsRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
                 var userClaimsId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-                if (userClaimsRole == "Member")
+                if(userClaimsRole == "Member")
                 {
-                    var claimId = int.Parse(userClaimsId!);
+                    var claimId= int.Parse(userClaimsId!);
                     if (userClaimsId != id.ToString())
                     {
                         claimId = int.Parse(userClaimsId!);
@@ -71,42 +71,18 @@ namespace TCM_App.Controllers
         }
 
         [HttpGet("memberTraningData/{id}")]
-        public async Task<IActionResult> GetMemberAttendanceAndPerformance(int id, [FromQuery] UserParams userParams)
+        public async Task<IActionResult> GetMemberAttendanceAndPerformance(int id,[FromQuery] UserParams userParams)
         {
             try
             {
-                var attendance = await _memberService.GetMemberAttendanceAndPerformance(id, userParams);
-                return Ok(mapper.Map<List<MemberTrainingDto>>(attendance));
+                    var attendance = await _memberService.GetMemberAttendanceAndPerformance(id, userParams);
+                    return Ok(mapper.Map<List<MemberTrainingDto>>(attendance));
             }
             catch (Exception e)
             {
                 logger.LogError(e, "Error getting attendance and performance for member with id {MemberId}", id);
                 throw new Exception(e.ToString());
             }
-        }
-
-        [HttpPut("edit-member/{id}")]
-        [Consumes("multipart/form-data")]
-        public async Task<IActionResult> EditMember(int id, [FromForm] MemberEditDto member)
-        {
-            try
-            {
-                
-                
-                 await _memberService.UpdateMember(id,member);
-
-                return Ok(new ApiResponse<string>
-                {
-                    Success = true,
-                    Message = "Успешна промена на податоци",
-                });
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, "Error editing member with id {Id}", id);
-                throw new Exception(e.ToString());
-            }
-
         }
 
         [HttpDelete("deactivate-member/{id}")]

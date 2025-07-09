@@ -95,7 +95,7 @@
                         <td routerLink="/members/{{member.id}}">
                             @if (member.profilePicture !=null) {
 
-                            <img [src]="member?.profilePicture?.url" alt="Profile" class="avatar">
+                            <img [src]="member?.profilePicture?.url+''+ member?.id+'.jpg'" alt="Profile" class="avatar">
                             {{ member.firstName }} {{ member.lastName }}
                             }
                             @else{
@@ -129,7 +129,7 @@
                         </td>
 
                         <td>
-
+                            
                             <a (click)="openDialog(member.id)" style="cursor: pointer;" class="delete" title="Delete"
                                 data-toggle="tooltip">
                                 <i class="material-icons big-icon">&#xE5C9;</i>
