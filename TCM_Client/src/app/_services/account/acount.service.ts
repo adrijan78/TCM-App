@@ -36,21 +36,23 @@ export class AcountService {
   //isLoggedIn=this._isLoggedIn.asReadonly();
 
   login(model: any) {
-    return this.http
-      .post(this.baseUrl + 'account/login', model)
-      .pipe(
-        map((member:any) => {
-          debugger
-          if (member) {
-            localStorage.setItem('member', JSON.stringify(member.data));
-            this.currentUser.set(member);
-          }
-        })
-      );
+    return this.http.post(this.baseUrl + 'account/login', model).pipe(
+      map((member: any) => {
+        debugger;
+        if (member) {
+          localStorage.setItem('member', JSON.stringify(member.data));
+          this.currentUser.set(member);
+        }
+      })
+    );
   }
 
   registerMember(model: any) {
     return this.http.post(this.baseUrl + 'account/register', model);
+  }
+
+  getAppRoles() {
+    return this.http.get(this.baseUrl + 'roles');
   }
 
   logout() {

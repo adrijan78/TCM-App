@@ -17,7 +17,7 @@ export interface Member {
   weight: number;
   currentBelt: Belt;
   belt: Belt;
-  role:[]
+  memberRoles: [];
 }
 
 export interface LoginMember {

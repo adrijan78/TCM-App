@@ -24,6 +24,7 @@ import { MemberTrainingData } from '../../../_models/MemberTrainingData';
 import { TrainingService } from '../../../_services/training/training.service';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-member-detail',
@@ -35,7 +36,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatProgressSpinnerModule,
     MatIconModule,
     MatPaginatorModule,
-    MatButtonModule
+    MatButtonModule,
+    RouterModule,
   ],
 
   templateUrl: './member-detail.component.html',
@@ -43,18 +45,18 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class MemberDetailComponent implements OnInit {
   memberService = inject(MemberService);
-  trainingService = inject(TrainingService)
+  trainingService = inject(TrainingService);
   toast = inject(ToastrService);
   @Input() id!: number;
   member = signal<Member | null>(null);
-  trainingsByMonth = signal<[]|null>(null);
-  memberTrainingAttendanceByMonth=signal<Record<number, number>|null>(null);
-  memberTotalNumOfTrainings=signal<number>(0);
-  clubTotalNumOfTrainings=signal<number>(0);
-  attendancePercentage=signal<number | null>(null);
+  trainingsByMonth = signal<[] | null>(null);
+  memberTrainingAttendanceByMonth = signal<Record<number, number> | null>(null);
+  memberTotalNumOfTrainings = signal<number>(0);
+  clubTotalNumOfTrainings = signal<number>(0);
+  attendancePercentage = signal<number | null>(null);
   pageSizeOptions = [5, 10, 20, 50];
   pageSize = 5; // број на членови по страница
-  pageNumber=1;
+  pageNumber = 1;
 
   // --- Profile Data (from image) ---
   userAge: string = 'Години:'; // As per image
@@ -76,10 +78,10 @@ export class MemberDetailComponent implements OnInit {
 
   // --- ngx-charts Data ---
   // Bar Chart Data (matching "Item 1, 2, 3, 4" from image)
-  barChartData= signal<any[]>([])
+  barChartData = signal<any[]>([]);
 
   // Pie Chart Data (matching "Skipped" and "Attended" from image)
-  
+
   pieChartDataForPayment: any[] = [
     { name: 'Платено', value: 82 }, // Values based on image percentages
     { name: 'Не платено', value: 18 },
@@ -158,9 +160,9 @@ export class MemberDetailComponent implements OnInit {
     roundDomains: true,
   };
 
-  pieChartData: any[]=[]
+  pieChartData: any[] = [];
   // --- Table Data (empty as per image, but structured) ---
-  dataSource : MemberTrainingData[] = [
+  dataSource: MemberTrainingData[] = [
     // { col1: '', col2: '', col3: '' },
   ];
   dataSourceForPayment = [
@@ -188,9 +190,8 @@ export class MemberDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMemberById();
-    
-    this.getMemberTrainingData();
 
+    this.getMemberTrainingData();
   }
 
   getMemberById() {
@@ -204,68 +205,78 @@ export class MemberDetailComponent implements OnInit {
     });
   }
   getMemberTrainingData() {
-    this.memberService.getMemberTrainingData(this.id,this.pageNumber,this.pageSize).subscribe({
-      next: (res) => {
-        this.dataSourceForLineChart = res.body as MemberTrainingData[];
-        this.dataSource=res.body as MemberTrainingData[];
-        this.getNumberOfTrainingsForEveryMonth();
-        this.generateLineChartData();
-        this.countMemberAttendanceByMonth();
+    this.memberService
+      .getMemberTrainingData(this.id, this.pageNumber, this.pageSize)
+      .subscribe({
+        next: (res) => {
+          this.dataSourceForLineChart = res.body as MemberTrainingData[];
+          this.dataSource = res.body as MemberTrainingData[];
+          this.getNumberOfTrainingsForEveryMonth();
+          this.generateLineChartData();
+          this.countMemberAttendanceByMonth();
+        },
+        error: (err) => console.log(err),
+      });
+  }
+  getNumberOfTrainingsForEveryMonth() {
+    this.trainingService.getNumberOfTrainingsForEveryMonth().subscribe({
+      next: (res: any) => {
+        this.trainingsByMonth.set(res);
+        this.getTotalNumberOfTrainings();
       },
-      error: (err) => console.log(err),
+      error: (err) => {},
     });
   }
-  getNumberOfTrainingsForEveryMonth(){
-    this.trainingService.getNumberOfTrainingsForEveryMonth().subscribe({
-      next:(res:any)=>{
-        this.trainingsByMonth.set(res);
-            this.getTotalNumberOfTrainings();
 
-      },
-      error:err=>{}
-    })
-  }
-
-   countMemberAttendanceByMonth() {
+  countMemberAttendanceByMonth() {
     this.barChartData.set([]);
-    var tmp = [...this.dataSourceForLineChart]
-  this.memberTrainingAttendanceByMonth.set(tmp.reduce((counts, training) => {
-    const month = new Date(training.date).getMonth() + 1;
-    counts[month] = (counts[month] || 0) + 1;
-    
-    this.memberTotalNumOfTrainings.update(value=>value+1);
-    return counts;
-  }, {} as Record<number, number>));
+    var tmp = [...this.dataSourceForLineChart];
+    this.memberTrainingAttendanceByMonth.set(
+      tmp.reduce((counts, training) => {
+        const month = new Date(training.date).getMonth() + 1;
+        counts[month] = (counts[month] || 0) + 1;
 
+        this.memberTotalNumOfTrainings.update((value) => value + 1);
+        return counts;
+      }, {} as Record<number, number>)
+    );
 
+    const tmp2 = this.memberTrainingAttendanceByMonth();
+    for (let item in tmp2) {
+      let it = +item;
+      let record = { name: this.getMonthName(it), value: tmp2[it] };
 
-  const tmp2=this.memberTrainingAttendanceByMonth();
-  for(let item in tmp2){
-    let it=+item;
-    let record = { name: this.getMonthName(it), value: tmp2[it] };
-    
-    this.barChartData.update((prev:any)=>[...prev,record])
-  
+      this.barChartData.update((prev: any) => [...prev, record]);
+    }
   }
 
-}
-
-getTotalNumberOfTrainings(){
-  let tmp=this.trainingsByMonth();
-  for (let item in tmp) {
-    let it=+item;
-    this.clubTotalNumOfTrainings.update(value=>value+it);
-    
+  getTotalNumberOfTrainings() {
+    let tmp = this.trainingsByMonth();
+    for (let item in tmp) {
+      let it = +item;
+      this.clubTotalNumOfTrainings.update((value) => value + it);
+    }
+    let perc =
+      +(this.memberTotalNumOfTrainings() / this.clubTotalNumOfTrainings()) *
+      100.0;
+    this.attendancePercentage.set(+perc.toFixed(1));
+    this.pieChartData = [
+      {
+        name: 'Отсутство',
+        value:
+          this.attendancePercentage() != null
+            ? 100 - this.attendancePercentage()!
+            : 10,
+      }, // Values based on image percentages
+      {
+        name: 'Присуство',
+        value:
+          this.attendancePercentage() != null
+            ? this.attendancePercentage()!
+            : 90,
+      },
+    ];
   }
-  let perc=+(this.memberTotalNumOfTrainings()/this.clubTotalNumOfTrainings())*100.0;
-  this.attendancePercentage.set(+perc.toFixed(1))
-   this.pieChartData= [
-    { name: 'Отсутство', value:this.attendancePercentage()!=null?100-this.attendancePercentage()! :10}, // Values based on image percentages
-    { name: 'Присуство', value:this.attendancePercentage()!=null?this.attendancePercentage()! :90},
-  ];
-
-  
-}
 
   generateLineChartData(): void {
     // Ngx-charts line chart expects data as an array of series.
@@ -286,10 +297,10 @@ getTotalNumberOfTrainings(){
     console.log('Generated lineChartData:', this.lineChartData); // For debugging
   }
 
- getMonthName(monthNumber: number): string {
-  const date = new Date(2000, monthNumber - 1); // Months are 0-indexed in JavaScript
-  return date.toLocaleString('en-US', { month: 'long' });
-}
+  getMonthName(monthNumber: number): string {
+    const date = new Date(2000, monthNumber - 1); // Months are 0-indexed in JavaScript
+    return date.toLocaleString('en-US', { month: 'long' });
+  }
 
   // --- ngx-charts Event Handlers (Optional, retained for interactivity) ---
   onSelect(event: any): void {
@@ -304,10 +315,10 @@ getTotalNumberOfTrainings(){
     console.log('Deactivate:', JSON.parse(JSON.stringify(data)));
   }
 
-  onPageChange(ev:any){
-    if(this.pageNumber !== ev.pageIndex+1 ||this.pageSize!==ev.pageSize){
-      this.pageNumber=ev.pageIndex+1;
-      this.pageSize=ev.pageSize;
+  onPageChange(ev: any) {
+    if (this.pageNumber !== ev.pageIndex + 1 || this.pageSize !== ev.pageSize) {
+      this.pageNumber = ev.pageIndex + 1;
+      this.pageSize = ev.pageSize;
       this.getMemberTrainingData();
     }
   }

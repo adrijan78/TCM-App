@@ -56,6 +56,13 @@ export class MemberService {
     );
   }
 
+  editMember(member: Member) {
+    return this.http.put(
+      this.baseUrl + 'members/edit-member/' + member.id,
+      member
+    );
+  }
+
   deactivateMember(id: number) {
     return this.http.delete(this.baseUrl + 'members/deactivate-member/' + id);
   }

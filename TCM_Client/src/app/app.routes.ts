@@ -14,6 +14,7 @@ import { NoteDetailComponent } from './dashboard/notes/note-detail/note-detail.c
 import { authGuard } from './_guards/auth.guard';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ClubDetailsComponent } from './dashboard/club-details/club-details.component';
+import { EditMemberComponent } from './dashboard/members/edit-member/edit-member.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -21,17 +22,18 @@ export const routes: Routes = [
     path: '',
     component: DashboardComponent,
     canActivate: [authGuard],
-    
+
     children: [
       { path: 'register-member', component: RegisterMemberComponent },
       { path: 'club-details', component: ClubDetailsComponent },
       { path: 'members', component: MemberListComponent },
-      { path: 'members/:id', component: MemberDetailComponent },
       { path: 'trainings', component: TrainingListComponent },
-      { path: 'trainings/:id', component: TrainingDetailComponent },
       { path: 'payments', component: PaymentListComponent },
-      { path: 'payments/:id', component: PaymentDetailComponent },
       { path: 'notes', component: NoteListComponent },
+      { path: 'edit-member/:id', component: EditMemberComponent },
+      { path: 'trainings/:id', component: TrainingDetailComponent },
+      { path: 'payments/:id', component: PaymentDetailComponent },
+      { path: 'members/:id', component: MemberDetailComponent },
       { path: 'notes:id', component: NoteDetailComponent },
     ],
   },

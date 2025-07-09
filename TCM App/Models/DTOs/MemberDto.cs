@@ -51,7 +51,7 @@ namespace TCM_App.Models.DTOs
 
     }
 
-    public class MemberEditDto
+    public class    MemberEditDto
     {
         [MaxLength(50)]
         public required string FirstName { get; set; }

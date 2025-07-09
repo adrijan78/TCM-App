@@ -11,7 +11,7 @@ using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Controllers
 {
-    //[Authorize]
+    [Authorize(Roles ="Coach")]
     public class MembersController(
         IMemberService _memberService,
         ILogger<MembersController> logger,

@@ -3,72 +3,50 @@
 
     <form [formGroup]="editForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
         <div class="row justify-content-center">
-            <div class="col-4">
-    <mat-form-field appearance="fill">
-    <mat-label>Upload Image</mat-label>
-    <div class="file-upload-container">
-      <input
-        #fileInput
-        type="file"
-        accept="image/*"
-        (change)="onFileSelected($event)"
-        hidden
-      />
-      <button
-        mat-icon-button
-        type="button"
-        (click)="fileInput.click()"
-        aria-label="Upload image"
-      >
-        <mat-icon>add_a_photo</mat-icon>
-      </button>
-      <div *ngIf="imagePreview">
-        <img [src]="imagePreview" alt="Image Preview" class="image-preview" />
-        <button
-          mat-icon-button
-          type="button"
-          (click)="removeImage()"
-          aria-label="Remove image"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
-    </div>
-  </mat-form-field>
+            <div class="col-4 d-flex justify-content-center pb-5">
+                <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+
+                <!-- Trigger file input with Material icon button -->
+                <button style="background-color: rgb(219, 220, 220)" mat-icon-button color="success"
+                    (click)="fileInput.click()" aria-label="Upload image">
+                    <mat-icon>add_a_photo</mat-icon>
+                </button>
+
+                <!-- Preview if available -->
+                <div *ngIf="imagePreview" class="d-flex align-items-center gap-2 mt-2">
+                    <img [src]="imagePreview" style="max-width: 100px;" alt="Image Preview" class="image-preview" />
+                    <button mat-icon-button color="warn" (click)="removeImage()" aria-label="Remove image">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+
             </div>
         </div>
         <div class="form-group">
             <mat-form-field appearance="outline">
                 <mat-label>Име</mat-label>
-                <input matInput formControlName="firstName" maxlength="50" required />
+                <input matInput formControlName="firstName" [value]="selectedMember()?.firstName" maxlength="50"
+                    required />
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>Презиме</mat-label>
-                <input matInput formControlName="lastName" maxlength="50" required />
+                <input matInput formControlName="lastName" [value]="selectedMember()?.lastName" maxlength="50"
+                    required />
             </mat-form-field>
         </div>
 
-        <div class="form-group">
-            <mat-form-field appearance="outline">
-                <mat-label>Емаил</mat-label>
-                <input matInput type="email" formControlName="email" required />
-            </mat-form-field>
 
-            <mat-form-field appearance="outline">
-                <mat-label>Лозинка</mat-label>
-                <input matInput type="password" formControlName="password" required />
-            </mat-form-field>
-        </div>
         <div class="form-group">
             <mat-form-field appearance="outline">
                 <mat-label>Висина</mat-label>
-                <input matInput type="number" min="0" max="250" formControlName="height" required />
+                <input matInput type="number" [value]="selectedMember()?.height" min="0" max="250"
+                    formControlName="height" required />
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>Тежина</mat-label>
-                <input matInput type="text" formControlName="weight" required />
+                <input matInput [value]="selectedMember()?.weight" type="text" formControlName="weight" required />
             </mat-form-field>
 
 
@@ -78,7 +56,8 @@
         <div class="form-group">
             <mat-form-field appearance="outline">
                 <mat-label>Датум на раѓање</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" required />
+                <input matInput [matDatepicker]="picker" [value]="selectedMember()?.startedOn"
+                    formControlName="dateOfBirth" required />
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
 
@@ -87,19 +66,21 @@
             </mat-form-field>
 
             <mat-form-field>
-                 <mat-label>Улога</mat-label>
-                            <mat-select formControlName="role" [(ngModel)]="selectedRole">
-                                <mat-option value="1">Член</mat-option>
-                                <mat-option value="2">Тренер</mat-option>
-                             
+                <mat-label>Улога</mat-label>
+                <mat-select formControlName="role" multiple [value]="selectedMember()?.memberRoles"
+                    [compareWith]="compareRoles">
 
-                            </mat-select>
+                    <mat-option *ngFor="let role of roles()" [value]="role">{{role.name}}</mat-option>
+
+
+
+                </mat-select>
             </mat-form-field>
 
             <div class="w-100 d-flex justify-content-end">
                 <button mat-raised-button color="primary" (click)="onSubmit()" class="submit-btn" type="button"
                     [disabled]="editForm.invalid">
-                    Register Member
+                    Промени податоци
                 </button>
 
             </div>
