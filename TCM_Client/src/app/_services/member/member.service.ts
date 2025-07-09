@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
-import { Member } from '../../_models/Member';
+import { EditMember, Member } from '../../_models/Member';
 import { MemberTrainingData } from '../../_models/MemberTrainingData';
 import { PaginationResult } from '../../_models/Pagination';
 import { map } from 'rxjs';
@@ -56,9 +56,9 @@ export class MemberService {
     );
   }
 
-  editMember(member: Member) {
+  editMember(memberId:any,member: FormData) {
     return this.http.put(
-      this.baseUrl + 'members/edit-member/' + member.id,
+      this.baseUrl + 'members/edit-member/' + memberId,
       member
     );
   }

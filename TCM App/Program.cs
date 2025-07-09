@@ -1,5 +1,9 @@
 
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -20,6 +24,35 @@ namespace TCM_App
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            #region Firebase
+            var config = builder.Configuration;
+
+            // Read the credentials path from appsettings.json
+            var keyPath = config["FIREBASE_CREDENTIALS:CredentialsPath"];
+
+            if (string.IsNullOrWhiteSpace(keyPath) || !File.Exists(keyPath))
+                throw new Exception("Firebase credentials path is invalid or file not found.");
+
+            // Create the GoogleCredential once
+            var credential = GoogleCredential.FromFile(keyPath);
+
+            // Initialize FirebaseApp with the credential
+            FirebaseApp.Create(new AppOptions
+            {
+                Credential = credential
+            });
+
+            // Register credential instance for DI
+            builder.Services.AddSingleton(credential);
+
+            // Register StorageClient with the credential
+            builder.Services.AddSingleton(s =>
+            {
+                var cred = s.GetRequiredService<GoogleCredential>();
+                return StorageClient.Create(cred);
+            });
+            #endregion
+
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -35,6 +68,7 @@ namespace TCM_App
 
 
             #region Our Services
+            builder.Services.AddSingleton<IFirebaseStorageService, FirebaseStorageService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IMemberService, MemberService>();
             builder.Services.AddScoped<ITrainingService, TrainingService>();
@@ -86,8 +120,8 @@ namespace TCM_App
 
 
             builder.Services.AddAuthorizationBuilder()
-                .AddPolicy("RequireCoachRole", policy => policy.RequireRole("Coach"))
-                .AddPolicy("RequireMemberAndCoachRole", policy => policy.RequireRole(["Member","Coach"]));
+               .AddPolicy("RequireCoachRole", policy => policy.RequireRole("Coach"))
+               .AddPolicy("RequireMemberAndCoachRole", policy => policy.RequireRole("Member", "Coach"));
 
 
             #endregion

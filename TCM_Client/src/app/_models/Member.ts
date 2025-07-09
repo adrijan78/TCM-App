@@ -26,3 +26,23 @@ export interface LoginMember {
   email: string;
   token: string;
 }
+
+export interface EditMember{
+  id: number;
+  firstName: string;
+  lastName: string;
+  photoId: number;
+  newPhoto: File;
+  dateOfBirth: Date;
+  belts: any[];
+  email: string;
+  isActive: boolean;
+  startedOn: string;
+  isCoach: boolean;
+  height: number;
+  weight: number;
+  currentBelt: Belt;
+  belt: Belt;
+  memberRoles: [];
+  rolesIds: any[];
+}

@@ -4,10 +4,10 @@
     <form [formGroup]="editForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
         <div class="row justify-content-center">
             <div class="col-4 d-flex justify-content-center pb-5">
-                <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+                <input #fileInput type="file" accept="image/*"  (change)="onFileSelected($event)" hidden />
 
                 <!-- Trigger file input with Material icon button -->
-                <button style="background-color: rgb(219, 220, 220)" mat-icon-button color="success"
+                <button type="button" style="background-color: rgb(219, 220, 220)" mat-icon-button color="success"
                     (click)="fileInput.click()" aria-label="Upload image">
                     <mat-icon>add_a_photo</mat-icon>
                 </button>
@@ -67,7 +67,7 @@
 
             <mat-form-field>
                 <mat-label>Улога</mat-label>
-                <mat-select formControlName="role" multiple [value]="selectedMember()?.memberRoles"
+                <mat-select formControlName="role" multiple (selectionChange)="OnRoleSelect($event)" [value]="selectedMember()?.memberRoles"
                     [compareWith]="compareRoles">
 
                     <mat-option *ngFor="let role of roles()" [value]="role">{{role.name}}</mat-option>

@@ -20,7 +20,10 @@ namespace TCM_App.MappingProfiles
 
             CreateMap<MemberRegisterDto, Member>()
                 .ForMember(d=>d.UserName,o=>o.MapFrom(s=>s.Email));
-                 
+
+            CreateMap<MemberEditDto, Member>()
+                .ForMember(d => d.ProfilePicture, o => o.Ignore());
+
 
             CreateMap<Member, MemberSimpleDto>()
                 .ForMember(d => d.Age, o => o.MapFrom(s => CalculateAgeHelper.CalculateAge(s.DateOfBirth)))
@@ -54,6 +57,7 @@ namespace TCM_App.MappingProfiles
             CreateMap<AppRole,RoleDto>()
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.Id));
+
         }
 
     }

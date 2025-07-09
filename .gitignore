@@ -483,3 +483,4 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 /TCM App/appsettings.json
+/TCM App/Data/firebase_creds.json

@@ -69,6 +69,29 @@ namespace TCM_App.Controllers
             }
 
         }
+        [HttpPut("edit-member/{id}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> EditMember(int id, [FromForm] MemberEditDto member)
+        {
+            try
+            {
+
+
+                await _memberService.UpdateMember(id, member);
+
+                return Ok(new ApiResponse<string>
+                {
+                    Success = true,
+                    Message = "Успешна промена на податоци",
+                });
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error editing member with id {Id}", id);
+                throw new Exception(e.ToString());
+            }
+
+        }
 
         [HttpGet("memberTraningData/{id}")]
         public async Task<IActionResult> GetMemberAttendanceAndPerformance(int id,[FromQuery] UserParams userParams)
@@ -84,6 +107,9 @@ namespace TCM_App.Controllers
                 throw new Exception(e.ToString());
             }
         }
+
+
+
 
         [HttpDelete("deactivate-member/{id}")]
         public async Task<IActionResult> DeactivateMember(int id)

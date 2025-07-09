@@ -11,7 +11,7 @@ namespace TCM_App.Services.Interfaces
         Task<Member> GetMember(int id);
 
         Task<PagedList<MemberListDto>> GetMembers(int id,UserParams userParams);
-        Task UpdateMember(Member member);
+        Task UpdateMember(int id, MemberEditDto memberDto);
 
         Task<PagedList<MemberTrainingDto>> GetMemberAttendanceAndPerformance(int member, UserParams userParams);
         
