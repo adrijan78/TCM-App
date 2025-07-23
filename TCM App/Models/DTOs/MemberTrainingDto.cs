@@ -16,4 +16,16 @@ namespace TCM_App.Models.DTOs
         public TrainingDto? Training { get; set; }
         public MemberSimpleDto? Member { get; set; }
     }
+
+    public class  CreateMemberTrainingDto
+    {
+        public required DateTime Date { get; set; }
+        public required string Description { get; set; }
+        //This will be the coach
+        public int MemberId { get; set;}   
+        public int ClubId { get; set; }
+        public int? Performace { get; set; }
+        public MemberTrainingStatusEnum Status { get; set; }
+
+    }
 }

@@ -61,5 +61,15 @@ namespace TCM_App.Repositories
             return training ?? throw new KeyNotFoundException($"Training with id {trainingId} not found.");
 
         }
+    
+    
+    
+        public async Task<string> CreateTraining(Training training)
+        {
+            await _context.AddAsync(training);
+            await _context.SaveChangesAsync();
+            return training.Id.ToString();
+        }
+
     }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, inject, Inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -9,6 +9,9 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { TrainingService } from '../../../_services/training/training.service';
+import { MatSelectModule } from '@angular/material/select';
+import { MemberTrainingData } from '../../../_models/MemberTrainingData';
 
 export interface AddTrainingData {
   date: Date;
@@ -23,13 +26,17 @@ export interface AddTrainingData {
     MatButtonModule,
     ReactiveFormsModule,
     MatDialogModule,
+    MatSelectModule
   ],
   templateUrl: './add-training.component.html',
   styleUrl: './add-training.component.css',
 })
 export class AddTrainingComponent {
+  trainingService = inject(TrainingService);
   trainingTitle = new FormControl('', Validators.required);
+  trainingType = new FormControl('', Validators.required);
   trainingNotes = new FormControl('');
+  trainingTypes=signal<any>([]);
 
   constructor(
     public dialogRef: MatDialogRef<AddTrainingComponent>,
@@ -38,6 +45,15 @@ export class AddTrainingComponent {
 
   ngOnInit(): void {
     // You could pre-fill if editing an existing training, but for now, it's for adding.
+    this.getTrainingTypes();
+  }
+
+  getTrainingTypes(){
+    this.trainingService.getTrainingTypes().subscribe({
+      next:(res:any)=>{
+        this.trainingTypes.set(res);
+      }
+    })
   }
 
   onSave(): void {

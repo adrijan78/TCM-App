@@ -109,6 +109,23 @@ namespace TCM_App.Controllers
         }
 
 
+        [HttpGet("membersGroupedByBelt")]
+        public async Task<IActionResult> GetMembersGroupedByBelt()
+        {
+            try
+            {
+                //var members = await _memberService.GetMembersGroupedByBelt(userParams);
+                //return Ok(members);
+                return Ok(null);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error getting members grouped by belt");
+                throw new Exception(e.ToString());
+            }
+        }
+
+
 
 
         [HttpDelete("deactivate-member/{id}")]

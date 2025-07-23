@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TCM_App.Helpers;
+using TCM_App.Models.DTOs;
+using TCM_App.Models.Enums;
 using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Controllers
@@ -62,6 +64,47 @@ namespace TCM_App.Controllers
                 throw new Exception($"Cannot get training with id {id}", ex);
             }
         }
+
+
+        [HttpGet("training-types")]
+        public IActionResult GetTrainingTypes()
+        {
+            try
+            {
+                var trainingTypes = Enum.GetValues(typeof(TrainingType))
+                    .Cast<TrainingType>()
+                    .Select(e => new { Id = (int)e, Name = e.ToString() })
+                    .ToList();
+                return Ok(trainingTypes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Cannot get training types");
+                throw new Exception("Cannot get training types", ex);
+            }
+        }
+
+
+        [HttpPost("create-training")]
+        public async Task<IActionResult> CreateTraining([FromBody] CreateTrainingDto trainingDto)
+        {
+            try
+            {
+                if (trainingDto == null)
+                {
+                    return BadRequest("Training data is null");
+                }
+                var result = await _trainingService.AddTraining(trainingDto);
+                return CreatedAtAction(nameof(GetTraining), new { id = result }, result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Cannot create training");
+                throw new Exception("Cannot create training", ex);
+            }
+        }
+
+
 
 
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TCM_App.Helpers;
 using TCM_App.Models;
 using TCM_App.Models.DTOs;
@@ -7,12 +8,28 @@ using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Services
 {
-    public class TrainingService(ITrainingRepository _trainingRepository) : ITrainingService
+    public class TrainingService(ITrainingRepository _trainingRepository,IMapper mapper,IMemberRepository _memberRepository) : ITrainingService
     {
 
-        public Task<Training> AddTraining(Training training)
+        public async Task<string> AddTraining(CreateTrainingDto trainingDto)
         {
-            throw new NotImplementedException();
+          var training = mapper.Map<Training>(trainingDto);
+          foreach (var memberT in trainingDto.MembersToAttend)
+          {
+              var existingMember = await _memberRepository.GetMemberById(memberT.MemberId);
+                var memberTraining = new MemberTraining
+              {
+                  MemberId = memberT.MemberId,
+                  TrainingId = training.Id,
+                  Status = memberT.Status,
+                  Date = training.Date,
+                  Description = training.Description,
+              };
+              training.MemberTrainings.Add(memberTraining);
+          }
+
+            return await _trainingRepository.CreateTraining(training);
+
         }
 
         public Task<Training> DeleteTraining(Training training)

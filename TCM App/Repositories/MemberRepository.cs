@@ -112,5 +112,10 @@ namespace TCM_App.Repositories
             return _context.SaveChangesAsync();
 
         }
+
+        public Task<Lookup<int, string>> GetMembersGroupedByBelt()
+        {
+            return null; // Not implemented in this repository, but can be implemented if needed.
+        }
     }
 }

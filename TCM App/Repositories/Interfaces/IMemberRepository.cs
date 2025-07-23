@@ -7,6 +7,7 @@ namespace TCM_App.Repositories.Interfaces
     public interface IMemberRepository : IRepository<Member>
     {
         bool CheckIfMemberExists(int memberId);
+        Task<Lookup<int, string>> GetMembersGroupedByBelt();
         Task <PagedList<MemberListDto>> GetMembersByClubId(int clubId,UserParams memberParams);
         Task<Member?> GetMemberById(int memberId);
 

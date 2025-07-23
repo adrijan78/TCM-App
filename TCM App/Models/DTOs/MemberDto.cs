@@ -9,6 +9,7 @@ namespace TCM_App.Models.DTOs
         public string LastName { get; set; }
         public PhotoDto ProfilePicture { get; set; }
         public int Age { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public List<BeltDto>? Belts { get; set; }
         public string Email { get; set; }
         public required bool IsActive { get; set; }
@@ -70,6 +71,8 @@ namespace TCM_App.Models.DTOs
         public int[]? RolesIds { get; set; }
 
         public IFormFile? NewPhoto { get; set; }
+
+        public MemberBelt? CurrentBelt { get; set; }
 
     }
 }

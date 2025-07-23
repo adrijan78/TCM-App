@@ -16,6 +16,6 @@ namespace TCM_App.Services.Interfaces
         Task<PagedList<MemberTrainingDto>> GetMemberAttendanceAndPerformance(int member, UserParams userParams);
         
         Task DeactivateMember(int memberId);
-
+        Task GetMembersGroupedByBelt(UserParams userParams);
     }
 }

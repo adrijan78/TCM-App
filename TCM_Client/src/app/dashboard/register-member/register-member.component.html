@@ -36,6 +36,7 @@
             </mat-form-field>
 
 
+
         </div>
 
 
@@ -48,6 +49,17 @@
 
 
 
+            </mat-form-field>
+
+            <mat-form-field>
+                 <mat-label>Појас</mat-label>
+                            <mat-select formControlName="belt" [(ngModel)]="selectedBelt">
+                                @for (belt of clubBelts(); track belt.id) {
+                                   <mat-option [value]="belt">{{belt.name}}</mat-option> 
+                                }
+                             
+
+                            </mat-select>
             </mat-form-field>
 
             <mat-form-field>
@@ -90,6 +102,7 @@
             </div> -->
 
         </div>
+        
 
 
     </form>

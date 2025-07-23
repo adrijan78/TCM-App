@@ -73,6 +73,7 @@ namespace TCM_App
             builder.Services.AddScoped<IMemberService, MemberService>();
             builder.Services.AddScoped<ITrainingService, TrainingService>();
             builder.Services.AddScoped<INoteService, NoteService>();
+            builder.Services.AddScoped<ICommonService, CommonService>();
             builder.Services.AddScoped<IUserClaimsPrincipalFactory<Member>, UserClaimsPrincipalFactory<Member, AppRole>>();
             #endregion
 

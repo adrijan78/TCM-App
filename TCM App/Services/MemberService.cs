@@ -8,7 +8,7 @@ using TCM_App.Services.Interfaces;
 namespace TCM_App.Services
 {
     public class MemberService(IMemberRepository _memberRepository, IFirebaseStorageService
-        _firebaseStorageService, IRepository<Photo> _photoRepository, IMapper mapper) : IMemberService
+        _firebaseStorageService, IRepository<Photo> _photoRepository,IRepository<MemberBelt> _memberBeltRepository, IMapper mapper) : IMemberService
     {
         public Task<Member> AddMember(Member member)
         {
@@ -59,6 +59,11 @@ namespace TCM_App.Services
             return await _memberRepository.GetMembersByClubId(id, userParams);
         }
 
+        public Task GetMembersGroupedByBelt(UserParams userParams)
+        {
+            return null;    
+        }
+
         public async Task UpdateMember(int id, MemberEditDto memberDto)
         {
             var member = await _memberRepository.GetMemberById(id);
@@ -98,9 +103,7 @@ namespace TCM_App.Services
                     }
 
                 }
-
-
-
+    
                 else
                 {
                     throw new Exception("Failed to upload profile picture.");
@@ -110,15 +113,30 @@ namespace TCM_App.Services
             }
             member.FirstName = memberDto.FirstName;
             member.LastName = memberDto.LastName;
-            member.DateOfBirth = memberDto.DateOfBirth;
+            member.DateOfBirth = memberDto.DateOfBirth.AddDays(1);
             member.Height = memberDto.Height;
             member.Weight = memberDto.Weight;
             member.IsActive = memberDto.IsActive.HasValue ? memberDto.IsActive.Value : false;
             member.IsCoach = memberDto.IsCoach.HasValue ? memberDto.IsCoach.Value : false;
 
+            var existingBelt = _memberBeltRepository.Query().Where(x => x.MemberId == id && x.BeltId == memberDto.CurrentBelt.Id && x.IsCurrentBelt).FirstOrDefault();
+            if (existingBelt == null) {
+                var memberBelt = new MemberBelt
+                {
+                    MemberId = id,
+                    BeltId = memberDto.CurrentBelt.Id,
+                    IsCurrentBelt = true,
+                    DateReceived = DateTime.Now,
+                    Description = ""
+                };
+               await _memberBeltRepository.AddAsync(memberBelt);
+            }
+
+
 
             _memberRepository.UpdateAsync(member);
 
+            await _memberBeltRepository.SaveChangesAsync();
             await _memberRepository.SaveChangesAsync();
         }
 

@@ -1,10 +1,19 @@
-<h2 mat-dialog-title>Add Training for {{ data.date | date:'fullDate' }}</h2>
+<h2 mat-dialog-title>Додади тренинг</h2>
 <mat-dialog-content class="mat-typography">
     <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Training Title</mat-label>
+        <mat-label>Опис за тренингот</mat-label>
         <input matInput [formControl]="trainingTitle" placeholder="e.g., Sparring Session">
-        <mat-error *ngIf="trainingTitle.hasError('required') && trainingTitle.touched">Title is required.</mat-error>
+        <mat-error *ngIf="trainingTitle.hasError('required') && trainingTitle.touched">Описот е задолжителен</mat-error>
     </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width-input">
+                <mat-label>Тип на тренинг</mat-label>
+                <mat-select formControlName="trainingType">
+                    <mat-option *ngFor="let type of trainingTypes()" [value]="type.id">{{type.name}}</mat-option>
+                </mat-select>
+                        <mat-error *ngIf="trainingType.hasError('required') && trainingType.touched">Типот на тренингот е задолжителен</mat-error>
+    </mat-form-field>
+        
 
     <mat-form-field appearance="outline" class="full-width-input">
         <mat-label>Notes (Optional)</mat-label>

@@ -52,10 +52,19 @@ namespace TCM_App.MappingProfiles
                 .ForMember(d => d.Status, o => o.MapFrom(s => ((TrainingStatusesEnum)s.Status).GetDescription()))
                 .ForMember(d=>d.MemberTrainings,o=>o.MapFrom(s=>s.MemberTrainings));
 
+            CreateMap<CreateTrainingDto, Training>()
+                .ForMember(d => d.MemberTrainings, o => o.Ignore())
+                .ForMember(d => d.Status, o => o.MapFrom(s => (int)s.Status))
+                .ForMember(d => d.TrainingType, o => o.MapFrom(s => s.TrainingType));
+
             CreateMap<Note, NoteDto>();
 
             CreateMap<AppRole,RoleDto>()
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.Id));
+
+            CreateMap<Belt, BeltDto>()
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.BeltName))
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.Id));
 
         }

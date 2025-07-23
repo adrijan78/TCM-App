@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -18,6 +18,8 @@ import { AcountService } from '../../_services/account/acount.service';
 import { ToastrService } from 'ngx-toastr';
 import { RegisterMember } from '../../_models/RegisterMember';
 import { MatSelectModule } from '@angular/material/select';
+import { Belt } from '../../_models/Belt';
+import { SharedService } from '../../_services/shared.service';
 
 @Component({
   selector: 'app-register-member',
@@ -36,13 +38,16 @@ import { MatSelectModule } from '@angular/material/select';
   templateUrl: './register-member.component.html',
   styleUrl: './register-member.component.css',
 })
-export class RegisterMemberComponent {
+export class RegisterMemberComponent implements OnInit {
   accountService = inject(AcountService);
+  sharedService = inject(SharedService);
   toastr = inject(ToastrService);
   registerForm: FormGroup;
   // selectedFile: File | null = null;
   memberToRegister: RegisterMember={} as RegisterMember;
   selectedRole: string='';
+  selectedBelt: string='';
+  clubBelts=signal<Belt[]>([]);
 
   constructor(private fb: FormBuilder) {
     this.registerForm = this.fb.group({
@@ -54,7 +59,22 @@ export class RegisterMemberComponent {
       height: ['', Validators.required],
       weight: ['', Validators.required],
       role: ['', Validators.required],
+      belt:['',Validators.required]
     });
+  }
+  ngOnInit(): void {
+    this.getBelts();
+  }
+
+  getBelts(){
+    this.sharedService.getClubBelts().subscribe({
+      next:(res:any)=>{
+        this.clubBelts.set(res)
+      },
+      error:(err)=>{
+        this.toastr.error(err)
+      }
+    })
   }
 
   // onFileSelected(event: Event) {
@@ -83,6 +103,7 @@ export class RegisterMemberComponent {
       this.memberToRegister.dateOfBirth = this.registerForm.value.dateOfBirth;
       this.memberToRegister.weight = this.registerForm.value.weight;
       this.memberToRegister.height = this.registerForm.value.height;
+      this.memberToRegister.belt=this.registerForm.value.belt;
       debugger;
       this.memberToRegister.rolesIds=[]
       this.memberToRegister.rolesIds.push(+this.selectedRole)

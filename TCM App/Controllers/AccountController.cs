@@ -8,12 +8,17 @@ using System.Security.Cryptography;
 using TCM_App.Data;
 using TCM_App.Models;
 using TCM_App.Models.DTOs;
+using TCM_App.Repositories.Interfaces;
 using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Controllers
 {
     [ApiController]
-    public class AccountController(IMapper  _mapper,UserManager<Member> userManager,ITokenService tokenService,RoleManager<AppRole> roleManager) : BaseController
+    public class AccountController(IMapper  _mapper,UserManager<Member> userManager,
+        ITokenService tokenService,
+        RoleManager<AppRole> roleManager,
+        IRepository<MemberBelt> _memberBeltRepository
+        ) : BaseController
     {
         [HttpPost("register")]
         public async Task<IActionResult> Register(MemberRegisterDto registerDto)
@@ -66,6 +71,8 @@ namespace TCM_App.Controllers
 
                     }
                 }
+
+
 
 
 
