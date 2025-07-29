@@ -119,17 +119,25 @@ namespace TCM_App.Services
             member.IsActive = memberDto.IsActive.HasValue ? memberDto.IsActive.Value : false;
             member.IsCoach = memberDto.IsCoach.HasValue ? memberDto.IsCoach.Value : false;
 
-            var existingBelt = _memberBeltRepository.Query().Where(x => x.MemberId == id && x.BeltId == memberDto.CurrentBelt.Id && x.IsCurrentBelt).FirstOrDefault();
-            if (existingBelt == null) {
+            var existingBelt = _memberBeltRepository.Query().Where(x => x.MemberId == id && x.IsCurrentBelt).FirstOrDefault();
+            if (existingBelt == null || (existingBelt.BeltId != memberDto.CurrentBeltId))
+            {
+                if(existingBelt != null)
+                    //Set existing belt to not current
+                    existingBelt.IsCurrentBelt = false;
+
+                //Ad new belt if it doesn't exist
                 var memberBelt = new MemberBelt
                 {
                     MemberId = id,
-                    BeltId = memberDto.CurrentBelt.Id,
+                    BeltId = memberDto.CurrentBeltId,
                     IsCurrentBelt = true,
                     DateReceived = DateTime.Now,
                     Description = ""
                 };
-               await _memberBeltRepository.AddAsync(memberBelt);
+                await _memberBeltRepository.AddAsync(memberBelt);
+
+
             }
 
 

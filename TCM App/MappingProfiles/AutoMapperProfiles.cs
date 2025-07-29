@@ -19,7 +19,7 @@ namespace TCM_App.MappingProfiles
 
 
             CreateMap<MemberRegisterDto, Member>()
-                .ForMember(d=>d.UserName,o=>o.MapFrom(s=>s.Email));
+                .ForMember(d => d.UserName, o => o.MapFrom(s => s.Email));
 
             CreateMap<MemberEditDto, Member>()
                 .ForMember(d => d.ProfilePicture, o => o.Ignore());

@@ -46,7 +46,6 @@ export class RegisterMemberComponent implements OnInit {
   // selectedFile: File | null = null;
   memberToRegister: RegisterMember={} as RegisterMember;
   selectedRole: string='';
-  selectedBelt: string='';
   clubBelts=signal<Belt[]>([]);
 
   constructor(private fb: FormBuilder) {
@@ -104,6 +103,7 @@ export class RegisterMemberComponent implements OnInit {
       this.memberToRegister.weight = this.registerForm.value.weight;
       this.memberToRegister.height = this.registerForm.value.height;
       this.memberToRegister.belt=this.registerForm.value.belt;
+      this.memberToRegister.belt.earnedOn=new Date(Date.now());
       debugger;
       this.memberToRegister.rolesIds=[]
       this.memberToRegister.rolesIds.push(+this.selectedRole)

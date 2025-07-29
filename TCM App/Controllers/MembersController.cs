@@ -43,17 +43,17 @@ namespace TCM_App.Controllers
         {
             try
             {
-                var userClaimsRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-                var userClaimsId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                //var userClaimsRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                //var userClaimsId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-                if(userClaimsRole == "Member")
-                {
-                    var claimId= int.Parse(userClaimsId!);
-                    if (userClaimsId != id.ToString())
-                    {
-                        claimId = int.Parse(userClaimsId!);
-                    }
-                }
+                //if(userClaimsRole == "Member")
+                //{
+                //    var claimId= int.Parse(userClaimsId!);
+                //    if (userClaimsId != id.ToString())
+                //    {
+                //        claimId = int.Parse(userClaimsId!);
+                //    }
+                //}
 
                 var member = await _memberService.GetMember(id);
                 if (member == null)

@@ -31,6 +31,8 @@ namespace TCM_App.Controllers
 
             var member = _mapper.Map<Member>(registerDto);
 
+            
+
             var result = await userManager.CreateAsync(member, registerDto.Password);
 
             if (!result.Succeeded)
@@ -70,9 +72,24 @@ namespace TCM_App.Controllers
                         }
 
                     }
+
+                  
                 }
 
 
+                var memberBelt = new MemberBelt
+                {
+                    MemberId = member.Id,
+                    BeltId = (int)registerDto.Belt.Id, // Assuming Belt is an enum or has an Id property
+                    DateReceived = registerDto.Belt.EarnedOn,
+                    Description="",
+                    IsCurrentBelt = true
+
+                };
+
+                await _memberBeltRepository.AddAsync(memberBelt);
+
+                await _memberBeltRepository.SaveChangesAsync();
 
 
 

@@ -24,6 +24,9 @@ import { MemberService } from '../../../_services/member/member.service';
 import { AcountService } from '../../../_services/account/acount.service';
 import { Role } from '../../../_models/Role';
 import { Router } from '@angular/router';
+import { Belt } from '../../../_models/Belt';
+import { SharedService } from '../../../_services/shared.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-member',
@@ -48,8 +51,10 @@ import { Router } from '@angular/router';
 export class EditMemberComponent implements OnInit {
 
   memberService = inject(MemberService);
+  sharedService = inject(SharedService);
   accountService = inject(AcountService);
   router = inject(Router);
+  toastr = inject(ToastrService);
   id = input.required<number>();
   editForm: FormGroup;
   selectedMember = signal<EditMember | null>(null);
@@ -57,6 +62,7 @@ export class EditMemberComponent implements OnInit {
   selectedRole: string = '';
   roles = signal<Role[] | null>(null);
   formData = new FormData();
+  clubBelts=signal<Belt[]>([]);
 
   constructor(private fb: FormBuilder) {
     this.editForm = this.fb.group({
@@ -67,12 +73,14 @@ export class EditMemberComponent implements OnInit {
       weight: [this.selectedMember()?.weight, Validators.required],
       role: [this.selectedMember()?.rolesIds, Validators.required],
       photo: [this.selectedMember()?.photoId, Validators.required],
+      belt:[this.selectedMember()?.currentBelt,Validators.required]
     });
-    debugger
+
   }
   ngOnInit(): void {
     this.getUserToEdit();
     this.getRoles();
+    this.getBelts();
   }
 
   getRoles() {
@@ -97,13 +105,28 @@ export class EditMemberComponent implements OnInit {
       weight: member.weight,
       role: member.rolesIds,
       photo: member.photoId,
+      belt:member.currentBelt
     });
       },
       error: () => {},
     });
   }
 
+  getBelts(){
+    this.sharedService.getClubBelts().subscribe({
+      next:(res:any)=>{
+        this.clubBelts.set(res)
+      },
+      error:(err)=>{
+        this.toastr.error(err)
+      }
+    })
+  }
+
   compareRoles(r1: Role, r2: Role): boolean {
+    return r1 && r2 && r1.id === r2.id;
+  }
+  compareBelts(r1: Belt, r2: Belt): boolean {
     return r1 && r2 && r1.id === r2.id;
   }
 
@@ -142,6 +165,8 @@ export class EditMemberComponent implements OnInit {
     this.formData.append('height',this.editForm.value.height)
     this.formData.append('weight',this.editForm.value.weight)
     this.formData.append('newPhoto',this.editForm.value.photo)
+    this.formData.append('currentBeltId',this.editForm.value.belt.id)
+    debugger;
     if(typeof this.editForm.value.dateOfBirth == 'string'){
       const iso = new Date(this.editForm.value.dateOfBirth).toISOString();
       this.formData.append('dateOfBirth',iso)

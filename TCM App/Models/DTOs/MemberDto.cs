@@ -72,7 +72,7 @@ namespace TCM_App.Models.DTOs
 
         public IFormFile? NewPhoto { get; set; }
 
-        public MemberBelt? CurrentBelt { get; set; }
+        public int CurrentBeltId { get; set; }
 
     }
 }
