@@ -75,4 +75,15 @@ namespace TCM_App.Models.DTOs
         public int CurrentBeltId { get; set; }
 
     }
+
+    public class MemberForTrainingDto 
+    {
+
+        public int MemberId { get; set; }
+        public string FullName { get; set; } = string.Empty;
+        public MemberBeltDto Belt { get; set; }
+
+    }
+
+
 }

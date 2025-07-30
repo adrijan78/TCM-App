@@ -59,9 +59,9 @@ namespace TCM_App.Services
             return await _memberRepository.GetMembersByClubId(id, userParams);
         }
 
-        public Task GetMembersGroupedByBelt(UserParams userParams)
+        public Task<Lookup<int,string>> GetMembersGroupedByBelt()
         {
-            return null;    
+            return _memberRepository.GetMembersGroupedByBelt();    
         }
 
         public async Task UpdateMember(int id, MemberEditDto memberDto)

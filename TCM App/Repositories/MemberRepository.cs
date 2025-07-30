@@ -113,9 +113,28 @@ namespace TCM_App.Repositories
 
         }
 
-        public Task<Lookup<int, string>> GetMembersGroupedByBelt()
+        public  Task<Lookup<int, string>> GetMembersGroupedByBelt()
         {
-            return null; // Not implemented in this repository, but can be implemented if needed.
+
+            var groupedMembers = _context.Members
+                .Include(m => m.Belts)
+                .ThenInclude(b => b.Belt)
+                .Where(m => m.IsActive)
+                .Select(m => new MemberForTrainingDto
+                {
+                    MemberId = m.Id,
+                    FullName = $"{m.FirstName} {m.LastName}",
+                    Belt = m.Belts.Where(x => x.IsCurrentBelt).Select(x => new MemberBeltDto
+                    {
+                        Id = x.BeltId,
+                        Name = x.Belt.BeltName,
+                        IsCurrentBelt = x.IsCurrentBelt
+                    }).FirstOrDefault()?? new MemberBeltDto()
+                })
+                .GroupBy(m => m.Belt.Id)
+                .ToLookup(g => g.Key, g => g.ToList());
+
+            return null;
         }
     }
 }

@@ -11,7 +11,7 @@ using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class MembersController(
         IMemberService _memberService,
         ILogger<MembersController> logger,
@@ -114,7 +114,7 @@ namespace TCM_App.Controllers
         {
             try
             {
-                //var members = await _memberService.GetMembersGroupedByBelt(userParams);
+                var members = await _memberService.GetMembersGroupedByBelt();
                 //return Ok(members);
                 return Ok(null);
             }
