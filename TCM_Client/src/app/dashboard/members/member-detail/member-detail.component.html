@@ -9,8 +9,8 @@
                             <div class="profile-img-container">
                                 @if (member()?.profilePicture!=null) {
 
-                                <img [src]="member()?.profilePicture?.url+''+ member()?.id+'.jpg'" alt="Profile"
-                                    class="profile-img">
+                                <img [src]="member()?.profilePicture?.url" alt="Profile" class="profile-img">
+
                                 }
                                 @else{
                                 <img class="profile-img" src="assets/images/profilePlaceholder.jpg" alt="Placeholder">
