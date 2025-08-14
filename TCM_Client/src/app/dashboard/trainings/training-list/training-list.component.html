@@ -46,8 +46,14 @@
                                                 <mat-expansion-panel-header>
                                                     <mat-panel-title class="h-100 w-100">
 
-                                                        <img [src]="memberTraining.member.profilePicture.url+memberTraining.member.id+'.jpg'"
-                                                            class="accordion-img">
+                                                        @if (memberTraining.member.profilePicture) {
+                                                            <img [src]="memberTraining.member.profilePicture.url+memberTraining.member.id+'.jpg'"
+                                                                class="accordion-img">
+    
+                                                        }@else {
+                                                                <img src="assets/images/profilePlaceholder.jpg"
+                                                                    class="accordion-img">
+                                                                }
                                                         {{memberTraining.member.firstName}}
                                                         {{memberTraining.member.lastName}}
                                                         <div class="w-75 justify-content-end d-flex">

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using TCM_App.Models.Enums;
 
 namespace TCM_App.Models
 {
@@ -27,5 +28,7 @@ namespace TCM_App.Models
         public int MemberId { get; set; }
         public Member Member { get; set; } = null!; // Ensure Member is not null
         public int Performace { get; set; }
+
+        public MemberTrainingStatusEnum Status { get; set; }
     }
 }

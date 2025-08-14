@@ -1,3 +1,5 @@
+import { Belt } from "./Belt";
+
 export interface RegisterMember {
   firstName: string;
   lastName: string;
@@ -7,4 +9,5 @@ export interface RegisterMember {
   height: number;
   weight: number;
   rolesIds:number[];
+  belt:Belt
 }

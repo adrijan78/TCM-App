@@ -56,7 +56,7 @@
         <div class="form-group">
             <mat-form-field appearance="outline">
                 <mat-label>Датум на раѓање</mat-label>
-                <input matInput [matDatepicker]="picker" [value]="selectedMember()?.startedOn"
+                <input matInput [matDatepicker]="picker" [value]="selectedMember()?.dateOfBirth"
                     formControlName="dateOfBirth" required />
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
@@ -77,9 +77,22 @@
                 </mat-select>
             </mat-form-field>
 
+            <div class="form-group w-100">
+                            <mat-form-field>
+                 <mat-label>Појас</mat-label>
+                            <mat-select formControlName="belt" [compareWith]="compareBelts">
+                                @for (belt of clubBelts(); track belt.id) {
+                                   <mat-option [value]="belt">{{belt.name}}</mat-option> 
+                                }
+                             
+
+                            </mat-select>
+            </mat-form-field>
+            </div>
+
             <div class="w-100 d-flex justify-content-end">
                 <button mat-raised-button color="primary" (click)="onSubmit()" class="submit-btn" type="button"
-                    [disabled]="editForm.invalid">
+                >
                     Промени податоци
                 </button>
 

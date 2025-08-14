@@ -57,4 +57,8 @@ export class TrainingService {
       this.baseUrl + 'trainings/training-details/' + id
     );
   }
+
+  getTrainingTypes(){
+    return this.http.get(this.baseUrl+'trainings/training-types');
+  }
 }

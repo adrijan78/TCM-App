@@ -11,7 +11,7 @@ using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class MembersController(
         IMemberService _memberService,
         ILogger<MembersController> logger,
@@ -43,17 +43,17 @@ namespace TCM_App.Controllers
         {
             try
             {
-                var userClaimsRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-                var userClaimsId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                //var userClaimsRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                //var userClaimsId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-                if(userClaimsRole == "Member")
-                {
-                    var claimId= int.Parse(userClaimsId!);
-                    if (userClaimsId != id.ToString())
-                    {
-                        claimId = int.Parse(userClaimsId!);
-                    }
-                }
+                //if(userClaimsRole == "Member")
+                //{
+                //    var claimId= int.Parse(userClaimsId!);
+                //    if (userClaimsId != id.ToString())
+                //    {
+                //        claimId = int.Parse(userClaimsId!);
+                //    }
+                //}
 
                 var member = await _memberService.GetMember(id);
                 if (member == null)
@@ -104,6 +104,23 @@ namespace TCM_App.Controllers
             catch (Exception e)
             {
                 logger.LogError(e, "Error getting attendance and performance for member with id {MemberId}", id);
+                throw new Exception(e.ToString());
+            }
+        }
+
+
+        [HttpGet("membersGroupedByBelt")]
+        public async Task<IActionResult> GetMembersGroupedByBelt()
+        {
+            try
+            {
+                var members = await _memberService.GetMembersGroupedByBelt();
+                //return Ok(members);
+                return Ok(null);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error getting members grouped by belt");
                 throw new Exception(e.ToString());
             }
         }

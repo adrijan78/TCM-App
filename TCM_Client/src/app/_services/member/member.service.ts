@@ -66,4 +66,6 @@ export class MemberService {
   deactivateMember(id: number) {
     return this.http.delete(this.baseUrl + 'members/deactivate-member/' + id);
   }
+
+  
 }

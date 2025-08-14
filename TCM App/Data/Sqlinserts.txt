@@ -5,13 +5,15 @@ VALUES ('Tiger Combat Martial Arts', '123 Kick St, Fightville, TX');
 
 
 INSERT INTO Belts (BeltName) VALUES 
-('White'),
-('Yellow'),
-('Orange'),
-('Green'),
-('Blue'),
-('Brown'),
-('Black');
+(N'Бел'),
+(N'Жолт'),
+(N'Портокалов'),
+(N'Зелен'),
+(N'Плав'),
+(N'Кафеав'),
+(N'Црн 1 дан'),
+(N'Црн 2 дан'),
+(N'Црн 3 дан');
 
 
 

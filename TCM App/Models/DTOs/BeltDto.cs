@@ -6,4 +6,11 @@
         public string Name { get; set; } = "";
         public DateTime EarnedOn { get; set; }
     }
+
+    public class MemberBeltDto : BeltDto
+    {
+        public bool IsCurrentBelt { get; set; }
+
+    }
+
 }

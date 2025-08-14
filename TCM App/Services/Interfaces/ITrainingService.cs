@@ -6,7 +6,7 @@ namespace TCM_App.Services.Interfaces
 {
     public interface ITrainingService
     {
-        Task<Training> AddTraining(Training training);
+        Task<string> AddTraining(CreateTrainingDto training);
         Task<Training> UpdateTraining(Training training);
         Task<Training> DeleteTraining(Training training);
         Task<TrainingDetailsDto> GetTraining(int trainingId,int clubId);
