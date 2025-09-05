@@ -15,6 +15,7 @@ namespace TCM_App.Models.DTOs
         public int Performace { get; set; }
         public TrainingDto? Training { get; set; }
         public MemberSimpleDto? Member { get; set; }
+        public MemberTrainingStatusEnum Status { get; set; }
     }
 
     public class  CreateMemberTrainingDto
@@ -27,5 +28,14 @@ namespace TCM_App.Models.DTOs
         public int? Performace { get; set; }
         public MemberTrainingStatusEnum Status { get; set; }
 
+    }
+
+    public class UpdateMemberTrainingDto
+    {
+        //public required DateTime Date { get; set; }
+        public required int Id { get; set; }
+        public required string Description { get; set; }
+        public int? Performance { get; set; }
+        public MemberTrainingStatusEnum Status { get; set; }
     }
 }

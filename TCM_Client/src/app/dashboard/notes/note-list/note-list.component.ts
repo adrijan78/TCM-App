@@ -7,13 +7,19 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-note-list',
-  imports: [NoteComponent,CommonModule,FormsModule],
+  imports: [NoteComponent, CommonModule, FormsModule],
   templateUrl: './note-list.component.html',
   styleUrl: './note-list.component.css',
 })
 export class NoteListComponent {
- notes: Note[] = [
-    {title:'Note1',content:'Note 1 desc',createdAt:new Date(),category:'For me', fromMemberId:1,toMemberId:2}
+  notes: Note[] = [
+    {
+      title: 'Note1',
+      content: 'Note 1 desc',
+      createdAt: new Date(),
+      fromMemberId: 1,
+      toMemberId: 2,
+    },
   ];
 
   constructor(private dialog: MatDialog) {}
@@ -32,17 +38,17 @@ export class NoteListComponent {
   }
 
   //openAddNoteDialog() {
-    // const dialogRef = this.dialog.open(AddNoteDialogComponent, {
-    //   width: '400px',
-    //   data: {}
-    // });
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     this.notes.push({
-    //       ...result,
-    //       createdAt: new Date()
-    //     });
-    //   }
-    // });
+  // const dialogRef = this.dialog.open(AddNoteDialogComponent, {
+  //   width: '400px',
+  //   data: {}
+  // });
+  // dialogRef.afterClosed().subscribe(result => {
+  //   if (result) {
+  //     this.notes.push({
+  //       ...result,
+  //       createdAt: new Date()
+  //     });
+  //   }
+  // });
   //}
 }

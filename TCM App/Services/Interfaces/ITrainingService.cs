@@ -10,7 +10,8 @@ namespace TCM_App.Services.Interfaces
         Task<Training> UpdateTraining(Training training);
         Task<Training> DeleteTraining(Training training);
         Task<TrainingDetailsDto> GetTraining(int trainingId,int clubId);
-        Task<Dictionary<int,int>> GetNumberOfTrainingsForEveryMonth(int clubId);
+        Task<Dictionary<int,int>> GetNumberOfTrainingsForEveryMonth(int clubId, int year);
+        Task<List<TrainingDetailsDto>> GetTrainingsForSpecificMonth(int month);
         Task<PagedList<TrainingDto>> GetTrainingsByClubId(int clubId, TrainingParams trainingParams);
 
     }

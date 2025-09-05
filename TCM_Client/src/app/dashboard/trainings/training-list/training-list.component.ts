@@ -1,8 +1,12 @@
 import {
+  AfterViewChecked,
+  AfterViewInit,
   Component,
+  effect,
   inject,
   OnInit,
   signal,
+  viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,6 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 import {
   MatDatepickerModule,
   MatCalendarCellClassFunction,
+  MatCalendar,
 } from '@angular/material/datepicker'; // Import MatCalendarCellClassFunction
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -58,7 +63,7 @@ import { Router, RouterLink, RouterModule } from '@angular/router';
   styleUrls: ['./training-list.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
-export class TrainingListComponent implements OnInit {
+export class TrainingListComponent implements OnInit, AfterViewInit {
   trainingService = inject(TrainingService);
   router = inject(Router);
   activeTraining = TrainingStatus.Active;
@@ -66,6 +71,7 @@ export class TrainingListComponent implements OnInit {
   finishedTraining = TrainingStatus.Finished;
 
   trainings = signal<Training[] | null>(null);
+  trainingsForCalendar = signal<Training[] | null>(null);
   selectedDate: Date | null = null;
   searchTermCalendar: string = '';
   totalTrainings = 0;
@@ -76,13 +82,33 @@ export class TrainingListComponent implements OnInit {
   selectedType = signal<number | null>(null);
   searchTerm = signal<string>('');
   selectedTraining = signal<TrainingDetails | null>(null);
+  calendar = viewChild(MatCalendar<Date>);
+  displayedMonth: string = new Date().getMonth().toString();
+  initialPull = signal<boolean>(true);
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog) {
+    effect(() => {
+      const cal = this.calendar(); // unwrap the signal
+      if (cal) {
+        cal.stateChanges.subscribe(() => {
+          var tmp = cal.activeDate.getMonth().toString();
+          if (tmp != this.displayedMonth) {
+            this.displayedMonth = tmp;
+            this.getTrainingsForMonth(+this.displayedMonth);
+          }
+        });
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.selectedDate = new Date();
     this.getTrainings();
+
+    this.getTrainingsForMonth(+this.displayedMonth);
   }
+
+  ngAfterViewInit(): void {}
 
   getTrainings() {
     this.trainingService
@@ -97,14 +123,15 @@ export class TrainingListComponent implements OnInit {
         next: (res) => {
           let response = res.body as Training[] | null;
           this.trainings.set(response);
+          // this.onDateSelected(new Date(), this.trainings);
           let pagination: Pagination = JSON.parse(
             res.headers.get('Pagination')!
           );
           this.pageNumber = pagination.currentPage!;
           this.pageSize = pagination.itemsPerPage!;
           this.totalTrainings = pagination.totalItems!;
-          this.forceReloadCalendarSelectedDates();
-          //this.getTrainingsForSelectedDate()
+          //this.forceReloadCalendarSelectedDates(response);
+          //this.getTrainingsForSelectedDate();
         },
       });
   }
@@ -114,6 +141,25 @@ export class TrainingListComponent implements OnInit {
       next: (res: TrainingDetails) => {
         this.selectedTraining.set(res);
       },
+    });
+  }
+
+  getTrainingsForMonth(month: number) {
+    var correctedMonth = month + 1;
+    this.trainingService.getTrainingsForMonth(correctedMonth).subscribe({
+      next: (res: any) => {
+        let response = res;
+        this.trainingsForCalendar.set(response);
+
+        this.forceReloadCalendarSelectedDates();
+        this.onDateSelected(new Date());
+        if (this.initialPull() == false) {
+          this.calendar()?.updateTodaysDate();
+        } else {
+          this.initialPull.set(false);
+        }
+      },
+      error: (err) => {},
     });
   }
 
@@ -129,7 +175,7 @@ export class TrainingListComponent implements OnInit {
       //     new Date(training.date).toDateString() == date.toDateString()
       //   }
       // );
-      for (let training of this.trainings()!) {
+      for (let training of this.trainingsForCalendar()!) {
         if (new Date(training.date).toDateString() == date.toDateString()) {
           hasTraining = true;
           break;
@@ -144,14 +190,22 @@ export class TrainingListComponent implements OnInit {
    * Handles date selection on the calendar.
    */
   onDateSelected(date: Date | null): void {
-    for (let training of this.trainings()!) {
-      if (
-        date != null &&
-        new Date(training.date).toDateString() == date?.toDateString()
-      ) {
-        this.getTrainingDetails(training.id);
-        break;
+    if (
+      this.trainingsForCalendar() != null &&
+      this.trainingsForCalendar() != undefined &&
+      this.trainingsForCalendar()!.length > 0
+    ) {
+      for (let training of this.trainingsForCalendar()!) {
+        if (
+          date != null &&
+          new Date(training.date).toDateString() == date?.toDateString()
+        ) {
+          this.getTrainingDetails(training.id);
+          break;
+        }
+        this.selectedTraining.set(null);
       }
+    } else {
       this.selectedTraining.set(null);
     }
 
@@ -213,7 +267,7 @@ export class TrainingListComponent implements OnInit {
         //     new Date(training.date).toDateString() == date.toDateString()
         //   }
         // );
-        for (let training of this.trainings()!) {
+        for (let training of this.trainingsForCalendar()!) {
           if (new Date(training.date).toDateString() == date.toDateString()) {
             hasTraining = true;
             break;

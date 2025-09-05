@@ -8,5 +8,6 @@
 
         public required string Token { get; set; }
         public List<string>? Roles { get; set; }
+        public string? ProfilePicture { get; set; }
     }
 }

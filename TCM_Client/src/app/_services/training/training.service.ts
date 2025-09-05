@@ -11,9 +11,12 @@ export class TrainingService {
   baseUrl = environment.apiUrl;
   selectedTraining = signal<TrainingDetails | null>(null);
 
-  getNumberOfTrainingsForEveryMonth() {
+  getNumberOfTrainingsForEveryMonth(year: number) {
+    var params = new HttpParams().set('year', year);
+
     return this.http.get(
-      this.baseUrl + 'trainings/numberOfTrainingsPerMonth/' + 1
+      this.baseUrl + 'trainings/numberOfTrainingsPerMonth/' + 1,
+      { params }
     );
   }
 
@@ -58,7 +61,18 @@ export class TrainingService {
     );
   }
 
-  getTrainingTypes(){
-    return this.http.get(this.baseUrl+'trainings/training-types');
+  getTrainingTypes() {
+    return this.http.get(this.baseUrl + 'trainings/training-types');
+  }
+
+  createTraining(training: any) {
+    return this.http.post(this.baseUrl + 'trainings/create-training', training);
+  }
+
+  getTrainingsForMonth(month: number) {
+    var params = new HttpParams().set('month', month);
+    return this.http.get(this.baseUrl + `trainings/monthly-trainings`, {
+      params,
+    });
   }
 }

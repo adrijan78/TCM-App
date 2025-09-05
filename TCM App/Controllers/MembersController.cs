@@ -116,7 +116,7 @@ namespace TCM_App.Controllers
             {
                 var members = await _memberService.GetMembersGroupedByBelt();
                 //return Ok(members);
-                return Ok(null);
+                return Ok(members);
             }
             catch (Exception e)
             {
@@ -125,6 +125,25 @@ namespace TCM_App.Controllers
             }
         }
 
+
+        [HttpPut("updateMembersAttendance")]
+        public async Task<IActionResult> UpdateMembersAttendance([FromBody] List<UpdateMemberTrainingDto> memberAttendances)
+        {
+            try
+            {
+                await _memberService.UpdateMemberAttendanceAndPerformace(memberAttendances);
+                return Ok(new ApiResponse<string>
+                {
+                    Success = true,
+                    Message = "Успешно ажурирање на присуство",
+                });
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Проблем при ажурирање на присуство");
+                throw new Exception(e.ToString());
+            }
+        }
 
 
 

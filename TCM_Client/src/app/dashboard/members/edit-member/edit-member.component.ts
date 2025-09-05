@@ -49,7 +49,6 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './edit-member.component.css',
 })
 export class EditMemberComponent implements OnInit {
-
   memberService = inject(MemberService);
   sharedService = inject(SharedService);
   accountService = inject(AcountService);
@@ -62,20 +61,25 @@ export class EditMemberComponent implements OnInit {
   selectedRole: string = '';
   roles = signal<Role[] | null>(null);
   formData = new FormData();
-  clubBelts=signal<Belt[]>([]);
+  clubBelts = signal<Belt[]>([]);
 
   constructor(private fb: FormBuilder) {
     this.editForm = this.fb.group({
-      firstName: [this.selectedMember()?.firstName, [Validators.required, Validators.maxLength(50)]],
-      lastName: [this.selectedMember()?.lastName, [Validators.required, Validators.maxLength(50)]],
+      firstName: [
+        this.selectedMember()?.firstName,
+        [Validators.required, Validators.maxLength(50)],
+      ],
+      lastName: [
+        this.selectedMember()?.lastName,
+        [Validators.required, Validators.maxLength(50)],
+      ],
       dateOfBirth: [this.selectedMember()?.dateOfBirth, Validators.required],
       height: [this.selectedMember()?.height, Validators.required],
       weight: [this.selectedMember()?.weight, Validators.required],
       role: [this.selectedMember()?.rolesIds, Validators.required],
       photo: [this.selectedMember()?.photoId, Validators.required],
-      belt:[this.selectedMember()?.currentBelt,Validators.required]
+      belt: [this.selectedMember()?.currentBelt, Validators.required],
     });
-
   }
   ngOnInit(): void {
     this.getUserToEdit();
@@ -95,32 +99,32 @@ export class EditMemberComponent implements OnInit {
 
   getUserToEdit() {
     this.memberService.getMember(this.id()).subscribe({
-      next: (member:any) => {
+      next: (member: any) => {
         this.selectedMember.set(member);
         this.editForm.patchValue({
-      firstName: member.firstName,
-      lastName: member.lastName,
-      dateOfBirth: member.dateOfBirth,
-      height: member.height,
-      weight: member.weight,
-      role: member.rolesIds,
-      photo: member.photoId,
-      belt:member.currentBelt
-    });
+          firstName: member.firstName,
+          lastName: member.lastName,
+          dateOfBirth: member.dateOfBirth,
+          height: member.height,
+          weight: member.weight,
+          role: member.rolesIds,
+          photo: member.photoId,
+          belt: member.currentBelt,
+        });
       },
       error: () => {},
     });
   }
 
-  getBelts(){
+  getBelts() {
     this.sharedService.getClubBelts().subscribe({
-      next:(res:any)=>{
-        this.clubBelts.set(res)
+      next: (res: any) => {
+        this.clubBelts.set(res);
       },
-      error:(err)=>{
-        this.toastr.error(err)
-      }
-    })
+      error: (err) => {
+        this.toastr.error(err);
+      },
+    });
   }
 
   compareRoles(r1: Role, r2: Role): boolean {
@@ -145,13 +149,12 @@ export class EditMemberComponent implements OnInit {
   }
 
   OnRoleSelect(event: MatSelectChange<any>) {
-    var arr:any[]=[];
+    var arr: any[] = [];
     this.formData.delete('rolesIds');
-    for (var val of event.value){
-        this.formData.append(`rolesIds`, val.id.toString());
+    for (var val of event.value) {
+      this.formData.append(`rolesIds`, val.id.toString());
     }
-  
-}
+  }
 
   removeImage(): void {
     this.imagePreview = null;
@@ -160,28 +163,27 @@ export class EditMemberComponent implements OnInit {
 
   onSubmit() {
     var dob;
-    this.formData.append('firstName',this.editForm.value.firstName)
-    this.formData.append('lastName',this.editForm.value.lastName)
-    this.formData.append('height',this.editForm.value.height)
-    this.formData.append('weight',this.editForm.value.weight)
-    this.formData.append('newPhoto',this.editForm.value.photo)
-    this.formData.append('currentBeltId',this.editForm.value.belt.id)
-    debugger;
-    if(typeof this.editForm.value.dateOfBirth == 'string'){
+    this.formData.append('firstName', this.editForm.value.firstName);
+    this.formData.append('lastName', this.editForm.value.lastName);
+    this.formData.append('height', this.editForm.value.height);
+    this.formData.append('weight', this.editForm.value.weight);
+    this.formData.append('newPhoto', this.editForm.value.photo);
+    this.formData.append('currentBeltId', this.editForm.value.belt.id);
+    if (typeof this.editForm.value.dateOfBirth == 'string') {
       const iso = new Date(this.editForm.value.dateOfBirth).toISOString();
-      this.formData.append('dateOfBirth',iso)
-
-    }else{
-       const iso = this.editForm.value.dateOfBirth.toISOString(); // e.g. "2025-06-09T22:00:00.000Z"
-      this.formData.append('dateOfBirth',iso)
+      this.formData.append('dateOfBirth', iso);
+    } else {
+      const iso = this.editForm.value.dateOfBirth.toISOString(); // e.g. "2025-06-09T22:00:00.000Z"
+      this.formData.append('dateOfBirth', iso);
     }
-    
 
-    this.memberService.editMember(this.selectedMember()?.id,this.formData).subscribe({
-      next: (res: any) => {
-        this.router.navigate(['members',this.id()])
-        console.log('Response', res);
-      },
-    });
+    this.memberService
+      .editMember(this.selectedMember()?.id, this.formData)
+      .subscribe({
+        next: (res: any) => {
+          this.router.navigate(['members', this.id()]);
+          console.log('Response', res);
+        },
+      });
   }
 }

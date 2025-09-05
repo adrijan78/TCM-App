@@ -10,7 +10,7 @@
 
 // }
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import {
   Router,
   RouterLink,
@@ -23,6 +23,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { AcountService } from '../_services/account/acount.service';
+import { LoginComponent } from '../login/login.component';
+import { LoginMember } from '../_models/Member';
 
 @Component({
   selector: 'app-root',
@@ -39,18 +41,22 @@ import { AcountService } from '../_services/account/acount.service';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   public accountService = inject(AcountService);
   private router = inject(Router);
   title = 'TCM_Client';
+  loggedMember = signal<LoginMember | null>(null);
+
+  ngOnInit(): void {
+    this.loggedMember.set(this.accountService.currentUser());
+  }
 
   logout() {
     this.accountService.logout();
   }
 
-
-    closeSidenav() {
+  closeSidenav() {
     this.sidenav.close();
   }
 }

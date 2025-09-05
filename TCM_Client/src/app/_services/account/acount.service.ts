@@ -38,10 +38,9 @@ export class AcountService {
   login(model: any) {
     return this.http.post(this.baseUrl + 'account/login', model).pipe(
       map((member: any) => {
-        debugger;
         if (member) {
           localStorage.setItem('member', JSON.stringify(member.data));
-          this.currentUser.set(member);
+          this.currentUser.set(member.data);
         }
       })
     );

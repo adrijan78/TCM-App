@@ -17,7 +17,8 @@ namespace TCM_App.Controllers
     public class AccountController(IMapper  _mapper,UserManager<Member> userManager,
         ITokenService tokenService,
         RoleManager<AppRole> roleManager,
-        IRepository<MemberBelt> _memberBeltRepository
+        IRepository<MemberBelt> _memberBeltRepository,
+        IRepository<Photo> _photoRepository
         ) : BaseController
     {
         [HttpPost("register")]
@@ -104,7 +105,8 @@ namespace TCM_App.Controllers
                         LastName = member.LastName,
                         Email = member.Email!,
                         Token = await tokenService.CreateToken(member),
-                        Roles = (List<string>)await userManager.GetRolesAsync(member)
+                        Roles = (List<string>)await userManager.GetRolesAsync(member),
+
                     }
                 }
                 );
@@ -150,19 +152,25 @@ namespace TCM_App.Controllers
                         });
                     }
                 }
+                var pic = await _photoRepository.Query()
+            .Where(p => p.MemberId == member.Id)
+            .Select(p => p.Url)
+            .FirstOrDefaultAsync();
 
 
-                    return Ok(new ApiResponse<MemberTokenDto>
+                return Ok(new ApiResponse<MemberTokenDto>
                     {
                         Message = "Успешно регистриран член",
                         Success = true,
                         Data = new MemberTokenDto
                         {
+                            
                             FirstName = member.FirstName,
                             LastName = member.LastName,
                             Email = member.Email!,
                             Token = await tokenService.CreateToken(member),
-                            Roles= (List<string>)roles
+                            Roles= (List<string>)roles,
+                            ProfilePicture = pic
                         }
                     }
                 );

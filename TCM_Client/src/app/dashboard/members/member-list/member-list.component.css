@@ -94,10 +94,11 @@ table.table td i {
     font-size: 19px;
 }
 table.table .avatar {
-    border-radius: 50%;
-    vertical-align: middle;
-    margin-right: 10px;
-    max-width: 80px;
+      width: 100px;       /* same width */
+  height: 100px;      /* same height */
+  border-radius: 50%;
+  object-fit: cover; 
+    
 }
 .status {
     font-size: 30px;

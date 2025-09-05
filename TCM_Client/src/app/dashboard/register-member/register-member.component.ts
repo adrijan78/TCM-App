@@ -33,7 +33,7 @@ import { SharedService } from '../../_services/shared.service';
     MatNativeDateModule,
     MatIconModule,
     MatSelectModule,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './register-member.component.html',
   styleUrl: './register-member.component.css',
@@ -44,9 +44,9 @@ export class RegisterMemberComponent implements OnInit {
   toastr = inject(ToastrService);
   registerForm: FormGroup;
   // selectedFile: File | null = null;
-  memberToRegister: RegisterMember={} as RegisterMember;
-  selectedRole: string='';
-  clubBelts=signal<Belt[]>([]);
+  memberToRegister: RegisterMember = {} as RegisterMember;
+  selectedRole: string = '';
+  clubBelts = signal<Belt[]>([]);
 
   constructor(private fb: FormBuilder) {
     this.registerForm = this.fb.group({
@@ -58,22 +58,22 @@ export class RegisterMemberComponent implements OnInit {
       height: ['', Validators.required],
       weight: ['', Validators.required],
       role: ['', Validators.required],
-      belt:['',Validators.required]
+      belt: ['', Validators.required],
     });
   }
   ngOnInit(): void {
     this.getBelts();
   }
 
-  getBelts(){
+  getBelts() {
     this.sharedService.getClubBelts().subscribe({
-      next:(res:any)=>{
-        this.clubBelts.set(res)
+      next: (res: any) => {
+        this.clubBelts.set(res);
       },
-      error:(err)=>{
-        this.toastr.error(err)
-      }
-    })
+      error: (err) => {
+        this.toastr.error(err);
+      },
+    });
   }
 
   // onFileSelected(event: Event) {
@@ -102,11 +102,11 @@ export class RegisterMemberComponent implements OnInit {
       this.memberToRegister.dateOfBirth = this.registerForm.value.dateOfBirth;
       this.memberToRegister.weight = this.registerForm.value.weight;
       this.memberToRegister.height = this.registerForm.value.height;
-      this.memberToRegister.belt=this.registerForm.value.belt;
-      this.memberToRegister.belt.earnedOn=new Date(Date.now());
-      debugger;
-      this.memberToRegister.rolesIds=[]
-      this.memberToRegister.rolesIds.push(+this.selectedRole)
+      this.memberToRegister.belt = this.registerForm.value.belt;
+      this.memberToRegister.belt.earnedOn = new Date(Date.now());
+
+      this.memberToRegister.rolesIds = [];
+      this.memberToRegister.rolesIds.push(+this.selectedRole);
 
       // if (this.selectedFile) {
       //   formData.append('profilePicture', this.selectedFile);

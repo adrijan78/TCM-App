@@ -325,9 +325,12 @@ table.table .avatar {
 }
 
 .accordion-img{
-  border-radius: 50%!important;
-  max-width: 80px;
+ border-radius: 50%!important;
   margin-right: .5rem;
+  height: 107px !important;
+    width: 192px !important;
+  object-fit: cover;
+
 }
 mat-expansion-panel-header {
   min-height: 100px;  /* default is ~48px */

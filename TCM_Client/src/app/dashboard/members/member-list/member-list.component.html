@@ -22,13 +22,14 @@
                             <mat-label>Појас</mat-label>
                             <mat-select [(ngModel)]="selectedBelt" (selectionChange)="applyFilters()">
                                 <mat-option value="">Сите</mat-option>
-                                <mat-option value="White">Бел</mat-option>
-                                <mat-option value="Yellow">Жолт</mat-option>
-                                <mat-option value="Orange">Портокалов</mat-option>
-                                <mat-option value="Green">Зелен</mat-option>
-                                <mat-option value="Blue">Плав</mat-option>
-                                <mat-option value="Brown">Кафеав</mat-option>
-                                <mat-option value="Black">Црн</mat-option>
+                                <mat-option value="Бел">{{beltMkNames[1]}}</mat-option>
+                                <mat-option value="Жолт">{{beltMkNames[2]}}</mat-option>
+                                <mat-option value="Портокалов">{{beltMkNames[3]}}</mat-option>
+                                <mat-option value="Зелен">{{beltMkNames[4]}}</mat-option>
+                                <mat-option value="Плав">{{beltMkNames[5]}}</mat-option>
+                                <mat-option value="Кафеав">{{beltMkNames[6]}}</mat-option>
+                                <mat-option value="Црн">{{beltMkNames[7]}}</mat-option>
+                                <mat-option value="Црн 1 дан">{{beltMkNames[8]}}</mat-option>
 
                             </mat-select>
                         </mat-form-field>

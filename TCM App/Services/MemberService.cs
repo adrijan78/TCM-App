@@ -8,7 +8,8 @@ using TCM_App.Services.Interfaces;
 namespace TCM_App.Services
 {
     public class MemberService(IMemberRepository _memberRepository, IFirebaseStorageService
-        _firebaseStorageService, IRepository<Photo> _photoRepository,IRepository<MemberBelt> _memberBeltRepository, IMapper mapper) : IMemberService
+        _firebaseStorageService, IRepository<Photo> _photoRepository,
+        IRepository<MemberBelt> _memberBeltRepository, IMapper mapper) : IMemberService
     {
         public Task<Member> AddMember(Member member)
         {
@@ -54,12 +55,20 @@ namespace TCM_App.Services
 
         }
 
+        public async Task UpdateMemberAttendanceAndPerformace(List<UpdateMemberTrainingDto> memberTrainingDtos)
+        {
+
+             await _memberRepository.UpdateMemberAttendanceAndPerformace(memberTrainingDtos);
+
+        
+        }
+
         public async Task<PagedList<MemberListDto>> GetMembers(int id, UserParams userParams)
         {
             return await _memberRepository.GetMembersByClubId(id, userParams);
         }
 
-        public Task<Lookup<int,string>> GetMembersGroupedByBelt()
+        public Task<Dictionary<int,List<MemberDropdownDto>>> GetMembersGroupedByBelt()
         {
             return _memberRepository.GetMembersGroupedByBelt();    
         }
@@ -120,13 +129,13 @@ namespace TCM_App.Services
             member.IsCoach = memberDto.IsCoach.HasValue ? memberDto.IsCoach.Value : false;
 
             var existingBelt = _memberBeltRepository.Query().Where(x => x.MemberId == id && x.IsCurrentBelt).FirstOrDefault();
-            if (existingBelt == null || (existingBelt.BeltId != memberDto.CurrentBeltId))
+            if (existingBelt == null || (existingBelt != null && existingBelt.BeltId != memberDto.CurrentBeltId))
             {
                 if(existingBelt != null)
                     //Set existing belt to not current
                     existingBelt.IsCurrentBelt = false;
 
-                //Ad new belt if it doesn't exist
+                //Add new belt if it doesn't exist
                 var memberBelt = new MemberBelt
                 {
                     MemberId = id,

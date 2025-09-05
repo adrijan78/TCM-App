@@ -44,11 +44,17 @@ export class MemberService {
   getMember(id: number) {
     return this.http.get<Member>(this.baseUrl + `members/${id}`);
   }
-  getMemberTrainingData(id: number, pageNumber?: number, pageSize?: number) {
+  getMemberTrainingData(
+    id: number,
+    year: number,
+    pageNumber?: number,
+    pageSize?: number
+  ) {
     let params = new HttpParams();
     if (pageNumber && pageSize) {
       params = params.append('pageNumber', pageNumber);
       params = params.append('pageSize', pageSize);
+      params = params.append('year', year);
     }
     return this.http.get<MemberTrainingData[]>(
       this.baseUrl + `members/memberTraningData/${id}`,
@@ -56,7 +62,14 @@ export class MemberService {
     );
   }
 
-  editMember(memberId:any,member: FormData) {
+  updateMembersAttendanceStatusAndPerformance(membersList: any) {
+    return this.http.put(
+      this.baseUrl + 'members/updateMembersAttendance',
+      membersList
+    );
+  }
+
+  editMember(memberId: any, member: FormData) {
     return this.http.put(
       this.baseUrl + 'members/edit-member/' + memberId,
       member
@@ -67,5 +80,7 @@ export class MemberService {
     return this.http.delete(this.baseUrl + 'members/deactivate-member/' + id);
   }
 
-  
+  getMembersGroupedByBelt() {
+    return this.http.get(this.baseUrl + 'members/membersGroupedByBelt');
+  }
 }

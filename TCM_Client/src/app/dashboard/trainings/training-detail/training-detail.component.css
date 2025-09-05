@@ -30,11 +30,16 @@ mat-icon {
 .training-text{
     color: #007bb5;
   }
+.w-40{
+  width: 40% !important;
+}
 
 .accordion-img{
   border-radius: 50%!important;
-  max-width: 80px;
   margin-right: .5rem;
+  height: 100px !important;
+  min-width: 104px !important;
+  object-fit: cover;
 }
 mat-expansion-panel-header {
   min-height: 100px;  /* default is ~48px */

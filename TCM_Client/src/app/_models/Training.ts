@@ -1,20 +1,19 @@
-import { MemberTrainingData } from "./MemberTrainingData";
+import { MemberTrainingData } from './MemberTrainingData';
 
 export interface Training {
-  id:number;
+  id: number;
   date: Date;
   description: string;
-  status:string;
+  status: string;
   notes?: string;
-  trainingType:string;
+  trainingType: string;
 }
 
-export interface TrainingDetails{
-      id:number;
-      date: Date;
-      description: string;
-      status:string;
-      trainingType:string;
-      memberTrainings:MemberTrainingData[]
-
+export interface TrainingDetails {
+  id: number;
+  date: Date;
+  description: string;
+  status: string;
+  trainingType: string;
+  memberTrainings: MemberTrainingData[];
 }

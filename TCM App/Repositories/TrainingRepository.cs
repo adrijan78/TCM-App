@@ -13,9 +13,9 @@ namespace TCM_App.Repositories
 {
     public class TrainingRepository(DataContext _context,IMapper mapper) : Repository<Training>(_context), ITrainingRepository
     {
-        public async Task<Dictionary<int, int>> GetNumberOfTrainingsForEveryMonth(int clubId)
+        public async Task<Dictionary<int, int>> GetNumberOfTrainingsForEveryMonth(int clubId,int year)
         {
-             var numOfTrainingsInMonths = await _context.Trainings.Where(x=>x.ClubId==clubId).GroupBy(x => x.Date.Month)
+             var numOfTrainingsInMonths = await _context.Trainings.Where(x=>x.ClubId==clubId && x.Date.Year==year).GroupBy(x => x.Date.Month)
                 .Select(x=>new {Month=x.Key,Total=x.Count() }).ToDictionaryAsync(x=>x.Month,x=>x.Total);
 
             return numOfTrainingsInMonths;
@@ -47,6 +47,15 @@ namespace TCM_App.Repositories
             return PagedList<TrainingDto>
                 .CreateAsync(query.ProjectTo<TrainingDto>(mapper.ConfigurationProvider), trainingParams.PageNumber, trainingParams.PageSize);
         }
+        public async Task<List<TrainingDetailsDto>> GetTrainingsForSpecificMonth(int month)
+        {
+            var trainings = await _context.Trainings
+                .Where(x => x.Date.Month == month)
+                .ProjectTo<TrainingDetailsDto>(mapper.ConfigurationProvider)
+                .ToListAsync();
+            return trainings;
+        }
+
 
 
 

@@ -21,11 +21,31 @@ namespace TCM_App.Repositories
         public async Task<PagedList<MemberTrainingDto>> GetMemberAttendanceAndPerformance(int memberId, UserParams userParams)
         {
             var query =  _context.Attendaces
-                .Where(a => a.MemberId == memberId)
+                .Where(a => a.MemberId == memberId && userParams.Year == a.Date.Year)
                 .OrderByDescending(x=>x.Date)
                 .AsQueryable();
 
             return await PagedList<MemberTrainingDto>.CreateAsync(query.ProjectTo<MemberTrainingDto>(mapper.ConfigurationProvider), userParams.PageNumber, userParams.PageSize);
+        }
+
+
+        public async Task UpdateMemberAttendanceAndPerformace(List<UpdateMemberTrainingDto> memberTrainingDtos)
+        {
+            var membersForTraining = await _context.Attendaces
+                .Where(a => memberTrainingDtos.Select(m => m.Id).Contains(a.Id))
+                .ToListAsync();
+            foreach (var attendance in membersForTraining)
+            {
+                var dtoMember = memberTrainingDtos.FirstOrDefault(m => m.Id == attendance.Id);
+                if (dtoMember != null)
+                {
+                    attendance.Performace = dtoMember.Performance.HasValue?dtoMember.Performance.Value:0;
+                    attendance.Status = dtoMember.Status;
+                    _context.Attendaces.Update(attendance);
+                }
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         public Task<Member?> GetMemberById(int memberId)
@@ -113,10 +133,11 @@ namespace TCM_App.Repositories
 
         }
 
-        public  Task<Lookup<int, string>> GetMembersGroupedByBelt()
+        public async Task<Dictionary<int,List<MemberDropdownDto>>> GetMembersGroupedByBelt()
         {
 
-            var groupedMembers = _context.Members
+
+            var groupedMembers = await  _context.Members
                 .Include(m => m.Belts)
                 .ThenInclude(b => b.Belt)
                 .Where(m => m.IsActive)
@@ -130,11 +151,21 @@ namespace TCM_App.Repositories
                         Name = x.Belt.BeltName,
                         IsCurrentBelt = x.IsCurrentBelt
                     }).FirstOrDefault()?? new MemberBeltDto()
-                })
-                .GroupBy(m => m.Belt.Id)
-                .ToLookup(g => g.Key, g => g.ToList());
+                }).ToListAsync();
 
-            return null;
+
+
+            var lookup = groupedMembers.GroupBy(x=>x.Belt.Id).ToDictionary(
+                g => g.Key,
+                g => g.Select(m => new MemberDropdownDto
+                {
+                    Id = m.MemberId,
+                    FullName = m.FullName,
+                   
+                }
+                ).ToList()
+            );
+            return lookup;
         }
     }
 }

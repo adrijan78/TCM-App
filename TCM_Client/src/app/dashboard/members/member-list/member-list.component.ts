@@ -20,6 +20,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Pagination, PaginationResult } from '../../../_models/Pagination';
 import { DialogComponent } from '../../../_shared/dialog/dialog/dialog.component';
 import { Dialog } from '@angular/cdk/dialog';
+import { BeltMkName } from '../../../_mappings/beltMapping';
 
 @Component({
   selector: 'app-member-list',
@@ -45,13 +46,13 @@ import { Dialog } from '@angular/cdk/dialog';
     MatProgressSpinner,
     MatPaginatorModule,
     MatPaginator,
-    DialogComponent,
     MatDialogModule,
   ],
   templateUrl: './member-list.component.html',
   styleUrl: './member-list.component.css',
 })
 export class MemberListComponent implements OnInit {
+  beltMkNames = BeltMkName;
   private memberService = inject(MemberService);
   private router = inject(Router);
   private toast = inject(ToastrService);

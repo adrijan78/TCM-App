@@ -25,9 +25,10 @@ export interface LoginMember {
   lastName: string;
   email: string;
   token: string;
+  profilePicture: string;
 }
 
-export interface EditMember{
+export interface EditMember {
   id: number;
   firstName: string;
   lastName: string;

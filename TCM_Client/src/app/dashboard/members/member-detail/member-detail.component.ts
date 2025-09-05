@@ -25,6 +25,8 @@ import { TrainingService } from '../../../_services/training/training.service';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-member-detail',
@@ -38,6 +40,8 @@ import { RouterModule } from '@angular/router';
     MatPaginatorModule,
     MatButtonModule,
     RouterModule,
+    MatFormFieldModule,
+    MatSelectModule,
   ],
 
   templateUrl: './member-detail.component.html',
@@ -57,7 +61,8 @@ export class MemberDetailComponent implements OnInit {
   pageSizeOptions = [5, 10, 20, 50];
   pageSize = 5; // број на членови по страница
   pageNumber = 1;
-
+  year = new Date().getFullYear();
+  years = Array.from({ length: this.year - 1980 + 1 }, (_, i) => this.year - i);
   // --- Profile Data (from image) ---
   userAge: string = 'Години:'; // As per image
   userEmail: string = 'Емаил:'; // As per image
@@ -206,42 +211,48 @@ export class MemberDetailComponent implements OnInit {
   }
   getMemberTrainingData() {
     this.memberService
-      .getMemberTrainingData(this.id, this.pageNumber, this.pageSize)
+      .getMemberTrainingData(this.id, this.year, this.pageNumber, this.pageSize)
       .subscribe({
         next: (res) => {
           this.dataSourceForLineChart = res.body as MemberTrainingData[];
           this.dataSource = res.body as MemberTrainingData[];
           this.getNumberOfTrainingsForEveryMonth();
           this.generateLineChartData();
-          this.countMemberAttendanceByMonth();
         },
         error: (err) => console.log(err),
       });
   }
   getNumberOfTrainingsForEveryMonth() {
-    this.trainingService.getNumberOfTrainingsForEveryMonth().subscribe({
-      next: (res: any) => {
-        this.trainingsByMonth.set(res);
-        this.getTotalNumberOfTrainings();
-      },
-      error: (err) => {},
-    });
+    this.trainingService
+      .getNumberOfTrainingsForEveryMonth(this.year)
+      .subscribe({
+        next: (res: any) => {
+          this.trainingsByMonth.set(res);
+          this.countMemberAttendanceByMonth();
+          this.getTotalNumberOfTrainings();
+        },
+        error: (err) => {},
+      });
+  }
+
+  refetchData() {
+    this.getMemberTrainingData();
   }
 
   countMemberAttendanceByMonth() {
     this.barChartData.set([]);
-    var tmp = [...this.dataSourceForLineChart];
-    this.memberTrainingAttendanceByMonth.set(
-      tmp.reduce((counts, training) => {
-        const month = new Date(training.date).getMonth() + 1;
-        counts[month] = (counts[month] || 0) + 1;
+    // var tmp = [...this.dataSourceForLineChart];
+    // this.memberTrainingAttendanceByMonth.set(
+    //   tmp.reduce((counts, training) => {
+    //     const month = new Date(training.date).getMonth() + 1;
+    //     counts[month] = (counts[month] || 0) + 1;
 
-        this.memberTotalNumOfTrainings.update((value) => value + 1);
-        return counts;
-      }, {} as Record<number, number>)
-    );
+    //     this.memberTotalNumOfTrainings.update((value) => value + 1);
+    //     return counts;
+    //   }, {} as Record<number, number>)
+    // );
 
-    const tmp2 = this.memberTrainingAttendanceByMonth();
+    const tmp2 = this.trainingsByMonth();
     for (let item in tmp2) {
       let it = +item;
       let record = { name: this.getMonthName(it), value: tmp2[it] };

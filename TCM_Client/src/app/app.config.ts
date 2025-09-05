@@ -7,6 +7,7 @@ import { provideToastr } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { jwtInterceptor } from './_interceptors/jwt.interceptor';
 import { errorInterceptor } from './_interceptors/error.interceptor';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,6 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withInterceptors([jwtInterceptor, errorInterceptor])),
     provideHttpClient(),
+    provideNativeDateAdapter(),
     provideToastr({ positionClass: 'toast-bottom-right' }),
     provideAnimations(),
   ],

@@ -1,26 +1,89 @@
 <h2 mat-dialog-title>Додади тренинг</h2>
 <mat-dialog-content class="mat-typography">
-    <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Опис за тренингот</mat-label>
-        <input matInput [formControl]="trainingTitle" placeholder="e.g., Sparring Session">
-        <mat-error *ngIf="trainingTitle.hasError('required') && trainingTitle.touched">Описот е задолжителен</mat-error>
-    </mat-form-field>
+    <form [formGroup]="addTraingingForm">
+        <mat-form-field appearance="outline" class="full-width-input mt-1">
+            <mat-label>Опис за тренингот</mat-label>
+            <input matInput formControlName="trainingTitle" required placeholder="Спаринг сесија за црни појаси">
 
-    <mat-form-field appearance="outline" class="full-width-input">
-                <mat-label>Тип на тренинг</mat-label>
-                <mat-select formControlName="trainingType">
-                    <mat-option *ngFor="let type of trainingTypes()" [value]="type.id">{{type.name}}</mat-option>
-                </mat-select>
-                        <mat-error *ngIf="trainingType.hasError('required') && trainingType.touched">Типот на тренингот е задолжителен</mat-error>
-    </mat-form-field>
-        
+            @if(addTraingingForm.get('trainingTitle')?.hasError('required') &&
+            addTraingingForm.get('trainingTitle')?.touched)
+            {
+            <mat-error>Описот е задолжителен</mat-error>
 
-    <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Notes (Optional)</mat-label>
-        <textarea matInput [formControl]="trainingNotes" rows="3"></textarea>
-    </mat-form-field>
+
+            }
+
+
+
+
+        </mat-form-field>
+        @if (trainingMembers() != null && trainingMembers()!=[]) {
+
+        <mat-form-field appearance="outline" class="full-width-input mt-2">
+            <mat-label>Членови</mat-label>
+            <mat-select multiple formControlName="trainingMembersCtrl" #membersSelect>
+                <mat-option (click)="toggleAllSelection()">Сите</mat-option>
+                <mat-optgroup *ngFor="let group of trainingMembers()" [label]="beltMkNames[group.beltId] +' појас'">
+                    @for( member of group.members; track member.id){
+                    <mat-option [value]="member">
+                        {{member.fullName}}
+                    </mat-option>
+                    }
+                </mat-optgroup>
+                <!-- <mat-option *ngFor="let member of trainingMembers()" [value]="member.key">{{member.value}}</mat-option>  -->
+            </mat-select>
+            @if(addTraingingForm.get('trainingMembersCtrl')?.hasError('required') &&
+            addTraingingForm.get('trainingMembersCtrl')?.touched)
+            {
+            <mat-error>Изборот на членови е задолжителен</mat-error>
+
+            }
+        </mat-form-field>
+        }@else {
+        <p>Нема врендност</p>
+        }
+
+
+
+        <mat-form-field appearance="outline" class="full-width-input mt-2">
+            <mat-label>Тип на тренинг</mat-label>
+            <mat-select formControlName="trainingType">
+                <mat-option *ngFor="let type of trainingTypes()" [value]="type.id">{{type.name}}</mat-option>
+            </mat-select>
+            @if(addTraingingForm.get('trainingType')?.hasError('required') &&
+            addTraingingForm.get('trainingType')?.touched)
+            {
+            <mat-error>Типот на тренингот е
+                задолжителен</mat-error>
+
+            }
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" class="full-width-input mt-2">
+            <mat-label>Датум на тренинг</mat-label>
+            <input formControlName="trainingDateCtrl" matInput [matDatepicker]="picker">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+
+            @if(addTraingingForm.get('trainingDateCtrl')?.hasError('required') &&
+            addTraingingForm.get('trainingDateCtrl')?.touched)
+            {
+            <mat-error>Описот е задолжителен</mat-error>
+
+
+            }
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" class="full-width-input mt-2">
+            <mat-label>Notes (Optional)</mat-label>
+            <textarea matInput formControlName="trainingNotes" rows="3"></textarea>
+        </mat-form-field>
+    </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-button (click)="onCancel()">Cancel</button>
-    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="trainingTitle.invalid">Save</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="addTraingingForm.invalid">Save</button>
 </mat-dialog-actions>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TCM_App.Helpers;
 using TCM_App.Models.DTOs;
 using TCM_App.Models.Enums;
@@ -32,11 +33,11 @@ namespace TCM_App.Controllers
 
 
         [HttpGet("numberOfTrainingsPerMonth/{clubId}")]
-        public async Task<IActionResult> GetNumberOfTrainingsForEveryMonth(int clubId)
+        public async Task<IActionResult> GetNumberOfTrainingsForEveryMonth(int clubId,[FromQuery] int year)
         {
             try
             {
-                return Ok(await _trainingService.GetNumberOfTrainingsForEveryMonth(clubId));
+                return Ok(await _trainingService.GetNumberOfTrainingsForEveryMonth(clubId,year));
             }
             catch (Exception ex)
             {
@@ -90,17 +91,60 @@ namespace TCM_App.Controllers
         {
             try
             {
+
                 if (trainingDto == null)
                 {
                     return BadRequest("Training data is null");
                 }
+
+                trainingDto.MemberId =int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
                 var result = await _trainingService.AddTraining(trainingDto);
                 return CreatedAtAction(nameof(GetTraining), new { id = result }, result);
             }
             catch (Exception ex)
             {
+                
                 _logger.LogError(ex, "Cannot create training");
                 throw new Exception("Cannot create training", ex);
+            }
+        }
+
+        [HttpPost("edit-training")]
+        public async Task<IActionResult> EditTraining([FromBody] EditTrainingDto trainingDto)
+        {
+            try
+            {
+                if (trainingDto == null)
+                {
+                    return BadRequest("Training data is null");
+                }
+                var result = true;
+                if (!result)
+                {
+                    return NotFound();
+                }
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Cannot edit training with id {Id}", trainingDto.Id);
+                throw new Exception($"Cannot edit training with id {trainingDto.Id}", ex);
+            }
+        }
+
+        [HttpGet("monthly-trainings")]
+        public async Task<IActionResult> GetTrainingsForSpecificMonth([FromQuery] int month)
+        {
+            try
+            {
+                var trainings = await _trainingService.GetTrainingsForSpecificMonth(month);
+                return Ok(trainings);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Cannot get trainings for month {Month}", month);
+                throw new Exception($"Cannot get trainings for month {month}", ex);
             }
         }
 

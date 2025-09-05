@@ -1,4 +1,4 @@
-import { Training } from "./Training";
+import { Training } from './Training';
 
 export interface MemberTrainingData {
   id: number;
@@ -9,4 +9,5 @@ export interface MemberTrainingData {
   memberId: number;
   member: any;
   performace: number;
+  status: number;
 }

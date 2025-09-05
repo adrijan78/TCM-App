@@ -6,7 +6,8 @@ namespace TCM_App.Repositories.Interfaces
 {
     public interface ITrainingRepository : IRepository<Training>
     {
-        Task<Dictionary<int, int>> GetNumberOfTrainingsForEveryMonth(int clubId);
+        Task<Dictionary<int, int>> GetNumberOfTrainingsForEveryMonth(int clubId,int year);
+        Task<List<TrainingDetailsDto>> GetTrainingsForSpecificMonth(int month);
         Task<PagedList<TrainingDto>> GetTrainingsByClubId(int clubId, TrainingParams userParams);
         Task<TrainingDetailsDto> GetTraining(int trainingId);
 

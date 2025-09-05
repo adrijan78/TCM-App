@@ -47,8 +47,9 @@ namespace TCM_App.Models.DTOs
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public PhotoDto ProfilePicture { get; set; }
-        public int Age { get; set; }
-        public List<MemberRoleDto> Roles { get; set; } = new List<MemberRoleDto>();
+
+        //public int Age { get; set; }
+        //public List<MemberRoleDto> Roles { get; set; } = new List<MemberRoleDto>();
 
     }
 
@@ -84,6 +85,14 @@ namespace TCM_App.Models.DTOs
         public MemberBeltDto Belt { get; set; }
 
     }
+
+    public class MemberDropdownDto
+    {
+        public int Id { get; set; }
+        public string FullName { get; set; } = string.Empty;
+        //public PhotoDto? ProfilePicture { get; set; }
+    }
+
 
 
 }

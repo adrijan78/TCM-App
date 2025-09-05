@@ -15,44 +15,57 @@
 <mat-sidenav-container class="example-container">
     <mat-sidenav #sidenav mode="over" opened="false" class="example-sidenav">
         <!-- Profile Section -->
+        @if(loggedMember()){
+
         <div class="profile-container">
             <div class="profile-img-container">
-                <img src="https://sportsmatik.com/uploads/users-media/profile-pic/img-20200729-221005-185_1634550787.jpg"
-                    alt="Profile" class="profile-img">
+                <!-- <img src="https://sportsmatik.com/uploads/users-media/profile-pic/img-20200729-221005-185_1634550787.jpg"
+                         alt="Profile" class="profile-img"> -->
+                @if (loggedMember()?.profilePicture!=null ||accountService.currentUser()?.profilePicture
+                =='') {
+
+                <img [src]="loggedMember()?.profilePicture" alt="Profile" class="profile-img">
+
+                }
+                @else{
+                <img class="profile-img" src="assets/images/profilePlaceholder.jpg" alt="Placeholder">
+                }
             </div>
             <div class="profile-details">
-                <h3 class="profile-name">John Doe</h3>
+                <h3 class="profile-name">{{loggedMember()?.firstName}}
+                    {{loggedMember()?.lastName}}</h3>
             </div>
         </div>
+        }
 
         <!-- Navigation List -->
         <mat-nav-list>
-  <a [routerLink]="['club-details']" routerLinkActive="active-link" mat-list-item class="d-flex mb-1 text-center"
-     (click)="closeSidenav()">
-    <mat-icon class="nav-icon">house</mat-icon>
-    <span class="nav-text">Дома</span>
-  </a>
-  <a [routerLink]="['members']" routerLinkActive="active-link" mat-list-item class="d-flex mb-1 text-center"
-     (click)="closeSidenav()">
-    <mat-icon class="nav-icon">group</mat-icon>
-    <span class="nav-text">Членови</span>
-  </a>
-  <a [routerLink]="['trainings']" routerLinkActive="active-link" mat-list-item class="d-flex mb-1 text-center"
-     (click)="closeSidenav()">
-    <mat-icon class="nav-icon">fitness_center</mat-icon>
-    <span class="nav-text">Тренинзи</span>
-  </a>
-  <a [routerLink]="['payments']" routerLinkActive="active-link" mat-list-item class="d-flex mb-1 text-center"
-     (click)="closeSidenav()">
-    <mat-icon class="nav-icon">payment</mat-icon>
-    <span class="nav-text">Членарини</span>
-  </a>
-  <a [routerLink]="['notes']" routerLinkActive="active-link" mat-list-item class="d-flex mb-1 text-center"
-     (click)="closeSidenav()">
-    <mat-icon class="nav-icon">note</mat-icon>
-    <span class="nav-text">Белешки</span>
-  </a>
-</mat-nav-list>
+            <a [routerLink]="['club-details']" routerLinkActive="active-link" mat-list-item
+                class="d-flex mb-1 text-center" (click)="closeSidenav()">
+                <mat-icon class="nav-icon">house</mat-icon>
+                <span class="nav-text">Дома</span>
+            </a>
+            <a [routerLink]="['members']" routerLinkActive="active-link" mat-list-item class="d-flex mb-1 text-center"
+                (click)="closeSidenav()">
+                <mat-icon class="nav-icon">group</mat-icon>
+                <span class="nav-text">Членови</span>
+            </a>
+            <a [routerLink]="['trainings']" routerLinkActive="active-link" mat-list-item class="d-flex mb-1 text-center"
+                (click)="closeSidenav()">
+                <mat-icon class="nav-icon">fitness_center</mat-icon>
+                <span class="nav-text">Тренинзи</span>
+            </a>
+            <a [routerLink]="['payments']" routerLinkActive="active-link" mat-list-item class="d-flex mb-1 text-center"
+                (click)="closeSidenav()">
+                <mat-icon class="nav-icon">payment</mat-icon>
+                <span class="nav-text">Членарини</span>
+            </a>
+            <a [routerLink]="['notes']" routerLinkActive="active-link" mat-list-item class="d-flex mb-1 text-center"
+                (click)="closeSidenav()">
+                <mat-icon class="nav-icon">note</mat-icon>
+                <span class="nav-text">Белешки</span>
+            </a>
+        </mat-nav-list>
 
     </mat-sidenav>
 

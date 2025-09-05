@@ -89,6 +89,16 @@
                                             </div>
                                         </div>
 
+
+                                        <mat-form-field appearance="outline" class="full-width-input mt-2">
+                                            <mat-label>Година на тренинзи</mat-label>
+                                            <mat-select [(value)]="year" (valueChange)="refetchData()">
+                                                @for (y of years; track $index) {
+                                                <mat-option [value]="y">{{y}}</mat-option>
+                                                }
+                                            </mat-select>
+                                        </mat-form-field>
+
                                         @if(barChartData().length>0){
                                         <div class="chart-item">
 
@@ -153,7 +163,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12 mb-3">
-                                            @if(lineChartData.length>1){
+                                            @if(lineChartData.length>0){
                                             <div class="chart-item">
                                                 <ngx-charts-line-chart [scheme]="lineChartColorScheme"
                                                     [results]="lineChartData" [gradient]="gradient" [xAxis]="showXAxis"

@@ -26,8 +26,8 @@ namespace TCM_App.MappingProfiles
 
 
             CreateMap<Member, MemberSimpleDto>()
-                .ForMember(d => d.Age, o => o.MapFrom(s => CalculateAgeHelper.CalculateAge(s.DateOfBirth)))
-                .ForMember(d => d.Roles, o => o.MapFrom(s => s.MemberRoles.Select(x => new MemberRoleDto { Id = x.RoleId, RoleName = x.Role != null ? x.Role.Name : "" })));
+                //.ForMember(d => d.Age, o => o.MapFrom(s => CalculateAgeHelper.CalculateAge(s.DateOfBirth)))
+                //.ForMember(d => d.Roles, o => o.MapFrom(s => s.MemberRoles.Select(x => new MemberRoleDto { Id = x.RoleId, RoleName = x.Role != null ? x.Role.Name : "" })));
             ;
 
 

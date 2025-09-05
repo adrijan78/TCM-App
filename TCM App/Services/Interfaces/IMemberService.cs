@@ -14,9 +14,12 @@ namespace TCM_App.Services.Interfaces
         Task UpdateMember(int id, MemberEditDto memberDto);
 
         Task<PagedList<MemberTrainingDto>> GetMemberAttendanceAndPerformance(int member, UserParams userParams);
-        
+
+        Task UpdateMemberAttendanceAndPerformace(List<UpdateMemberTrainingDto> memberTrainingDtos);
+
+
         Task DeactivateMember(int memberId);
         //Task GetMembersGroupedByBelt(UserParams userParams);
-        Task<Lookup<int, string>> GetMembersGroupedByBelt();
+        Task<Dictionary<int, List<MemberDropdownDto>>> GetMembersGroupedByBelt();
     }
 }

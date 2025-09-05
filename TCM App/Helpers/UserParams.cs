@@ -26,7 +26,7 @@ namespace TCM_App.Helpers
 
         public int? MemberAgeCategorie { get; set; }
         
-
+        public int? Year { get; set; }
     }
 
     public class TrainingParams:BaseParams

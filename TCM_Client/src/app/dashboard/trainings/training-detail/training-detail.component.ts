@@ -1,9 +1,21 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  input,
+  OnInit,
+  signal,
+  viewChild,
+  viewChildren,
+} from '@angular/core';
 import { Training, TrainingDetails } from '../../../_models/Training';
 import { TrainingService } from '../../../_services/training/training.service';
 import { DatePipe, NgIf } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { MatExpansionModule } from '@angular/material/expansion';
+import {
+  MatExpansionModule,
+  MatExpansionPanel,
+} from '@angular/material/expansion';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -12,6 +24,11 @@ import { NoteComponent } from '../../notes/note/note.component';
 import { NoteService } from '../../../_services/note/note.service';
 import { MemberTrainingData } from '../../../_models/MemberTrainingData';
 import { Note } from '../../../_models/Note';
+import { AttendanceMkName } from '../../../_mappings/attendanceStatusMapping';
+import { AttendanceStatus } from '../../../_models/_enums/AttendanceStatus';
+import { MatSelectModule } from '@angular/material/select';
+import { MemberService } from '../../../_services/member/member.service';
+import { AcountService } from '../../../_services/account/acount.service';
 
 @Component({
   selector: 'app-training-detail',
@@ -24,6 +41,7 @@ import { Note } from '../../../_models/Note';
     FormsModule,
     MatInputModule,
     NoteComponent,
+    MatSelectModule,
   ],
   templateUrl: './training-detail.component.html',
   styleUrl: './training-detail.component.css',
@@ -32,10 +50,26 @@ export class TrainingDetailComponent implements OnInit {
   id = input.required<number>();
   trainingService = inject(TrainingService);
   noteService = inject(NoteService);
+  memberService = inject(MemberService);
+  accountService = inject(AcountService);
   training = signal<TrainingDetails | null>(null);
   searchTermCalendar: string = '';
   searchTermNotes: string = '';
   notesForMember = signal<Note[] | null>(null);
+  attendaceNames = AttendanceMkName;
+  inEditMode = signal<boolean>(false);
+  AttendanceStatus = AttendanceStatus;
+  panel = viewChildren<MatExpansionPanel>('panel');
+  selectedMemberId = signal<number>(0);
+
+  constructor() {
+    effect(() => {
+      const panel = this.panel();
+      if (!this.inEditMode()) {
+        panel?.forEach((x) => x.close());
+      }
+    });
+  }
 
   ngOnInit(): void {
     if (this.id() != null) this.getTrainingDetails();
@@ -50,6 +84,7 @@ export class TrainingDetailComponent implements OnInit {
   }
 
   onMemberSelect(memberTraining: MemberTrainingData) {
+    this.selectedMemberId.set(memberTraining.id);
     this.noteService
       .getNotesForMember(
         memberTraining.training.date.toString(),
@@ -94,5 +129,46 @@ export class TrainingDetailComponent implements OnInit {
       const title = n.content.toLowerCase();
       return title.includes(term);
     });
+  }
+
+  addNoteForMemberAttendance() // fromMemberId: number, // content: string, // title: string,
+  // toMemberId: number
+  {
+    var note: Note = {
+      title: 'Test naslov',
+      content: 'Test sodrzina',
+      createdAt: new Date(),
+      fromMemberId: 0,
+      toMemberId: this.selectedMemberId(),
+    };
+
+    console.log;
+    if (this.notesForMember() != null) {
+      this.notesForMember.update((arr) => [note, ...arr!]);
+    } else {
+      this.notesForMember.set([note]);
+    }
+  }
+
+  updateMembersAttendanceStatusAndPerformance() {
+    var membersUpdated = this.training()!.memberTrainings.map((x) => {
+      return {
+        id: x.id,
+        description: x.description,
+        performance: x.performace,
+        status: x.status,
+      };
+    });
+    this.memberService
+      .updateMembersAttendanceStatusAndPerformance(membersUpdated)
+      .subscribe({
+        next: (response: any) => {
+          console.log('Response: ', response);
+          this.inEditMode.set(false);
+        },
+        error: (err: any) => {
+          console.log(err);
+        },
+      });
   }
 }

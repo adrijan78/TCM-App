@@ -16,16 +16,19 @@ namespace TCM_App.Services
           var training = mapper.Map<Training>(trainingDto);
           foreach (var memberT in trainingDto.MembersToAttend)
           {
-              var existingMember = await _memberRepository.GetMemberById(memberT.MemberId);
-                var memberTraining = new MemberTraining
-              {
-                  MemberId = memberT.MemberId,
-                  TrainingId = training.Id,
-                  Status = memberT.Status,
-                  Date = training.Date,
-                  Description = training.Description,
-              };
-              training.MemberTrainings.Add(memberTraining);
+              if(memberT != null) {
+                    var existingMember = await _memberRepository.GetMemberById(memberT.MemberId);
+                    var memberTraining = new MemberTraining
+                    {
+                        MemberId = memberT.MemberId,
+                        TrainingId = training.Id,
+                        Status = memberT.Status,
+                        Date = training.Date,
+                        Description = training.Description,
+                    };
+                    training.MemberTrainings.Add(memberTraining);
+                }
+              
           }
 
             return await _trainingRepository.CreateTraining(training);
@@ -37,14 +40,19 @@ namespace TCM_App.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Dictionary<int, int>> GetNumberOfTrainingsForEveryMonth(int clubId)
+        public async Task<Dictionary<int, int>> GetNumberOfTrainingsForEveryMonth(int clubId,int year)
         {
-           return await _trainingRepository.GetNumberOfTrainingsForEveryMonth(clubId);
+           return await _trainingRepository.GetNumberOfTrainingsForEveryMonth(clubId,year);
         }
 
         public async Task<TrainingDetailsDto> GetTraining(int trainingId, int clubId)
         {
             return await _trainingRepository.GetTraining(trainingId);
+        }
+
+        public async Task<List<TrainingDetailsDto>> GetTrainingsForSpecificMonth(int month)
+        {
+            return await _trainingRepository.GetTrainingsForSpecificMonth(month);
         }
 
         public async Task<PagedList<TrainingDto>> GetTrainingsByClubId(int clubId, TrainingParams trainingParams)
