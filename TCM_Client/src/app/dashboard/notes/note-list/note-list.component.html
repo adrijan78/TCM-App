@@ -1,14 +1,12 @@
 <div class="container mt-4">
     <div class="mb-3 input-group">
         <input type="text" class="form-control" placeholder="Add a new note..." [(ngModel)]="newNote">
-        <button mat-flat-button color="primary" (click)="addNote()">Add</button>
-    
+        <button mat-flat-button color="primary" (click)="openAddNoteDialog()">Add</button>
+
     </div>
     @for (notee of notes; track $index) {
     <div class="col-md-6 col-lg-4">
-    <app-note [note]="notee"></app-note>
+        <app-note [note]="notee"></app-note>
     </div>
     }
-    </div>
-
-    
+</div>

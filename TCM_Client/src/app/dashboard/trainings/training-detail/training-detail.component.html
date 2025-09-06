@@ -191,7 +191,8 @@
         <div class="app-card-style h-100" style="width: 100%;">
             <h5 class="mt-3">Белешки за членот:</h5>
             <div class="d-flex justify-content-lg-end justify-content-sm-center">
-                <button class="btn btn-primary" (click)="addNoteForMemberAttendance()">
+                <button class="btn btn-primary" [disabled]="selectedMemberId()==0"
+                    (click)="addNoteForMemberAttendance()">
                     <mat-icon class="text-white">add</mat-icon>
                     Додади белешка
                 </button>
@@ -201,13 +202,14 @@
 
                 <mat-form-field appearance="outline" class="w-100 my-2">
                     <mat-label>Пребарај по наслов</mat-label>
-                    <input matInput placeholder="Внеси име и презиме" [(ngModel)]="searchTermNotes" />
+                    <input matInput placeholder="Внеси име и презиме" [disabled]="selectedMemberId()==0"
+                        [(ngModel)]="searchTermNotes" />
                     <mat-icon matSuffix>search</mat-icon>
                 </mat-form-field>
 
-                @for (note of getFilteredNotes(); track $index) {
+                @for (note of getFilteredNotes(); track note.id) {
                 <div class="col-lg-12 col-md-12 col-sm-12 px-5">
-                    <app-note [note]="note"></app-note>
+                    <app-note [note]="note" (deleteClicked)="deleteNoteForMemberAttendance(note.id)"></app-note>
                 </div>
                 }
 

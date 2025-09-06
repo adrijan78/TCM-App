@@ -29,6 +29,8 @@ import { AttendanceStatus } from '../../../_models/_enums/AttendanceStatus';
 import { MatSelectModule } from '@angular/material/select';
 import { MemberService } from '../../../_services/member/member.service';
 import { AcountService } from '../../../_services/account/acount.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddNoteComponent } from '../../notes/add-note/add-note.component';
 
 @Component({
   selector: 'app-training-detail',
@@ -62,7 +64,7 @@ export class TrainingDetailComponent implements OnInit {
   panel = viewChildren<MatExpansionPanel>('panel');
   selectedMemberId = signal<number>(0);
 
-  constructor() {
+  constructor(private dialog: MatDialog) {
     effect(() => {
       const panel = this.panel();
       if (!this.inEditMode()) {
@@ -131,22 +133,44 @@ export class TrainingDetailComponent implements OnInit {
     });
   }
 
-  addNoteForMemberAttendance() // fromMemberId: number, // content: string, // title: string,
-  // toMemberId: number
-  {
-    var note: Note = {
-      title: 'Test naslov',
-      content: 'Test sodrzina',
-      createdAt: new Date(),
-      fromMemberId: 0,
-      toMemberId: this.selectedMemberId(),
-    };
+  addNoteForMemberAttendance() {
+    const dialogRef = this.dialog.open(AddNoteComponent, {
+      width: '400px',
+      data: { date: new Date() },
+    });
 
-    console.log;
-    if (this.notesForMember() != null) {
-      this.notesForMember.update((arr) => [note, ...arr!]);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        debugger;
+        var note: Note = {
+          id: `FE-${Math.random() * 100}`,
+          title: result.title,
+          content: result.content,
+          createdAt: new Date(),
+          fromMemberId: 0,
+          toMemberId: this.selectedMemberId(),
+          createdForTraining: true,
+        };
+
+        if (
+          this.notesForMember() != null &&
+          this.notesForMember()!.length > 1
+        ) {
+          this.notesForMember.update((arr) => [note, ...arr!]);
+        } else {
+          this.notesForMember.set([note]);
+        }
+      } else {
+        console.log('Dialog closed without adding training.');
+      }
+    });
+  }
+
+  deleteNoteForMemberAttendance(id: string) {
+    if (id.includes('FE-')) {
+      this.notesForMember.set(this.notesForMember()!.filter((x) => x.id != id));
     } else {
-      this.notesForMember.set([note]);
+      //remove item https
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, EventEmitter, input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,5 +20,10 @@ import { Note } from '../../../_models/Note';
   styleUrls: ['./note.component.css'],
 })
 export class NoteComponent {
+  @Output() deleteClicked = new EventEmitter<void>();
   note = input<Note | null>(null);
+
+  onDeleteClicked() {
+    this.deleteClicked.emit();
+  }
 }

@@ -3,7 +3,7 @@
     <mat-card class="note-card mat-elevation-z2">
         <mat-card-content>{{ note()?.content }}</mat-card-content>
         <div class="text-end mt-2">
-            <button mat-icon-button color="warn">
+            <button (click)="onDeleteClicked()" mat-icon-button color="warn">
                 <mat-icon>delete</mat-icon>
             </button>
         </div>

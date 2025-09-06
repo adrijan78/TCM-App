@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using TCM_App.Models.DTOs;
 using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Controllers
@@ -22,7 +24,32 @@ namespace TCM_App.Controllers
 
 
             }
-        } 
+        }
+
+        [HttpPost("addNote")]
+        public  async Task<IActionResult> AddNote(AddNoteDto note)
+        {
+            try
+            {
+                var coachId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+                if (coachId != null)
+                {
+
+                    note.FromMemberId = int.Parse(coachId);
+
+                    _noteService.AddNotes(note);
+                }
+
+                return Ok("Белешката е успешно додадена");
+            }
+            catch (Exception ex)
+            {
+
+                logger.LogError(ex, "Error adding notes for member with id {ToMemberId} on {DateCreated}", note.ToMemberId, note.CreatedAt);
+                throw new Exception("An error occurred while adding notes. Please try again later.", ex);
+            }
+        }
 
 
     }

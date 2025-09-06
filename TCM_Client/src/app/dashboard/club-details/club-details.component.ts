@@ -1,50 +1,60 @@
 import { Component, model } from '@angular/core';
-import {MatIconModule} from '@angular/material/icon';
-import { LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
+import { MatIconModule } from '@angular/material/icon';
+import {
+  LegendPosition,
+  NgxChartsModule,
+  ScaleType,
+} from '@swimlane/ngx-charts';
 import { CardComponent } from '../../_shared/card/card/card.component';
-import { NoteComponent } from "../notes/note/note.component";
+import { NoteComponent } from '../notes/note/note.component';
 import { MatCardModule } from '@angular/material/card';
-import {  MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-club-details',
-   providers: [provideNativeDateAdapter()],
-  imports: [MatIconModule,MatTabsModule, NgxChartsModule, CardComponent, NoteComponent,MatCardModule,MatDatepickerModule],
+  providers: [provideNativeDateAdapter()],
+  imports: [
+    MatIconModule,
+    MatTabsModule,
+    NgxChartsModule,
+    CardComponent,
+    NoteComponent,
+    MatCardModule,
+    MatDatepickerModule,
+  ],
   templateUrl: './club-details.component.html',
-  styleUrl: './club-details.component.css'
+  styleUrl: './club-details.component.css',
 })
 export class ClubDetailsComponent {
+  selected = model<Date | null>(null);
 
-    selected = model<Date | null>(null);
-
-
-    barChartColorScheme = {
-      name: 'blueGradientScheme',
-      selectable: true,
-      group: ScaleType.Ordinal,
-      domain: ['#5484a4', '#417298', '#2e608c', '#1b4d80'], // Shades of blue for bars
-    };
-     commonChartOptions = {
-        legendPosition: LegendPosition.Below, // Image shows legend above the chart
-        animations: true,
-        roundDomains: true,
-        tooltipDisabled: false, // Ensure tooltips are enabled
-      };
-    barChart1Options = {
+  barChartColorScheme = {
+    name: 'blueGradientScheme',
+    selectable: true,
+    group: ScaleType.Ordinal,
+    domain: ['#5484a4', '#417298', '#2e608c', '#1b4d80'], // Shades of blue for bars
+  };
+  commonChartOptions = {
+    legendPosition: LegendPosition.Below, // Image shows legend above the chart
+    animations: true,
+    roundDomains: true,
+    tooltipDisabled: false, // Ensure tooltips are enabled
+  };
+  barChart1Options = {
     xAxisLabel: 'Training Discipline',
     yAxisLabel: 'Sessions',
     barPadding: 8,
     roundDomains: true,
   };
-   barChartData: any[] = [
+  barChartData: any[] = [
     { name: 'January', value: 5 },
     { name: 'February', value: 12 },
     { name: 'March', value: 8 },
     { name: 'April', value: 12 },
   ];
-    showXAxis = true;
+  showXAxis = true;
   showYAxis = true;
   gradient = false; // Set to false to control colors explicitly if no gradient is desired, or true for ngx-charts' default gradient
   showLegend = true;

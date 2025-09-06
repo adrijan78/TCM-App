@@ -10,7 +10,7 @@ namespace TCM_App.Repositories
 {
     public class NoteRepository(DataContext _context,IMapper _mapper) : Repository<Note>(_context), INoteRepository
     {
-         public Task<List<NoteDto>> GetNotesForMember(DateTime dateCreated, int fromMemberId, int toMemberId,bool createdForTraining)
+        public Task<List<NoteDto>> GetNotesForMember(DateTime dateCreated, int fromMemberId, int toMemberId,bool createdForTraining)
          {
             var query = _context.Notes
                 .Where(n => n.CreatedAt == dateCreated &&
@@ -27,6 +27,15 @@ namespace TCM_App.Repositories
             
 
          }
+        public  void AddNote(AddNoteDto noteDto)
+        {
+            var note= _mapper.Map<Note>(noteDto);
+             _context.Notes.Add(note);
+            _context.SaveChanges();
+
+        }
+
+         
 
     }
 }

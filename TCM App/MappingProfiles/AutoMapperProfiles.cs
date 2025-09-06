@@ -58,6 +58,7 @@ namespace TCM_App.MappingProfiles
                 .ForMember(d => d.TrainingType, o => o.MapFrom(s => s.TrainingType));
 
             CreateMap<Note, NoteDto>();
+            CreateMap<AddNoteDto, Note>();
 
             CreateMap<AppRole,RoleDto>()
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
