@@ -14,20 +14,27 @@
             }
 
 
-
-
         </mat-form-field>
         @if (trainingMembers() != null && trainingMembers()!=[]) {
 
         <mat-form-field appearance="outline" class="full-width-input mt-2">
             <mat-label>Членови</mat-label>
-            <mat-select multiple formControlName="trainingMembersCtrl" #membersSelect>
-                <mat-option (click)="toggleAllSelection()">Сите</mat-option>
+            <mat-select [(value)]="selectedMembers" multiple formControlName="trainingMembersCtrl" #membersSelect
+                [compareWith]="compareMembers">
+                <!-- <mat-option (onSelectionChange)="onSelectedItemsChange('All')" id="testALL"
+                    [value]="{id:'All'}">Сите</mat-option> -->
                 <mat-optgroup *ngFor="let group of trainingMembers()" [label]="beltMkNames[group.beltId] +' појас'">
                     @for( member of group.members; track member.id){
+                    <!-- <mat-option (onSelectionChange)="onSelectedItemsChange(member.id)" 
+                    [value]="member">
+                        {{member.fullName}}
+                    </mat-option> -->
+
                     <mat-option [value]="member">
                         {{member.fullName}}
                     </mat-option>
+
+
                     }
                 </mat-optgroup>
                 <!-- <mat-option *ngFor="let member of trainingMembers()" [value]="member.key">{{member.value}}</mat-option>  -->
@@ -58,6 +65,24 @@
 
             }
         </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width-input mt-2">
+            <mat-label>Статус на тренинг</mat-label>
+            <mat-select formControlName="trainingStatusCtrl">
+                <mat-option [value]="1">Активен</mat-option>
+                <mat-option [value]="2">Завршен</mat-option>
+                <mat-option [value]="3">Откажан</mat-option>
+            </mat-select>
+            @if(addTraingingForm.get('trainingStatusCtrl')?.hasError('required') &&
+            addTraingingForm.get('trainingStatusCtrl')?.touched)
+            {
+            <mat-error>Типот на тренингот е
+                задолжителен</mat-error>
+
+            }
+        </mat-form-field>
+
+
 
 
         <mat-form-field appearance="outline" class="full-width-input mt-2">

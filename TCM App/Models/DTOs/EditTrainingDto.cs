@@ -3,5 +3,6 @@
     public class EditTrainingDto
     {
         public int Id { get; set; }
+
     }
 }

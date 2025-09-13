@@ -1,4 +1,7 @@
-import { MemberTrainingData } from './MemberTrainingData';
+import {
+  MemberTrainingData,
+  SimpleMemberAttendanceData,
+} from './MemberTrainingData';
 
 export interface Training {
   id: number;
@@ -16,4 +19,13 @@ export interface TrainingDetails {
   status: string;
   trainingType: string;
   memberTrainings: MemberTrainingData[];
+}
+
+export interface TrainingForEdit {
+  id: number;
+  date: Date;
+  description: string;
+  status: string;
+  trainingType: string;
+  membersToAttend: SimpleMemberAttendanceData[];
 }

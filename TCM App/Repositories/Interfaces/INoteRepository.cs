@@ -5,7 +5,7 @@ namespace TCM_App.Repositories.Interfaces
 {
     public interface INoteRepository : IRepository<Note>
     {
-        Task<List<NoteDto>> GetNotesForMember(DateTime dateCreated, int fromMemberId, int toMemberId, bool createdForTraining);
-        void AddNote(AddNoteDto note);
+        Task<List<NoteDto>> GetNotesForMember(DateTime dateCreated, int fromMemberId, int toMemberId, int? trainingId);
+        Task AddNote(AddNoteDto noteDto);
     }
 }

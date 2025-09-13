@@ -1,7 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
-import { Training, TrainingDetails } from '../../_models/Training';
+import {
+  Training,
+  TrainingDetails,
+  TrainingForEdit,
+} from '../../_models/Training';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +20,19 @@ export class TrainingService {
 
     return this.http.get(
       this.baseUrl + 'trainings/numberOfTrainingsPerMonth/' + 1,
+      { params }
+    );
+  }
+
+  getNumberOfAttendedMemberTrainingsForEveryMonth(
+    year: number,
+    memberId: number
+  ) {
+    var params = new HttpParams().set('year', year);
+    params = params.append('memberId', memberId);
+
+    return this.http.get(
+      this.baseUrl + 'trainings/numberOfAttendedMemberTrainingsPerMonth/' + 1,
       { params }
     );
   }
@@ -74,5 +91,19 @@ export class TrainingService {
     return this.http.get(this.baseUrl + `trainings/monthly-trainings`, {
       params,
     });
+  }
+
+  getTrainingForUpdate(id: number) {
+    return this.http.get<TrainingForEdit>(
+      this.baseUrl + 'trainings/training-for-update/' + id
+    );
+  }
+
+  editTraining(training: any) {
+    return this.http.post(this.baseUrl + 'trainings/edit-training', training);
+  }
+
+  deleteTraining(id: number) {
+    return this.http.delete(this.baseUrl + 'trainings/delete-training/' + id);
   }
 }

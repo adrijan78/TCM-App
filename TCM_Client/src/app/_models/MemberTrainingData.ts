@@ -11,3 +11,8 @@ export interface MemberTrainingData {
   performace: number;
   status: number;
 }
+
+export interface SimpleMemberAttendanceData {
+  id: number;
+  fullName: number;
+}

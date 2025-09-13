@@ -1,12 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  Input,
-  OnInit,
-  signal,
-  Signal,
-} from '@angular/core';
+import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   NgxChartsModule,
@@ -24,7 +16,7 @@ import { MemberTrainingData } from '../../../_models/MemberTrainingData';
 import { TrainingService } from '../../../_services/training/training.service';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 
@@ -51,6 +43,8 @@ export class MemberDetailComponent implements OnInit {
   memberService = inject(MemberService);
   trainingService = inject(TrainingService);
   toast = inject(ToastrService);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
   @Input() id!: number;
   member = signal<Member | null>(null);
   trainingsByMonth = signal<[] | null>(null);
@@ -80,17 +74,13 @@ export class MemberDetailComponent implements OnInit {
   lineYAxisLabel = 'Performance Score';
   autoScale = true; // Auto-scales the Y-axis based on data
   timeline = true; // Enables timeline/zooming features for date-based data
+  selectedTabIndex = 0;
 
   // --- ngx-charts Data ---
   // Bar Chart Data (matching "Item 1, 2, 3, 4" from image)
   barChartData = signal<any[]>([]);
 
   // Pie Chart Data (matching "Skipped" and "Attended" from image)
-
-  pieChartDataForPayment: any[] = [
-    { name: 'Платено', value: 82 }, // Values based on image percentages
-    { name: 'Не платено', value: 18 },
-  ];
 
   // --- ngx-charts Common Options ---
   // We'll rely on CSS for responsiveness, no 'view' property needed here.
@@ -118,13 +108,6 @@ export class MemberDetailComponent implements OnInit {
     domain: ['#61DAFB', '#00BCD4'], // Cyan and a slightly darker cyan/teal
   };
 
-  pieChartColorSchemeForPayment = {
-    name: 'cyanScheme',
-    selectable: true,
-    group: ScaleType.Ordinal,
-    domain: ['#61DAFB', '#00BCD4'], // Cyan and a slightly darker cyan/teal
-  };
-
   // Common ngx-charts options that can be shared across charts
   commonChartOptions = {
     legendPosition: LegendPosition.Below, // Image shows legend above the chart
@@ -138,15 +121,6 @@ export class MemberDetailComponent implements OnInit {
     labels: true, // Show labels (e.g., 'Skipped', 'Attended')
     doughnut: true, // Make it a doughnut chart
     arcWidth: 0.55, // Adjust width of doughnut ring for better look
-    labelFormatting: (value: any) => {
-      return `${value.value}%`; // Format percentage TooltipLabelStyle
-    },
-  };
-
-  pieChartOptionsForPayment = {
-    labels: true, // Show labels (e.g., 'Skipped', 'Attended')
-    doughnut: true, // Make it a doughnut chart
-    arcWidth: 0.65, // Adjust width of doughnut ring for better look
     labelFormatting: (value: any) => {
       return `${value.value}%`; // Format percentage TooltipLabelStyle
     },
@@ -170,12 +144,7 @@ export class MemberDetailComponent implements OnInit {
   dataSource: MemberTrainingData[] = [
     // { col1: '', col2: '', col3: '' },
   ];
-  dataSourceForPayment = [
-    { col1: '', col2: '', col3: '' },
-    { col1: '', col2: '', col3: '' },
-    { col1: '', col2: '', col3: '' },
-    { col1: '', col2: '', col3: '' },
-  ];
+
   dataSourceForLineChart: MemberTrainingData[] = [
     // {
     //   col1: '2024-01-15',
@@ -224,7 +193,10 @@ export class MemberDetailComponent implements OnInit {
   }
   getNumberOfTrainingsForEveryMonth() {
     this.trainingService
-      .getNumberOfTrainingsForEveryMonth(this.year)
+      .getNumberOfAttendedMemberTrainingsForEveryMonth(
+        this.year,
+        this.member()!.id
+      )
       .subscribe({
         next: (res: any) => {
           this.trainingsByMonth.set(res);
@@ -241,16 +213,6 @@ export class MemberDetailComponent implements OnInit {
 
   countMemberAttendanceByMonth() {
     this.barChartData.set([]);
-    // var tmp = [...this.dataSourceForLineChart];
-    // this.memberTrainingAttendanceByMonth.set(
-    //   tmp.reduce((counts, training) => {
-    //     const month = new Date(training.date).getMonth() + 1;
-    //     counts[month] = (counts[month] || 0) + 1;
-
-    //     this.memberTotalNumOfTrainings.update((value) => value + 1);
-    //     return counts;
-    //   }, {} as Record<number, number>)
-    // );
 
     const tmp2 = this.trainingsByMonth();
     for (let item in tmp2) {
@@ -331,6 +293,16 @@ export class MemberDetailComponent implements OnInit {
       this.pageNumber = ev.pageIndex + 1;
       this.pageSize = ev.pageSize;
       this.getMemberTrainingData();
+    }
+  }
+
+  onTabChange(index: number) {
+    if (index === 0) {
+      this.router.navigate(['members/' + this.id]);
+    } else if (index === 1) {
+      this.router.navigate(['membership-fee'], { relativeTo: this.route });
+    } else if (index === 2) {
+      this.router.navigate(['notes-and-belts'], { relativeTo: this.route });
     }
   }
 }

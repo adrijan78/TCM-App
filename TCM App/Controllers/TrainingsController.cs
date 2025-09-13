@@ -47,6 +47,24 @@ namespace TCM_App.Controllers
 
         }
 
+
+        [HttpGet("numberOfAttendedMemberTrainingsPerMonth/{clubId}")]
+        public async Task<IActionResult> GetNumberOfAttendedMemberTrainingsForEveryMonth(int clubId, [FromQuery] int year, [FromQuery] int memberId)
+        {
+            try
+            {
+                return Ok(await _trainingService.GetNumberOfAttendedMemberTrainingsForEveryMonth(clubId, year,memberId));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Cannot get number of trainings for every month");
+                throw new Exception("Cannot get number of trainings for every month", ex);
+            }
+
+        }
+
+
+
         [HttpGet("training-details/{id}")]
         public async Task<IActionResult> GetTraining(int id, [FromQuery] int clubId)
         {
@@ -66,6 +84,27 @@ namespace TCM_App.Controllers
             }
         }
 
+
+        [HttpGet("training-for-update/{id}")]
+        public async Task<IActionResult> GetTrainingForUpdate(int id)
+        {
+            try
+            {
+                var training = await _trainingService.GetTrainingForUpdate(id);
+                if (training == null)
+                {
+                    return NotFound();
+                }
+                return Ok(training);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Cannot get training for update with id {Id}", id);
+                throw new Exception($"Cannot get training for update with id {id}", ex);
+            }
+
+
+        }
 
         [HttpGet("training-types")]
         public IActionResult GetTrainingTypes()
@@ -111,7 +150,8 @@ namespace TCM_App.Controllers
         }
 
         [HttpPost("edit-training")]
-        public async Task<IActionResult> EditTraining([FromBody] EditTrainingDto trainingDto)
+
+        public async Task<IActionResult> EditTraining([FromBody] UpdateTrainingDto trainingDto)
         {
             try
             {
@@ -119,12 +159,8 @@ namespace TCM_App.Controllers
                 {
                     return BadRequest("Training data is null");
                 }
-                var result = true;
-                if (!result)
-                {
-                    return NotFound();
-                }
-                return NoContent();
+                var result = await _trainingService.UpdateTraining(trainingDto);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -148,6 +184,22 @@ namespace TCM_App.Controllers
             }
         }
 
+
+        [HttpDelete("delete-training/{id}")]
+        public async Task<IActionResult> DeleteTraining( int id)
+        {
+            try
+            {
+                
+                await _trainingService.DeleteTraining(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Cannot delete training with id {Id}", id);
+                throw new Exception($"Cannot delete training with id {id}", ex);
+            }
+        }
 
 
 

@@ -164,7 +164,7 @@ namespace TCM_App.Controllers
                         Success = true,
                         Data = new MemberTokenDto
                         {
-                            
+                            Id=member.Id,
                             FirstName = member.FirstName,
                             LastName = member.LastName,
                             Email = member.Email!,

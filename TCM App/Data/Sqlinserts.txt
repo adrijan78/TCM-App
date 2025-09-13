@@ -173,8 +173,12 @@ INSERT INTO Notes (Content, CreatedAt, FromMemberId, ToMemberId) VALUES
 
 
 
- alter table Notes
-  add CreatedForTraining bit null
+ Alter Table Notes
+add constraint Fk_Notes_Trainings
+Foreign key (TrainingId)
+references Trainings(Id)
+on delete cascade
+on update cascade
 
   insert into  AspNetRoles (Name,NormalizedName,ConcurrencyStamp) values
 ('Member','MEMBER',null),

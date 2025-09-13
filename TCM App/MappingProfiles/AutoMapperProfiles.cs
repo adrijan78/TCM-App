@@ -68,6 +68,21 @@ namespace TCM_App.MappingProfiles
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.BeltName))
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.Id));
 
+            CreateMap<UpdateTrainingDto, Training>()
+                .ForMember(d => d.MemberTrainings, o => o.Ignore())
+                .ForMember(d => d.Status, o => o.MapFrom(s => (int)s.Status))
+                .ForMember(d => d.TrainingType, o => o.MapFrom(s => s.TrainingType));
+
+
+            CreateMap<Training, TrainingEditDto>()
+                .ForMember(d => d.Status, o => o.MapFrom(s => (TrainingStatusesEnum)s.Status))
+                .ForMember(d => d.TrainingType, o => o.MapFrom(s => s.TrainingType))
+                .ForMember(d => d.MembersToAttend, o => o.MapFrom(s => s.MemberTrainings.Select(mt => new MemberTrainingSimpleDto
+                {
+                    Id = mt.MemberId,
+                   
+                }).ToList()));
+
         }
 
     }

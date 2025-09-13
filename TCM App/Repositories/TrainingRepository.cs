@@ -22,6 +22,17 @@ namespace TCM_App.Repositories
 
         }
 
+        public async Task<Dictionary<int, int>> GetNumberOfAttendedMemberTrainingsForEveryMonth(int clubId, int year,int memberId)
+        {
+            var numOfTrainingsInMonths = await _context.Trainings.Include(t=>t.MemberTrainings).Where(x => x.ClubId == clubId && x.Date.Year == year
+            && x.MemberTrainings.Any(m=>m.MemberId==memberId && m.Status == MemberTrainingStatusEnum.Attended)).GroupBy(x => x.Date.Month)
+               .Select(x => new { Month = x.Key, Total = x.Count() }).ToDictionaryAsync(x => x.Month, x => x.Total);
+
+
+            return numOfTrainingsInMonths;
+
+        }
+
 
         public Task<PagedList<TrainingDto>> GetTrainingsByClubId(int clubId,TrainingParams trainingParams)
         {
@@ -57,8 +68,20 @@ namespace TCM_App.Repositories
         }
 
 
+        public async Task<TrainingEditDto> GetTrainingForUpdate(int id)
+        {
+            var training = await _context.Trainings.Include(t => t.MemberTrainings).FirstOrDefaultAsync(t => t.Id == id);
+            if (training == null)
+            {
+                throw new Exception($"Training with id {id} not found");
+            }
+            
+            var trainingDto = mapper.Map<TrainingEditDto>(training);
 
+            return trainingDto;
 
+        }            
+        
 
         public async Task<TrainingDetailsDto> GetTraining(int trainingId)
         {
@@ -80,5 +103,78 @@ namespace TCM_App.Repositories
             return training.Id.ToString();
         }
 
+        public async Task<int> UpdateTraining(UpdateTrainingDto trainingDto)
+        {
+
+           var memberTrainingDtos = trainingDto.MembersToAttend ?? new List<UpdateMemberTrainingDto>();
+
+            var training = _context.Trainings.Include(t => t.MemberTrainings).FirstOrDefault(t => t.Id == trainingDto.Id);
+
+            if (training == null)
+            {
+                throw new Exception($"Training with id {trainingDto.Id} not found");
+            }
+
+            training.Description = trainingDto.Description;
+            training.Date = trainingDto.Date;
+            training.Status = (int)trainingDto.Status;
+            training.TrainingType = trainingDto.TrainingType;
+
+
+            var existingMemberTrainings= _context.Attendaces
+                .Where(mt => mt.TrainingId == training.Id)
+                .ToList();
+
+            var toRemove = existingMemberTrainings
+                .Where(mt => !memberTrainingDtos.Any(x => x.MemberId == mt.MemberId))
+                .ToList();
+
+            foreach(var mt in toRemove)
+            {
+              training.MemberTrainings.Remove(mt);
+            }
+
+            _context.Attendaces.RemoveRange(toRemove);
+
+
+            foreach (var memberTraining in memberTrainingDtos)
+            {
+                var existingMemberTraining = existingMemberTrainings
+                    .FirstOrDefault(mt => mt.MemberId == memberTraining.MemberId);
+
+                if(existingMemberTraining != null)
+                {
+                    existingMemberTraining.Date= training.Date;
+                }
+
+                    if (existingMemberTraining == null)
+                {
+                    // Add new member training
+                    var newMemberTraining = new MemberTraining
+                    {
+                        MemberId = memberTraining.MemberId,
+                        TrainingId = training.Id,
+                        Status = memberTraining.Status,
+                        Performace = 0,
+                        Date = training.Date,
+                        Description = training.Description,
+                    };
+                    await _context.Attendaces.AddAsync(newMemberTraining);
+                }
+            }
+
+            _context.Update(training);
+
+            await _context.SaveChangesAsync();
+
+            return training.Id;
+
+        }
+
+        public async Task DeleteTraining(Training t)
+        {
+            _context.Trainings.Remove(t);
+            await _context.SaveChangesAsync();
+        }
     }
 }

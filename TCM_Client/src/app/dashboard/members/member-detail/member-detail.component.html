@@ -74,13 +74,13 @@
 
             <div class="col-md-9 charts-table-col">
                 @if(member()){
-                <mat-tab-group>
+                <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedIndexChange)="onTabChange($event)">
                     <mat-tab label="Присуство и перформанси">
                         <div class="card charts-card pt-3 h-100">
                             <div class="card-body">
 
                                 <div class="row charts-row pt-3  mb-4 justify-content-center pb-4">
-                                    <div class="col-lg-6 col-md-6 col-12 mb-3">
+                                    <div class="col-lg-6 col-md-6 col-12 mb-5">
                                         <div class="table-title">
                                             <div class="row">
                                                 <div class="col-sm-12 text-center">
@@ -100,6 +100,7 @@
                                         </mat-form-field>
 
                                         @if(barChartData().length>0){
+
                                         <div class="chart-item">
 
                                             <ngx-charts-bar-vertical [scheme]="barChartColorScheme"
@@ -262,112 +263,12 @@
                         </div>
                     </mat-tab>
                     <mat-tab label="Членарина">
-                        <div class="row justify-content-center1 mt-2">
 
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <div class="col-12 mb-3 pb-5 mt-4">
-
-                                    <div class="table-title">
-                                        <div class="row">
-                                            <div class="col-sm-12 text-center ">
-                                                <h2>Проценти на платени/неплатени членарини</h2>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="chart-item pie-chart-container">
-                                        <ngx-charts-pie-chart [scheme]="pieChartColorSchemeForPayment"
-                                            [results]="pieChartDataForPayment" [gradient]="gradient"
-                                            [legend]="showLegend" [labels]="pieChartOptionsForPayment.labels"
-                                            [doughnut]="pieChartOptionsForPayment.doughnut"
-                                            [arcWidth]="pieChartOptionsForPayment.arcWidth"
-                                            [legendPosition]="commonChartOptions.legendPosition"
-                                            [tooltipText]="pieChartOptionsForPayment.labelFormatting"
-                                            (select)="onSelect($event)">
-                                        </ngx-charts-pie-chart>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <div class="d-flex justify-content-center1">
-
-                                    <div class="table-responsive w-100">
-                                        <div class="table-wrapper">
-                                            <div class="table-title">
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <h2>Платени членарини</h2>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <table class="table table-striped table-hover">
-                                                <thead>
-                                                    <tr>
-
-                                                        <th>Датум</th>
-                                                        <th>Начин на плaќање</th>
-                                                        <th>Сума</th>
-                                                        <th>Опис</th>
-                                                        <th>Опис</th>
-
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr *ngFor="let row of dataSource; let i = index">
-
-                                                        <td>
-                                                            <span class="status" [ngClass]="{
-                                                                    'text-success': 'good' === 'good',
-                                                                    
-                                                                }">
-                                                                &bull;
-                                                            </span>
-                                                            {{ 5 }}
-                                                        </td>
-                                                        <td>{{ 'Note 1' }}</td>
-                                                        <td>
-                                                            <a href="#" class="settings" title="Edit"
-                                                                data-toggle="tooltip">
-                                                                <i class="material-icons">&#xE8B8;</i>
-                                                            </a>
-                                                            <a href="#" class="delete" title="Delete"
-                                                                data-toggle="tooltip">
-                                                                <i class="material-icons">&#xE5C9;</i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr
-                                                        *ngIf="dataSourceForPayment && dataSourceForPayment.length === 0">
-                                                        <td colspan="7" class="text-center">Нема податоци за обавени
-                                                            тренинзи
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            <div class="clearfix">
-                                                <div class="hint-text">
-                                                    Showing <b>{{ dataSourceForPayment ? dataSourceForPayment.length :
-                                                        0}}</b> entries
-                                                </div>
-                                                <ul class="pagination">
-                                                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                                                    <li class="page-item active"><a href="#" class="page-link">1</a>
-                                                    </li>
-                                                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                                    <li class="page-item"><a href="#" class="page-link">Next</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                        </div>
                     </mat-tab>
-                    <mat-tab label="Полагања и белешки"> </mat-tab>
+                    <mat-tab label="Полагања и белешки">
+                    </mat-tab>
                 </mat-tab-group>
+                <router-outlet></router-outlet>
                 }@else {
                 <div class="d-flex align-items-center h-100 justify-content-center">
                     <mat-spinner></mat-spinner>

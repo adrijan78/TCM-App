@@ -15,6 +15,8 @@ import { authGuard } from './_guards/auth.guard';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ClubDetailsComponent } from './dashboard/club-details/club-details.component';
 import { EditMemberComponent } from './dashboard/members/edit-member/edit-member.component';
+import { NotesAndBeltsComponent } from './dashboard/members/member-detail/notes-and-belts/notes-and-belts.component';
+import { MembershipFeeComponent } from './dashboard/members/member-detail/membership-fee/membership-fee.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -33,7 +35,14 @@ export const routes: Routes = [
       { path: 'edit-member/:id', component: EditMemberComponent },
       { path: 'trainings/:id', component: TrainingDetailComponent },
       { path: 'payments/:id', component: PaymentDetailComponent },
-      { path: 'members/:id', component: MemberDetailComponent },
+      {
+        path: 'members/:id',
+        component: MemberDetailComponent,
+        children: [
+          { path: 'notes-and-belts', component: NotesAndBeltsComponent },
+          { path: 'membership-fee', component: MembershipFeeComponent },
+        ],
+      },
       { path: 'notes:id', component: NoteDetailComponent },
     ],
   },

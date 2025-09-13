@@ -1,6 +1,13 @@
 <div class="row g-3 mb-2">
 
     <mat-card class="note-card mat-elevation-z2">
+        <mat-card-header class="justify-content-center">
+            <h4>
+                {{note()?.title}}
+            </h4>
+
+        </mat-card-header>
+        <hr>
         <mat-card-content>{{ note()?.content }}</mat-card-content>
         <div class="text-end mt-2">
             <button (click)="onDeleteClicked()" mat-icon-button color="warn">

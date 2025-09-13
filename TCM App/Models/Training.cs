@@ -19,6 +19,8 @@ namespace TCM_App.Models
         public Club Club { get; set; } = null!; // Ensure Club is not null
         public List<MemberTraining> MemberTrainings { get; set; } = []; // Initialize to an empty list
 
+
+
         public TrainingType TrainingType { get; set; } 
     }
 }

@@ -21,7 +21,7 @@ export class NoteListComponent {
       createdAt: new Date(),
       fromMemberId: 1,
       toMemberId: 2,
-      createdForTraining: false,
+      trainingId: null,
     },
   ];
 

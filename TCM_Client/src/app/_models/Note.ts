@@ -5,5 +5,5 @@ export interface Note {
   createdAt: Date;
   fromMemberId: number;
   toMemberId: number;
-  createdForTraining: boolean;
+  trainingId: number | null;
 }

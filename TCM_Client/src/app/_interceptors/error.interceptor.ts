@@ -6,7 +6,7 @@ import { catchError } from 'rxjs';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
-  const route =inject(ActivatedRoute);
+  const route = inject(ActivatedRoute);
   const toast = inject(ToastrService);
   return next(req).pipe(
     catchError((error) => {
@@ -31,13 +31,13 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           case 401:
             toast.error('Неавторизиран пристап', error.status);
             break;
-          
+
           case 403:
-            toast.error("Немате пристап до оваа страна");
+            toast.error('Немате пристап до оваа страна');
             router.navigate(['/club-details'], { relativeTo: route });
             break;
           case 404:
-            toast.error("Записот кои го барате не постои");
+            toast.error('Записот кој го барате не постои');
             router.navigateByUrl('/not found');
             break;
 
@@ -45,7 +45,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             toast.error('Настана грешка', error.status);
             break;
           default:
-            toast.error("Настана грешка.")
+            toast.error('Настана грешка.');
             break;
         }
       }

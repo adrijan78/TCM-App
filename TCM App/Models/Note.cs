@@ -1,4 +1,6 @@
-﻿namespace TCM_App.Models
+﻿using TCM_App.Models.Enums;
+
+namespace TCM_App.Models
 {
     public class Note
     {
@@ -12,8 +14,13 @@
 
         public int ToMemberId { get; set; }
         public required Member ToMember { get; set; }
+        
+        public int? TrainingId { get; set; }
 
-        public bool CreatedForTraining { get; set; }
+        public required Training? Training { get; set; }
+
+        public required NotePriorityEnum Priority { get; set; }
+
 
     }
 }

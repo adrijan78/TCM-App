@@ -35,14 +35,14 @@ namespace TCM_App.Services
 
         }
 
-        public Task<Training> DeleteTraining(Training training)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Dictionary<int, int>> GetNumberOfTrainingsForEveryMonth(int clubId,int year)
         {
            return await _trainingRepository.GetNumberOfTrainingsForEveryMonth(clubId,year);
+        }
+
+        public async Task<Dictionary<int, int>> GetNumberOfAttendedMemberTrainingsForEveryMonth(int clubId, int year, int memberId)
+        {
+            return await _trainingRepository.GetNumberOfAttendedMemberTrainingsForEveryMonth(clubId, year, memberId);
         }
 
         public async Task<TrainingDetailsDto> GetTraining(int trainingId, int clubId)
@@ -60,9 +60,30 @@ namespace TCM_App.Services
             return await _trainingRepository.GetTrainingsByClubId(clubId, trainingParams);
         }
 
-        public Task<Training> UpdateTraining(Training training)
+        public async Task<TrainingEditDto> GetTrainingForUpdate(int id)
         {
-            throw new NotImplementedException();
+           return await _trainingRepository.GetTrainingForUpdate(id);
+        }
+
+        public  Task<int> UpdateTraining(UpdateTrainingDto trainingDto)
+        {
+
+            var result=_trainingRepository.UpdateTraining(trainingDto);
+
+
+            return result;
+        }
+
+        public async Task<int> DeleteTraining(int id)
+        {
+            var training= await _trainingRepository.GetByIdAsync(id);
+            if(training == null)
+            {
+                throw new Exception($"Training with id {id} not found");
+            }
+            await _trainingRepository.DeleteTraining(training);
+
+            return id;
         }
     }
 }

@@ -10,28 +10,28 @@ namespace TCM_App.Repositories
 {
     public class NoteRepository(DataContext _context,IMapper _mapper) : Repository<Note>(_context), INoteRepository
     {
-        public Task<List<NoteDto>> GetNotesForMember(DateTime dateCreated, int fromMemberId, int toMemberId,bool createdForTraining)
+        public Task<List<NoteDto>> GetNotesForMember(DateTime dateCreated, int fromMemberId, int toMemberId,int? trainingId)
          {
             var query = _context.Notes
-                .Where(n => n.CreatedAt == dateCreated &&
-                n.FromMemberId == fromMemberId && n.ToMemberId == toMemberId).AsQueryable();
+                .Where(n =>
+                n.FromMemberId == fromMemberId &&
+                n.ToMemberId == toMemberId &&
+                n.TrainingId == trainingId &&
+                n.FromMemberId == fromMemberId).AsQueryable();
 
-            if (createdForTraining)
-            {
-                query = query.Where(n => n.CreatedAt == dateCreated &&
-                n.FromMemberId == fromMemberId && n.ToMemberId == toMemberId && n.CreatedForTraining == createdForTraining);
-            }
 
                 return
                     query.ProjectTo<NoteDto>(_mapper.ConfigurationProvider).ToListAsync();
             
 
          }
-        public  void AddNote(AddNoteDto noteDto)
+        public  async Task AddNote(AddNoteDto noteDto)
         {
             var note= _mapper.Map<Note>(noteDto);
-             _context.Notes.Add(note);
-            _context.SaveChanges();
+             await _context.Notes.AddAsync(note);
+             await _context.SaveChangesAsync();
+
+            
 
         }
 

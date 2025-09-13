@@ -11,6 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
+import { CountdownTimerComponent } from '../../UI/countdown-timer/countdown-timer.component';
 
 @Component({
   selector: 'app-club-details',
@@ -23,6 +24,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     NoteComponent,
     MatCardModule,
     MatDatepickerModule,
+    CountdownTimerComponent,
   ],
   templateUrl: './club-details.component.html',
   styleUrl: './club-details.component.css',

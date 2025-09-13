@@ -9,11 +9,13 @@ namespace TCM_App.Controllers
     public class NotesController(INoteService _noteService,ILogger<NotesController> logger) : BaseController
     {
         [HttpGet("notes")]
-        public async Task<IActionResult> GetNotes([FromQuery] DateTime dateCreated, [FromQuery] int fromMemberId, [FromQuery]int toMemberId, [FromQuery]bool createdForTraining)
+        public async Task<IActionResult> GetNotes([FromQuery] DateTime dateCreated, [FromQuery] int fromMemberId, [FromQuery]int toMemberId, [FromQuery] int? trainingId)
         {
             try
             {
-                var notes = await _noteService.GetNotesForMember(dateCreated, fromMemberId, toMemberId,createdForTraining);
+                var memberCoachId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value);
+
+                var notes = await _noteService.GetNotesForMember(dateCreated, memberCoachId, toMemberId,trainingId);
                 return Ok(notes);
             }
             catch (Exception ex)
@@ -38,16 +40,32 @@ namespace TCM_App.Controllers
 
                     note.FromMemberId = int.Parse(coachId);
 
-                    _noteService.AddNotes(note);
+                    await _noteService.AddNote(note);
                 }
 
-                return Ok("Белешката е успешно додадена");
+                return Ok();
             }
             catch (Exception ex)
             {
 
                 logger.LogError(ex, "Error adding notes for member with id {ToMemberId} on {DateCreated}", note.ToMemberId, note.CreatedAt);
                 throw new Exception("An error occurred while adding notes. Please try again later.", ex);
+            }
+        }
+
+
+        [HttpDelete("deleteNote/{noteId}")]
+        public async Task<IActionResult> DeleteNote(int noteId)
+        {
+            try
+            {
+                await _noteService.DeleteNote(noteId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occured while trying to delete the note with id {NoteId}",noteId);
+                throw new Exception("An error occurred while deleting note. Please try again later.", ex);
             }
         }
 

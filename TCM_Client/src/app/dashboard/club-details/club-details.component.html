@@ -7,83 +7,105 @@
                 </div>
             </div>
         </div>
-    
+
         <div class="row desktop-only">
             <div class="col-sm-12 col-md-6 col-lg-4 justify-content-center d-flex">
-                <app-card title="Членови" routePath="members" routerLinkActive="router-link-active"  image="assets/images/members.png" cardValue="10"/>
+                <app-card title="Членови" routePath="members" routerLinkActive="router-link-active"
+                    image="assets/images/members.png" cardValue="10" />
             </div>
             <div class="col-sm-12 col-md-6 col-lg-4  justify-content-center d-flex">
-                <app-card title="Тренинзи" routePath="trainings" image="assets/images/trainings-number.png" cardValue="5"/>
+                <app-card title="Тренинзи" routePath="trainings" image="assets/images/trainings-number.png"
+                    cardValue="5" />
             </div>
             <div class="col-sm-12 col-md-6 col-lg-4 justify-content-center d-flex ">
-                <app-card title="Присутност" image="assets/images/attendance-percentage.png" cardValue="73%"/>
+                <app-card title="Присутност" image="assets/images/attendance-percentage.png" cardValue="73%" />
             </div>
 
         </div>
         <div class="row mobile-only">
             <mat-tab-group>
-                    <mat-tab label="Членови">
-                        <div class="col-sm-12 my-2 col-md-4 col-lg-4 justify-content-center d-flex">
-                            <app-card title="Членови" routePath="members" routerLinkActive="router-link-active"  image="assets/images/members.png" cardValue="10"/>
-                        </div>
-                    </mat-tab>
-                    <mat-tab label="Тренинзи">
-                        <div class="col-sm-12 my-2 col-md-4 col-lg-4  justify-content-center d-flex">
-                <app-card title="Тренинзи" routePath="trainings" image="assets/images/trainings-number.png" cardValue="5"/>
-            </div>
-                    </mat-tab>
-                    <mat-tab label="Присутност">
+                <mat-tab label="Членови">
+                    <div class="col-sm-12 my-2 col-md-4 col-lg-4 justify-content-center d-flex">
+                        <app-card title="Членови" routePath="members" routerLinkActive="router-link-active"
+                            image="assets/images/members.png" cardValue="10" />
+                    </div>
+                </mat-tab>
+                <mat-tab label="Тренинзи">
+                    <div class="col-sm-12 my-2 col-md-4 col-lg-4  justify-content-center d-flex">
+                        <app-card title="Тренинзи" routePath="trainings" image="assets/images/trainings-number.png"
+                            cardValue="5" />
+                    </div>
+                </mat-tab>
+                <mat-tab label="Присутност">
                     <div class="col-sm-12 my-2 col-md-4 col-lg-4 justify-content-center d-flex ">
-                <app-card title="Присутност" image="assets/images/attendance-percentage.png" cardValue="73%"/>
-            </div>
-                    </mat-tab>
+                        <app-card title="Присутност" image="assets/images/attendance-percentage.png" cardValue="73%" />
+                    </div>
+                </mat-tab>
             </mat-tab-group>
-            
-            
+
+
 
         </div>
-    <div class=" mt-5">
-        <div class="table-title app-info-title">
-            <div class="row">
-                <div class="col-sm-12 text-center">
-                    <h2 class="m-0">Присутсво по месеци</h2>
+        <div class=" mt-5">
+            <div class="table-title app-info-title">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <h2 class="m-0">Присутсво по месеци</h2>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="chart-item  w-100 my-3  app-info-card ">
+            <div class="chart-item  w-100 my-3  app-info-card ">
 
-            <ngx-charts-bar-vertical [scheme]="barChartColorScheme" [results]="barChartData" [gradient]="gradient"
-                [xAxis]="showXAxis" [yAxis]="showYAxis" [showXAxisLabel]="showXAxisLabel"
-                [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
-                [barPadding]="barChart1Options.barPadding" [roundDomains]="barChart1Options.roundDomains"
-                [legendPosition]="commonChartOptions.legendPosition">
-            </ngx-charts-bar-vertical>
-        </div>
+                <ngx-charts-bar-vertical [scheme]="barChartColorScheme" [results]="barChartData" [gradient]="gradient"
+                    [xAxis]="showXAxis" [yAxis]="showYAxis" [showXAxisLabel]="showXAxisLabel"
+                    [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+                    [barPadding]="barChart1Options.barPadding" [roundDomains]="barChart1Options.roundDomains"
+                    [legendPosition]="commonChartOptions.legendPosition">
+                </ngx-charts-bar-vertical>
+            </div>
 
-    </div>
+        </div>
 
     </div>
     <div class="col-lg-3 col-md-12 col-sm-12">
-         <div class="table-title app-info-title col-12">
+        <div class="table-title app-info-title col-12">
             <div class="row">
-                <div class="col-sm-12 text-center">
+                <div class="col-sm-12 text-center ">
                     <h2 class="m-0">Календар</h2>
                 </div>
             </div>
-           
-        </div>
-        <div class="row mt-2  p-3 justify-content-center ">
-            <div class="col-12 app-info-card p-5 ">
-
-                <mat-calendar  class="" [(selected)]="selected"></mat-calendar>
-
-            </div>    
 
         </div>
+        <div class="row  pb-2">
+            <div class="w-100 p-3">
+
+                <mat-calendar class="app-info-card" [(selected)]="selected"></mat-calendar>
+
+            </div>
+
+        </div>
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="table-title app-info-title col-12">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <h2 class="m-0">Нареден тренинг за:</h2>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row ">
+                <div class="w-100 mt-2">
+                    <app-countdown-timer />
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+
     </div>
-
-    
-    
-   
-    
 </div>

@@ -5,9 +5,12 @@ namespace TCM_App.Services.Interfaces
 {
     public interface INoteService
     {
-       Task<List<NoteDto>> GetNotesForMember(DateTime dateCreated, int fromMemberId, int toMemberId, bool createdForTraining);
-        void AddNotes(AddNoteDto note);
-       
+       Task<List<NoteDto>> GetNotesForMember(DateTime dateCreated, int fromMemberId, int toMemberId, int? trainingId);
+       Task AddNote(AddNoteDto noteDto);
+
+       Task DeleteNote(int noteId);
+
+
 
     }
 }

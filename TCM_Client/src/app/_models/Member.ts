@@ -21,6 +21,7 @@ export interface Member {
 }
 
 export interface LoginMember {
+  id: number;
   firstName: string;
   lastName: string;
   email: string;

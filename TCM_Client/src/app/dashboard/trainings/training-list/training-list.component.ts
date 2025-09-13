@@ -30,9 +30,12 @@ import { TrainingStatus } from '../../../_models/_enums/TrainingStatus';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule, NgModel } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Pagination } from '../../../_models/Pagination';
-import { Router, RouterLink, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { DialogRef } from '@angular/cdk/dialog';
+import { ConfirmationDialogComponent } from '../../../_shared/confirmation-dialog/confirmation-dialog.component';
 
 // Define your Training interface for better type safety
 
@@ -66,6 +69,7 @@ import { Router, RouterLink, RouterModule } from '@angular/router';
 export class TrainingListComponent implements OnInit, AfterViewInit {
   trainingService = inject(TrainingService);
   router = inject(Router);
+  toast = inject(ToastrService);
   activeTraining = TrainingStatus.Active;
   canceledTraining = TrainingStatus.Canceled;
   finishedTraining = TrainingStatus.Finished;
@@ -226,17 +230,58 @@ export class TrainingListComponent implements OnInit, AfterViewInit {
 
     const dialogRef = this.dialog.open(AddTrainingComponent, {
       width: '400px',
-      data: { date: date },
+      data: { date: date, isInEditMode: false },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.trainings.update((r) => [result]);
-        this.trainings()?.sort((a, b) => a.date.getTime() - b.date.getTime());
-        // Angular's change detection will automatically re-render the calendar
-        // because the 'trainings' array, which 'dateClass' depends on, has changed.
+        this.getTrainings();
       } else {
         console.log('Dialog closed without adding training.');
+      }
+    });
+  }
+
+  onTrainingEdit(date: Date | null, trainingId: number) {
+    if (!date) {
+      alert(
+        'Please select a date on the calendar first or choose one to add a training.'
+      );
+      return;
+    }
+
+    const dialogRef = this.dialog.open(AddTrainingComponent, {
+      width: '400px',
+      data: { date: date, id: trainingId },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.getTrainings();
+      } else {
+        console.log('Dialog closed without adding training.');
+      }
+    });
+  }
+
+  onDeleteTraining(trainingId: number) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: {
+        questionTitle: 'Дали сте сигурни?',
+        questionBody:
+          'Оваа операција ќе го избрише тренингот.Дали сте сигурни дека го сакате тоа?',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.trainingService.deleteTraining(trainingId).subscribe({
+          next: () => {
+            this.toast.success('Тренингот беше успешно отстранет');
+            this.getTrainings();
+          },
+        });
       }
     });
   }

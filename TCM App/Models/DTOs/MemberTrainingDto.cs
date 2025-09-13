@@ -33,9 +33,17 @@ namespace TCM_App.Models.DTOs
     public class UpdateMemberTrainingDto
     {
         //public required DateTime Date { get; set; }
-        public required int Id { get; set; }
+        public  int Id { get; set; }
+
+        public int MemberId { get; set; }
         public required string Description { get; set; }
         public int? Performance { get; set; }
         public MemberTrainingStatusEnum Status { get; set; }
+    }
+
+    public class MemberTrainingSimpleDto
+    {
+        public int Id { get; set; }
+
     }
 }

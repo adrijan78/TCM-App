@@ -21,7 +21,7 @@ namespace TCM_App.Repositories
         public async Task<PagedList<MemberTrainingDto>> GetMemberAttendanceAndPerformance(int memberId, UserParams userParams)
         {
             var query =  _context.Attendaces
-                .Where(a => a.MemberId == memberId && userParams.Year == a.Date.Year)
+                .Where(a => a.MemberId == memberId && userParams.Year == a.Date.Year && a.Status==MemberTrainingStatusEnum.Attended)
                 .OrderByDescending(x=>x.Date)
                 .AsQueryable();
 
@@ -48,9 +48,9 @@ namespace TCM_App.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public Task<Member?> GetMemberById(int memberId)
+        public async Task<Member?> GetMemberById(int memberId)
         {
-            return _context.Members
+            return await _context.Members
                 .Include(m => m.ProfilePicture)
                 .Include(m => m.Belts)
                 .ThenInclude(m => m.Belt)

@@ -17,7 +17,7 @@
         <!-- Profile Section -->
         @if(loggedMember()){
 
-        <div class="profile-container">
+        <div class="profile-container" (click)="closeSidenav()" [routerLink]="['members/',loggedMember()?.id]">
             <div class="profile-img-container">
                 <!-- <img src="https://sportsmatik.com/uploads/users-media/profile-pic/img-20200729-221005-185_1634550787.jpg"
                          alt="Profile" class="profile-img"> -->

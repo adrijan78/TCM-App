@@ -50,7 +50,7 @@ namespace TCM_App.Data
                 .HasOne(mt => mt.Training)
                 .WithMany(t => t.MemberTrainings)
                 .HasForeignKey(mt => mt.TrainingId)   
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<MemberTraining>()
                 .HasOne(mt => mt.Member)

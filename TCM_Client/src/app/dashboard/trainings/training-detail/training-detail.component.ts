@@ -31,6 +31,8 @@ import { MemberService } from '../../../_services/member/member.service';
 import { AcountService } from '../../../_services/account/acount.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddNoteComponent } from '../../notes/add-note/add-note.component';
+import { AddNote } from '../../../_models/_enums/AddNote';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-training-detail',
@@ -51,6 +53,7 @@ import { AddNoteComponent } from '../../notes/add-note/add-note.component';
 export class TrainingDetailComponent implements OnInit {
   id = input.required<number>();
   trainingService = inject(TrainingService);
+  toast = inject(ToastrService);
   noteService = inject(NoteService);
   memberService = inject(MemberService);
   accountService = inject(AcountService);
@@ -85,14 +88,13 @@ export class TrainingDetailComponent implements OnInit {
     });
   }
 
-  onMemberSelect(memberTraining: MemberTrainingData) {
-    this.selectedMemberId.set(memberTraining.id);
+  getNotesForMember() {
     this.noteService
       .getNotesForMember(
-        memberTraining.training.date.toString(),
+        this.training()!.date.toString(),
         1,
-        memberTraining.memberId,
-        true
+        this.selectedMemberId(),
+        this.training()!.id
       )
       .subscribe({
         next: (res: Note[]) => {
@@ -101,6 +103,11 @@ export class TrainingDetailComponent implements OnInit {
         error: () => {},
         complete: () => {},
       });
+  }
+
+  onMemberSelect(memberTraining: MemberTrainingData) {
+    this.selectedMemberId.set(memberTraining.memberId);
+    this.getNotesForMember();
   }
 
   getFilteredMembers() {
@@ -141,37 +148,47 @@ export class TrainingDetailComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        debugger;
-        var note: Note = {
-          id: `FE-${Math.random() * 100}`,
+        var note: AddNote = {
           title: result.title,
           content: result.content,
           createdAt: new Date(),
           fromMemberId: 0,
           toMemberId: this.selectedMemberId(),
-          createdForTraining: true,
+          trainingId: this.training()!.id,
+          priority: 1,
         };
 
         if (
           this.notesForMember() != null &&
           this.notesForMember()!.length > 1
         ) {
-          this.notesForMember.update((arr) => [note, ...arr!]);
+          // this.notesForMember.update((arr) => [note, ...arr!]);
         } else {
-          this.notesForMember.set([note]);
+          // this.notesForMember.set([note]);
         }
+        this.noteService.addNote(note).subscribe({
+          next: () => {
+            this.toast.success('Белешката е креирана');
+            this.getNotesForMember();
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
       } else {
-        console.log('Dialog closed without adding training.');
+        console.log('Dialog closed without adding note.');
       }
     });
   }
 
   deleteNoteForMemberAttendance(id: string) {
-    if (id.includes('FE-')) {
-      this.notesForMember.set(this.notesForMember()!.filter((x) => x.id != id));
-    } else {
-      //remove item https
-    }
+    this.noteService.deleteNote(+id).subscribe({
+      next: () => {
+        this.toast.success('Белешката е избришана');
+        this.getNotesForMember();
+      },
+      error: () => {},
+    });
   }
 
   updateMembersAttendanceStatusAndPerformance() {
