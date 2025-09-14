@@ -80,6 +80,16 @@
                             <div class="card-body">
 
                                 <div class="row charts-row pt-3  mb-4 justify-content-center pb-4">
+                                    <div class="col-12">
+                                        <mat-form-field appearance="outline" class="full-width-input d-block mb-2 ">
+                                            <mat-label>Година на тренинзи</mat-label>
+                                            <mat-select [(value)]="year" (valueChange)="refetchData()">
+                                                @for (y of years; track $index) {
+                                                <mat-option [value]="y">{{y}}</mat-option>
+                                                }
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
                                     <div class="col-lg-6 col-md-6 col-12 mb-5">
                                         <div class="table-title">
                                             <div class="row">
@@ -90,14 +100,7 @@
                                         </div>
 
 
-                                        <mat-form-field appearance="outline" class="full-width-input mt-2">
-                                            <mat-label>Година на тренинзи</mat-label>
-                                            <mat-select [(value)]="year" (valueChange)="refetchData()">
-                                                @for (y of years; track $index) {
-                                                <mat-option [value]="y">{{y}}</mat-option>
-                                                }
-                                            </mat-select>
-                                        </mat-form-field>
+
 
                                         @if(barChartData().length>0){
 

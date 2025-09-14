@@ -76,11 +76,23 @@ export class MemberService {
     );
   }
 
+  getMemberBeltExams(id: number) {
+    return this.http.get(this.baseUrl + 'members/member-belts/' + id);
+  }
+
   deactivateMember(id: number) {
     return this.http.delete(this.baseUrl + 'members/deactivate-member/' + id);
   }
 
   getMembersGroupedByBelt() {
     return this.http.get(this.baseUrl + 'members/membersGroupedByBelt');
+  }
+
+  addMemberBeltExam(exam: any) {
+    return this.http.post(this.baseUrl + 'members/add-belt-exam', exam);
+  }
+
+  deleteMemberBeltExam(id: number) {
+    return this.http.delete(this.baseUrl + 'members/delete-belt-exam/' + id);
   }
 }

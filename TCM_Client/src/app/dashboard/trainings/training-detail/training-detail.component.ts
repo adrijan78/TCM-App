@@ -155,7 +155,10 @@ export class TrainingDetailComponent implements OnInit {
           fromMemberId: 0,
           toMemberId: this.selectedMemberId(),
           trainingId: this.training()!.id,
-          priority: 1,
+          priority:
+            result.priority == null || result.priority == ''
+              ? 1
+              : result.priority,
         };
 
         if (

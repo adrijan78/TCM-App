@@ -145,6 +145,64 @@ namespace TCM_App.Controllers
             }
         }
 
+        [HttpGet("member-belts/{id}")]
+        public async Task<IActionResult> GetMemberBelts(int id)
+        {
+            try
+            {
+                var memberBelts = await _memberService.GetMemberBelts(id);
+                return Ok(memberBelts);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error getting belts for member with id {Id}", id);
+                throw new Exception(e.ToString());
+            }
+        }
+
+        [HttpPost("add-belt-exam")]
+        public async Task<IActionResult> AddBeltExamForMember([FromBody]UpdateMemberBeltDto memberBelt)
+        {
+            try
+            {
+                var newMemberBeltId = await _memberService.AddBeltExamForMember(memberBelt);
+                return Ok(new ApiResponse<int>
+                {
+                    Success = true,
+                    Message = "Успешно додаден појас",
+                    Data = newMemberBeltId
+                });
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error adding belt exam for member with id {MemberId}", memberBelt.MemberId);
+                throw new Exception(e.ToString());
+            }
+
+
+        }
+
+        [HttpDelete("delete-belt-exam/{id}")]
+        public async Task<IActionResult> DeleteBeltExamForMember(int id)
+        {
+            try
+            {
+               
+                // Proceed to delete the member belt
+                await _memberService.DeleteBeltExamForMember(id);
+                return Ok(new ApiResponse<string>
+                {
+                    Success = true,
+                    Message = "Успешно го избришавте полагањето на членот"
+                });
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error deleting belt exam with id {Id}", id);
+                throw new Exception(e.ToString());
+            }
+        }
+
 
 
         [HttpDelete("deactivate-member/{id}")]

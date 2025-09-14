@@ -6,4 +6,5 @@ export interface Note {
   fromMemberId: number;
   toMemberId: number;
   trainingId: number | null;
+  priority: number;
 }

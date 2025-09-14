@@ -280,6 +280,8 @@ export class TrainingListComponent implements OnInit, AfterViewInit {
           next: () => {
             this.toast.success('Тренингот беше успешно отстранет');
             this.getTrainings();
+            var currentMonth = new Date().getMonth();
+            this.getTrainingsForMonth(currentMonth);
           },
         });
       }

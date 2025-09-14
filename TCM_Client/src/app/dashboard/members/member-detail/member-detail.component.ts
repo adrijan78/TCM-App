@@ -19,6 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { SharedService } from '../../../_services/shared.service';
 
 @Component({
   selector: 'app-member-detail',
@@ -45,6 +46,7 @@ export class MemberDetailComponent implements OnInit {
   toast = inject(ToastrService);
   router = inject(Router);
   route = inject(ActivatedRoute);
+  sharedService = inject(SharedService);
   @Input() id!: number;
   member = signal<Member | null>(null);
   trainingsByMonth = signal<[] | null>(null);
@@ -105,7 +107,7 @@ export class MemberDetailComponent implements OnInit {
     name: 'cyanScheme',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#61DAFB', '#00BCD4'], // Cyan and a slightly darker cyan/teal
+    domain: ['#00BCD4', '#88e4fdff'], // Cyan and a slightly darker cyan/teal
   };
 
   // Common ngx-charts options that can be shared across charts
@@ -160,7 +162,13 @@ export class MemberDetailComponent implements OnInit {
     // },
   ];
 
-  constructor() {}
+  constructor() {
+    if (this.router.url.includes('/notes-and-belts')) {
+      this.onRouteChange('notes-and-belts');
+    } else if (this.router.url.includes('/membership-fee')) {
+      this.onRouteChange('membership-fee');
+    }
+  }
 
   ngOnInit(): void {
     this.getMemberById();
@@ -186,6 +194,7 @@ export class MemberDetailComponent implements OnInit {
           this.dataSourceForLineChart = res.body as MemberTrainingData[];
           this.dataSource = res.body as MemberTrainingData[];
           this.getNumberOfTrainingsForEveryMonth();
+          this.getClubNumberOfTrainings();
           this.generateLineChartData();
         },
         error: (err) => console.log(err),
@@ -211,6 +220,15 @@ export class MemberDetailComponent implements OnInit {
     this.getMemberTrainingData();
   }
 
+  getClubNumberOfTrainings() {
+    this.sharedService.getClubNumberOfTrainings(this.year, null).subscribe({
+      next: (res: any) => {
+        debugger;
+        this.clubTotalNumOfTrainings.set(res);
+      },
+    });
+  }
+
   countMemberAttendanceByMonth() {
     this.barChartData.set([]);
 
@@ -226,8 +244,9 @@ export class MemberDetailComponent implements OnInit {
   getTotalNumberOfTrainings() {
     let tmp = this.trainingsByMonth();
     for (let item in tmp) {
-      let it = +item;
-      this.clubTotalNumOfTrainings.update((value) => value + it);
+      let it = tmp[+item];
+
+      this.memberTotalNumOfTrainings.update((value) => value + it);
     }
     let perc =
       +(this.memberTotalNumOfTrainings() / this.clubTotalNumOfTrainings()) *
@@ -235,18 +254,18 @@ export class MemberDetailComponent implements OnInit {
     this.attendancePercentage.set(+perc.toFixed(1));
     this.pieChartData = [
       {
+        name: `Присуство`,
+        value:
+          this.attendancePercentage() != null
+            ? this.attendancePercentage()!
+            : 90,
+      },
+      {
         name: 'Отсутство',
         value:
           this.attendancePercentage() != null
             ? 100 - this.attendancePercentage()!
             : 10,
-      }, // Values based on image percentages
-      {
-        name: 'Присуство',
-        value:
-          this.attendancePercentage() != null
-            ? this.attendancePercentage()!
-            : 90,
       },
     ];
   }
@@ -302,6 +321,17 @@ export class MemberDetailComponent implements OnInit {
     } else if (index === 1) {
       this.router.navigate(['membership-fee'], { relativeTo: this.route });
     } else if (index === 2) {
+      this.router.navigate(['notes-and-belts'], { relativeTo: this.route });
+    }
+  }
+  onRouteChange(url?: string) {
+    if (url == '') {
+      //this.router.navigate(['members/' + this.id]);
+    } else if (url == 'membership-fee') {
+      this.selectedTabIndex = 1;
+      this.router.navigate(['membership-fee'], { relativeTo: this.route });
+    } else if (url == 'notes-and-belts') {
+      this.selectedTabIndex = 2;
       this.router.navigate(['notes-and-belts'], { relativeTo: this.route });
     }
   }

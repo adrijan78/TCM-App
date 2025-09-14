@@ -10,6 +10,15 @@
     public class MemberBeltDto : BeltDto
     {
         public bool IsCurrentBelt { get; set; }
+        public string Description { get; set; } = "";
+
+
+    }
+
+    public class UpdateMemberBeltDto: MemberBeltDto
+    {
+        public int MemberId { get; set; }
+        public int BeltId { get; set; }
 
     }
 

@@ -1,87 +1,112 @@
-<div class="row mt-5">
-    <div class="col-lg-6 col-md-6 col-12 mb-3 text-center">
-        <div class="table-title">
-            <div class="row">
-                <div class="col-sm-12 text-center">
-                    <h2>Полагања за појаси</h2>
+<div class="pt-2">
+
+    <div class="row mt-4">
+        <div class="col-lg-6 col-md-6 col-12 mb-3 text-center">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <h2>Полагања за појаси</h2>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="d-flex justify-content-lg-end justify-content-sm-center mt-3">
+                <button class="btn btn-primary d-flex" [disabled]="id()==0" (click)="addBeltForMember()">
+                    <mat-icon class="text-white">add</mat-icon>
+                    <span>
+                        Додади полагање
+                    </span>
+                </button>
+
+            </div>
+            <table class="table table-striped  table-hover mt-3">
+                <thead class="">
+                    <tr>
+
+                        <th>Појас</th>
+                        <th>Датум</th>
+                        <th>Моментален</th>
+                        <th>Акции</th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let beltExam of memberBeltExams(); let i = index">
+
+                        <td>
+                            <span>
+                                {{beltExam.name}}
+                            </span>
+                        </td>
+                        <td>{{beltExam.earnedOn | date:'dd/MM/yyyy'}}</td>
+                        @if(beltExam.isCurrentBelt){
+                        <td>
+
+                            <mat-icon class="text-success">done</mat-icon>
+                        </td>
+                        }@else {
+                        <td></td>
+                        }
+                        <td>
+                            <!-- <a href="#" class="settings" title="Edit" data-toggle="tooltip">
+                                <i class="material-icons">&#xE8B8;</i>
+                            </a> -->
+                            <a (click)="deleteMemberBeltExam(beltExam.id)" class="delete" title="Delete"
+                                data-toggle="tooltip">
+                                <i class="material-icons">&#xE5C9;</i>
+                            </a>
+                        </td>
+                    </tr>
+                    <!-- <tr *ngIf="dataSourceForPayment && dataSourceForPayment.length === 0">
+                        <td colspan="7" class="text-center">Нема податоци за полагања
+                        </td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-6 col-md-6 col-12 mb-3">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <h2>Белешки за мене</h2>
+                    </div>
+
 
                 </div>
 
             </div>
-        </div>
-        <table class="table table-striped  table-hover mt-3">
-            <thead class="">
-                <tr>
+            <div class="d-flex justify-content-lg-end justify-content-sm-center mt-3">
+                <button class="btn btn-primary d-flex" [disabled]="id()==0" (click)="addNoteForMember()">
+                    <mat-icon class="text-white">add</mat-icon>
+                    <span>
+                        Додади белешка
+                    </span>
+                </button>
 
-                    <th>Појас</th>
-                    <th>Датум</th>
-                    <th>Акции</th>
+            </div>
+            <div class="row" style="max-height: 500px; overflow-x: auto;">
 
+                <mat-form-field appearance="outline" class="w-100 my-2">
+                    <mat-label>Пребарај по наслов</mat-label>
+                    <input matInput placeholder="Внеси име и презиме" [disabled]="id()==0"
+                        [(ngModel)]="searchTermNotes" />
+                    <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
 
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let row of [{}]; let i = index">
-
-                    <td>
-                        Бел појас
-                    </td>
-                    <td>08/08/2025</td>
-                    <td>
-                        <a href="#" class="settings" title="Edit" data-toggle="tooltip">
-                            <i class="material-icons">&#xE8B8;</i>
-                        </a>
-                        <a href="#" class="delete" title="Delete" data-toggle="tooltip">
-                            <i class="material-icons">&#xE5C9;</i>
-                        </a>
-                    </td>
-                </tr>
-                <!-- <tr *ngIf="dataSourceForPayment && dataSourceForPayment.length === 0">
-                    <td colspan="7" class="text-center">Нема податоци за полагања
-                    </td>
-                </tr> -->
-            </tbody>
-        </table>
-    </div>
-    <div class="col-lg-6 col-md-6 col-12 mb-3">
-        <div class="table-title">
-            <div class="row">
-                <div class="col-sm-12 text-center">
-                    <h2>Белешки за мене</h2>
+                @if(notesForMember()){
+                @for (note of getFilteredNotes(); track note.id) {
+                <div class="col-lg-12 col-md-12 col-sm-12 px-5">
+                    <app-note [note]="note" (deleteClicked)="deleteNoteForMember(note.id)"></app-note>
                 </div>
+                }
 
+                }@else {
+                <h4>Нема белешки за овој член</h4>
+                }
 
             </div>
-
-        </div>
-        <div class="d-flex justify-content-lg-end justify-content-sm-center mt-3">
-            <button class="btn btn-primary d-flex" [disabled]="id()==0" (click)="addNoteForMember()">
-                <mat-icon class="text-white">add</mat-icon>
-                <span>
-                    Додади белешка
-                </span>
-            </button>
-
-        </div>
-        <div class="row" style="max-height: 500px; overflow-x: auto;">
-
-            <mat-form-field appearance="outline" class="w-100 my-2">
-                <mat-label>Пребарај по наслов</mat-label>
-                <input matInput placeholder="Внеси име и презиме" [disabled]="id()==0" [(ngModel)]="searchTermNotes" />
-                <mat-icon matSuffix>search</mat-icon>
-            </mat-form-field>
-
-            @if(notesForMember()){
-            @for (note of getFilteredNotes(); track note.id) {
-            <div class="col-lg-12 col-md-12 col-sm-12 px-5">
-                <app-note [note]="note" (deleteClicked)="deleteNoteForMember(note.id)"></app-note>
-            </div>
-            }
-
-            }@else {
-            <h4>Нема белешки за овој член</h4>
-            }
-
         </div>
     </div>
 </div>

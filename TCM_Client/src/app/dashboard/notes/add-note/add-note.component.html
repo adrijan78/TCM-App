@@ -1,38 +1,51 @@
-<h2 mat-dialog-title>Додади белешка</h2>
-<mat-dialog-content class="mat-typography">
-    <form [formGroup]="addNoteForm">
-        <mat-form-field appearance="outline" class="full-width-input d-block mt-1">
-            <mat-label>Наслов на белешката</mat-label>
-            <input matInput formControlName="title" required placeholder="Вежби за истегнување">
+<div class="wrapper">
+    <h2 mat-dialog-title>Додади белешка</h2>
+    <mat-dialog-content class="mat-typography">
+        <form [formGroup]="addNoteForm">
+            <mat-form-field appearance="outline" class="full-width-input d-block mt-1">
+                <mat-label>Наслов на белешката</mat-label>
+                <input matInput formControlName="title" required placeholder="Вежби за истегнување">
 
-            @if(addNoteForm.get('title')?.hasError('required') &&
-            addNoteForm.get('title')?.touched)
-            {
-            <mat-error>Насловот е задолжителен</mat-error>
-            }
+                @if(addNoteForm.get('title')?.hasError('required') &&
+                addNoteForm.get('title')?.touched)
+                {
+                <mat-error>Насловот е задолжителен</mat-error>
+                }
 
-        </mat-form-field>
-
-
-        <mat-form-field appearance="outline" class="full-width-input d-block mt-1">
-            <mat-label>Опис на белешката</mat-label>
-            <textarea rows="5" cols="3" matInput formControlName="content" required
-                placeholder="Прави ги следните вежби за истегнување"></textarea>
-
-            @if(addNoteForm.get('content')?.hasError('required') &&
-            addNoteForm.get('content')?.touched)
-            {
-            <mat-error>Описот е задолжителен</mat-error>
-            }
+            </mat-form-field>
 
 
+            <mat-form-field appearance="outline" class="full-width-input d-block mt-1">
+                <mat-label>Опис на белешката</mat-label>
+                <textarea rows="5" cols="3" matInput formControlName="content" required
+                    placeholder="Прави ги следните вежби за истегнување"></textarea>
+
+                @if(addNoteForm.get('content')?.hasError('required') &&
+                addNoteForm.get('content')?.touched)
+                {
+                <mat-error>Описот е задолжителен</mat-error>
+                }
 
 
-        </mat-form-field>
 
-    </form>
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-    <button mat-raised-button (click)="onSend()" [disabled]="addNoteForm.invalid" color="primary">Зачувај</button>
-    <button mat-button (click)="onCancel()">Откажи</button>
-</mat-dialog-actions>
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width-input d-block mt-2">
+                <mat-label>Приоритет</mat-label>
+                <mat-select formControlName="priority">
+                    <mat-option [value]="1">Низок</mat-option>
+                    <mat-option [value]="2">Среден</mat-option>
+                    <mat-option [value]="3">Висок</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+
+        </form>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button (click)="onSend()" [disabled]="addNoteForm.invalid" color="primary">Зачувај</button>
+        <button mat-button (click)="onCancel()">Откажи</button>
+    </mat-dialog-actions>
+</div>

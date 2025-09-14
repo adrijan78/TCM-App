@@ -5,5 +5,6 @@ namespace TCM_App.Services.Interfaces
     public interface ICommonService
     {
         Task<List<BeltDto>> GetBelts();
+        Task<int> GetNumberOfTrainingsForClub(int year, int? month);
     }
 }

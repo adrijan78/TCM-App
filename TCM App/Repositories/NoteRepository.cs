@@ -12,12 +12,16 @@ namespace TCM_App.Repositories
     {
         public Task<List<NoteDto>> GetNotesForMember(DateTime dateCreated, int fromMemberId, int toMemberId,int? trainingId)
          {
+            var year = DateTime.Now.Year;
             var query = _context.Notes
                 .Where(n =>
                 n.FromMemberId == fromMemberId &&
                 n.ToMemberId == toMemberId &&
                 n.TrainingId == trainingId &&
-                n.FromMemberId == fromMemberId).AsQueryable();
+                n.FromMemberId == fromMemberId &&
+                n.CreatedAt.Year ==year)
+                .OrderByDescending(x=>x.Priority)
+                .ThenByDescending(x=>x.CreatedAt).AsQueryable();
 
 
                 return

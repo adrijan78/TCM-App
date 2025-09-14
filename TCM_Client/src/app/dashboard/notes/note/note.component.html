@@ -1,14 +1,45 @@
 <div class="row g-3 mb-2">
 
     <mat-card class="note-card mat-elevation-z2">
-        <mat-card-header class="justify-content-center">
+        <mat-card-header class="justify-content-center d-flex">
             <h4>
                 {{note()?.title}}
+                <span>
+                    @if(note()?.priority==3){
+                    <mat-icon class="text-danger">priority_high</mat-icon>
+                    <mat-icon class="text-danger">priority_high</mat-icon>
+                    <mat-icon class="text-danger">priority_high</mat-icon>
+                    }@else if(note()?.priority==2){
+                    <mat-icon class="text-warning">priority_high</mat-icon>
+                    <mat-icon class="text-warning">priority_high</mat-icon>
+                    }@else if(note()?.priority==1){
+                    <mat-icon class="text-success">priority_high</mat-icon>
+
+                    }
+                </span>
             </h4>
+
+
+
+
 
         </mat-card-header>
         <hr>
-        <mat-card-content>{{ note()?.content }}</mat-card-content>
+        <mat-card-content>
+            <span>
+                <span>
+                    <mat-icon>calendar_today</mat-icon>
+
+                </span>
+                <span>
+                    {{dateFormated}}
+                </span>
+            </span>
+            <p>
+                {{ note()?.content }}
+
+            </p>
+        </mat-card-content>
         <div class="text-end mt-2">
             <button (click)="onDeleteClicked()" mat-icon-button color="warn">
                 <mat-icon>delete</mat-icon>

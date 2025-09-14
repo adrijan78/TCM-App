@@ -1,0 +1,63 @@
+<div class="wrapper">
+    <h2 mat-dialog-title>Додади полагање</h2>
+    <mat-dialog-content class="mat-typography">
+
+        <form [formGroup]="addBeltForm">
+
+            <mat-form-field appearance="outline" class="full-width-input d-block mt-1">
+                <mat-label>Појас</mat-label>
+                <mat-select formControlName="belt">
+
+                    @for(belt of clubBelts(); track belt.id){
+                    <mat-option [value]="belt.id">
+                        {{belt.name}}
+                    </mat-option>
+                    }
+
+                </mat-select>
+
+                @if(addBeltForm.get('belt')?.hasError('required') &&
+                addBeltForm.get('belt')?.touched)
+                {
+                <mat-error>Појасот е задолжителен</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width-input d-block mt-2">
+                <mat-label>Датум на полагање</mat-label>
+                <input formControlName="dateReceived" matInput [matDatepicker]="picker">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+
+                @if(addBeltForm.get('dateReceived')?.hasError('required') &&
+                addBeltForm.get('dateReceived')?.touched)
+                {
+                <mat-error>Датумот е задолжителен</mat-error>
+                }
+            </mat-form-field>
+            <div class="mt-3">
+
+                <mat-label class="me-3 ">Тековен појас </mat-label>
+                <mat-radio-group formControlName="isCurrentBelt">
+                    <mat-radio-button [value]="true">Да</mat-radio-button>
+                    <mat-radio-button [value]="false">Не</mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width-input d-block mt-2">
+                <mat-label>Опис (Опционално)</mat-label>
+                <textarea matInput formControlName="description" rows="3"></textarea>
+            </mat-form-field>
+
+
+
+        </form>
+
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="onSave()" [disabled]="addBeltForm.invalid">Save</button>
+    </mat-dialog-actions>
+
+</div>

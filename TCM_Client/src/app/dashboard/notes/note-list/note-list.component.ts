@@ -13,17 +13,7 @@ import { AddNoteComponent } from '../add-note/add-note.component';
   styleUrl: './note-list.component.css',
 })
 export class NoteListComponent {
-  notes: Note[] = [
-    {
-      id: 'FE-19',
-      title: 'Note1',
-      content: 'Note 1 desc',
-      createdAt: new Date(),
-      fromMemberId: 1,
-      toMemberId: 2,
-      trainingId: null,
-    },
-  ];
+  notes: Note[] = [];
 
   constructor(private dialog: MatDialog) {}
 

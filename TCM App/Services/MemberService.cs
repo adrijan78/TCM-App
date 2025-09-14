@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TCM_App.Helpers;
 using TCM_App.Models;
 using TCM_App.Models.DTOs;
@@ -160,6 +162,68 @@ namespace TCM_App.Services
         private bool CheckIfMemberExists(int memberId)
         {
             return _memberRepository.CheckIfMemberExists(memberId);
+        }
+
+        public  Task<List<UpdateMemberBeltDto>> GetMemberBelts(int id)
+        {
+             var belts =   _memberBeltRepository.Query()
+                .Include(x=>x.Belt)
+                .Where(x => x.MemberId == id)
+                .OrderByDescending(x => x.DateReceived)
+                .ToList();
+
+            return Task.FromResult(mapper.Map<List<UpdateMemberBeltDto>>(belts));
+        }
+
+        public async Task<int> AddBeltExamForMember(UpdateMemberBeltDto memberBelt)
+        {
+            var member = _memberRepository.Query().FirstOrDefault(x => x.Id == memberBelt.MemberId);
+            if (member == null)
+            {
+                throw new Exception("Member not found");
+            }
+
+            var domain=mapper.Map<MemberBelt>(memberBelt);
+
+            var existingCurrentBelt = await _memberBeltRepository.Query().Where(x => x.MemberId == memberBelt.MemberId && x.IsCurrentBelt).FirstOrDefaultAsync();
+            if(existingCurrentBelt != null) {
+                existingCurrentBelt.IsCurrentBelt = false;
+                _memberBeltRepository.UpdateAsync(existingCurrentBelt);
+            }
+
+            await _memberBeltRepository.AddAsync(domain);
+            await _memberBeltRepository.SaveChangesAsync();
+
+            return domain.Id;
+
+        }
+
+        public async Task<IActionResult> DeleteBeltExamForMember(int id)
+        {
+            var memberBelt = await _memberBeltRepository.GetByIdAsync(id);
+            if (memberBelt == null)
+            {
+                throw new Exception("Member belt exam not found");
+            }
+
+            var previousBelt = await _memberBeltRepository.Query()
+                .Where(x => x.MemberId == memberBelt.MemberId && x.Id != memberBelt.Id)
+                .OrderByDescending(x => x.DateReceived)
+                .FirstOrDefaultAsync();
+            if(previousBelt != null && memberBelt.IsCurrentBelt)
+            {
+                previousBelt.IsCurrentBelt = true;
+                _memberBeltRepository.UpdateAsync(previousBelt);    
+            }
+
+                _memberBeltRepository.DeleteAsync(memberBelt);
+            await _memberBeltRepository.SaveChangesAsync();
+            return new OkObjectResult(new ApiResponse<string>
+            {
+                Success = true,
+                Message = "Успешно избришан појас"
+            });
+
         }
     }
 }

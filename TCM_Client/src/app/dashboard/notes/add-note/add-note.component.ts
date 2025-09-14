@@ -41,6 +41,7 @@ export class AddNoteComponent {
     this.addNoteForm = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(30)]],
       content: ['', [Validators.required, Validators.maxLength(50)]],
+      priority: [''],
     });
   }
 
