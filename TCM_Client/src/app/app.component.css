@@ -103,7 +103,7 @@
   }
   
   .content{
-    margin: 1rem;
+     margin-top: 24px !important;
     border: 10px;
     padding: 1rem;
     background-color: #f5f5f5!important;

@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TCM_App.Data;
+using TCM_App.EmailService.Services;
+using TCM_App.EmailService.Services.Interfaces;
 using TCM_App.Models;
 using TCM_App.Repositories;
 using TCM_App.Repositories.Interfaces;
@@ -55,7 +57,18 @@ namespace TCM_App
 
             // Add services to the container.
 
+
+            #region Email
+            builder.Services.Configure<EmailService.GmailSettings>
+                (builder.Configuration.GetSection(EmailService.GmailSettings.GmailSettingsKey));
+
+
+            builder.Services.AddScoped<IEmailService, EmailServiceImpl>();
+            #endregion
+
             builder.Services.AddControllers();
+
+
             #region DbContext
             builder.Services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -97,7 +110,12 @@ namespace TCM_App
             })
                 .AddRoles<AppRole>()
                 .AddRoleManager<RoleManager<AppRole>>()
-                .AddEntityFrameworkStores<DataContext>();
+                .AddEntityFrameworkStores<DataContext>()
+                .AddDefaultTokenProviders();
+
+
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+               options.TokenLifespan = TimeSpan.FromHours(2));
 
 
 

@@ -24,6 +24,21 @@ namespace TCM_App.Controllers
             }
         }
 
+        [HttpGet("members")]
+        public async Task<IActionResult> GetMembersForClub()
+        {
+            try
+            {
+                var members = await _commonService.GetMembersForClub();
+                return Ok(members);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error getting members");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
+
         [HttpGet("number-of-trainings")]
         public async Task<IActionResult> GetNumberOfTrainingsForClub([FromQuery] int year, [FromQuery] int? month)
         {
@@ -35,6 +50,36 @@ namespace TCM_App.Controllers
             catch (Exception e)
             {
                 logger.LogError(e, "Error getting trainings");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
+
+        [HttpGet("club-numbers-info")]
+        public async Task<IActionResult> GetClubNumbersInfo([FromQuery] int year, [FromQuery] int? month)
+        {
+            try
+            {
+                var result = await _commonService.GetClubNumbersInfo(year, month);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error getting club numbers info");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
+
+        [HttpGet("club-trainings-attendance")]
+        public async Task<IActionResult> GetNumberOfAttendedMemberTrainingsForEveryMonth(int clubId, int year, int? month)
+        {
+            try { 
+                clubId = 1; // Replace with actual clubId from authenticated user context
+                var result = await _commonService.GetNumberOfAttendedTrainingsForEveryMonth(clubId, year, month);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error getting club trainings attendance");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
             }
         }

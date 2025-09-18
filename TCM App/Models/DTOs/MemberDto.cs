@@ -62,6 +62,8 @@ namespace TCM_App.Models.DTOs
         public required string LastName { get; set; }
         public required DateTime DateOfBirth { get; set; }
 
+        public string Email { get; set; }
+
         public bool? IsActive { get; set; } = true;
 
         public bool? IsCoach { get; set; }

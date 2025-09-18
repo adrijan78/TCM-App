@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { interval, Subscription } from 'rxjs';
 
@@ -9,7 +9,8 @@ import { interval, Subscription } from 'rxjs';
   styleUrl: './countdown-timer.component.css',
 })
 export class CountdownTimerComponent {
-  targetDate: Date = new Date('September 15, 2025 23:59:59'); // Example target date
+  @Input() targetDate: any;
+  // Example target date
   days: number = 0;
   hours: number = 0;
   minutes: number = 0;
@@ -17,6 +18,7 @@ export class CountdownTimerComponent {
   private countdownSubscription: Subscription | undefined;
 
   ngOnInit() {
+    console.log('Target Date:', this.targetDate);
     this.calculateTimeRemaining();
     this.startCountdown();
   }
@@ -35,7 +37,8 @@ export class CountdownTimerComponent {
 
   calculateTimeRemaining() {
     const now = new Date().getTime();
-    const distance = this.targetDate.getTime() - now;
+    if (!this.targetDate) return;
+    const distance = new Date(this.targetDate).getTime() - now;
 
     if (distance < 0) {
       this.days = 0;

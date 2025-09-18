@@ -1,4 +1,43 @@
 <div class="row mx-1">
+    <div class="col-12">
+        <mat-expansion-panel class="mb-4">
+            <mat-expansion-panel-header>
+                <mat-panel-title>Филтри</mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="row">
+                <mat-form-field appearance="outline" class="w-50  mb-2 ">
+                    <mat-label>Година на тренинзи</mat-label>
+                    <mat-select [(value)]="year" (valueChange)="refetchData()">
+                        @for (y of years; track $index) {
+                        <mat-option [value]="y">{{y}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-50  mb-2 ">
+                    <mat-label>Месец на тренинзи</mat-label>
+                    <mat-select [(value)]="month" (valueChange)="refetchData()">
+
+                        <mat-option [value]="1">Јануари</mat-option>
+                        <mat-option [value]="2">Февруари</mat-option>
+                        <mat-option [value]="3">Март</mat-option>
+                        <mat-option [value]="4">Април</mat-option>
+                        <mat-option [value]="5">Мај</mat-option>
+                        <mat-option [value]="6">Јуни</mat-option>
+                        <mat-option [value]="7">Јули</mat-option>
+                        <mat-option [value]="8">Август</mat-option>
+                        <mat-option [value]="9">Септември</mat-option>
+                        <mat-option [value]="10">Октомври</mat-option>
+                        <mat-option [value]="11">Ноември</mat-option>
+                        <mat-option [value]="12">Декември</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div class="col-12 text-end">
+                    <button mat-raised-button class="btn btn-primary" color="primary" (click)="resetFilters()">Ресетирај
+                        филтри</button>
+                </div>
+            </div>
+        </mat-expansion-panel>
+    </div>
     <div class="col-lg-9 col-md-12 col-sm-12">
         <div class="table-title app-info-title mb-3">
             <div class="row">
@@ -8,20 +47,26 @@
             </div>
         </div>
 
+
+
+        @if(clubNumbersInfo()){
+
         <div class="row desktop-only">
             <div class="col-sm-12 col-md-6 col-lg-4 justify-content-center d-flex">
                 <app-card title="Членови" routePath="members" routerLinkActive="router-link-active"
-                    image="assets/images/members.png" cardValue="10" />
+                    image="assets/images/members.png" [cardValue]="clubNumbersInfo()?.numberOfMembers" />
             </div>
             <div class="col-sm-12 col-md-6 col-lg-4  justify-content-center d-flex">
                 <app-card title="Тренинзи" routePath="trainings" image="assets/images/trainings-number.png"
-                    cardValue="5" />
+                    [cardValue]="clubNumbersInfo()?.numberOfTrainings" />
             </div>
             <div class="col-sm-12 col-md-6 col-lg-4 justify-content-center d-flex ">
-                <app-card title="Присутност" image="assets/images/attendance-percentage.png" cardValue="73%" />
+                <app-card title="Присутност" image="assets/images/attendance-percentage.png"
+                    [cardValue]="clubNumbersInfo()?.attendance?.toFixed(2) + '%'" />
             </div>
 
         </div>
+        }
         <div class="row mobile-only">
             <mat-tab-group>
                 <mat-tab label="Членови">
@@ -55,13 +100,16 @@
                 </div>
             </div>
             <div class="chart-item  w-100 my-3  app-info-card ">
+                @if(barChartData().length > 0){
 
-                <ngx-charts-bar-vertical [scheme]="barChartColorScheme" [results]="barChartData" [gradient]="gradient"
+                <ngx-charts-bar-vertical [scheme]="barChartColorScheme" [results]="barChartData()" [gradient]="gradient"
                     [xAxis]="showXAxis" [yAxis]="showYAxis" [showXAxisLabel]="showXAxisLabel"
                     [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
                     [barPadding]="barChart1Options.barPadding" [roundDomains]="barChart1Options.roundDomains"
                     [legendPosition]="commonChartOptions.legendPosition">
                 </ngx-charts-bar-vertical>
+
+                }
             </div>
 
         </div>
@@ -78,8 +126,11 @@
         </div>
         <div class="row  pb-2">
             <div class="w-100 p-3">
+                @if(trainingsForCalendar()){
 
-                <mat-calendar class="app-info-card" [(selected)]="selected"></mat-calendar>
+                <mat-calendar #calendar [(selected)]="selectedDate" [dateClass]="dateClass"
+                    class="app-info-card"></mat-calendar>
+                }
 
             </div>
 
@@ -95,8 +146,8 @@
             </div>
 
             <div class="row ">
-                <div class="w-100 mt-2">
-                    <app-countdown-timer />
+                <div class="w-100 mt-2" *ngIf="clubNumbersInfo()?.nextTraining">
+                    <app-countdown-timer [targetDate]="clubNumbersInfo()?.nextTraining" />
                 </div>
 
             </div>

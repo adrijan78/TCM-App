@@ -26,10 +26,13 @@ export class AcountService {
 
   setCurrentUser() {
     const memberString = localStorage.getItem('member');
-    if (!memberString) {
-      this.router.navigate(['/login']);
-    } else {
-      this.currentUser.set(JSON.parse(memberString));
+    if (!this.router.url.includes('/reset-password')) {
+      console.log(this.router.url);
+      if (!memberString) {
+        this.router.navigate(['/login']);
+      } else {
+        this.currentUser.set(JSON.parse(memberString));
+      }
     }
   }
 
@@ -48,6 +51,14 @@ export class AcountService {
 
   registerMember(model: any) {
     return this.http.post(this.baseUrl + 'account/register', model);
+  }
+
+  onForgotPasswordClicked(data: any) {
+    return this.http.post(this.baseUrl + 'account/forgot-password', data);
+  }
+
+  onResetPasswordClicked(data: any) {
+    return this.http.post(this.baseUrl + 'account/reset-password', data);
   }
 
   getAppRoles() {

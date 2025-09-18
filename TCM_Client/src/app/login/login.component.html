@@ -1,46 +1,44 @@
 <div class="login-container">
     <mat-card class="login-card">
-        <h2 class="login-title">Login</h2>
+        <h2 class="login-title">Најава</h2>
 
         <form #loginForm="ngForm" (ngSubmit)="login()" novalidate>
 
             <!-- Email Field -->
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Email</mat-label>
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Eмаил</mat-label>
                 <input matInput type="email" name="email" required email [(ngModel)]="model.email" #email="ngModel" />
                 <mat-error *ngIf="email.invalid && email.touched">
-                    <span *ngIf="email.errors?.['required']">Email is required.</span>
-                    <span *ngIf="email.errors?.['email']">Enter a valid email address.</span>
+                    <span *ngIf="email.errors?.['required']">Е-маил адресата е задолжителна.</span>
+                    <span *ngIf="email.errors?.['email']">Внесете валидна е-маил адреса.</span>
                 </mat-error>
             </mat-form-field>
 
             <!-- Password Field -->
-            <mat-form-field appearance="fill" class="full-width">
+            <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Password</mat-label>
                 <input matInput type="password" name="password" required minlength="6"
                     pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$" [(ngModel)]="model.password" #password="ngModel" />
+
                 <mat-error *ngIf="password.invalid && password.touched">
-                    <span *ngIf="password.errors?.['required']">Password is required.</span>
-                    <span *ngIf="password.errors?.['minlength']">Minimum 6 characters required.</span>
+                    <span *ngIf="password.errors?.['required']">Лозинката е задолжителна.</span>
+                    <span *ngIf="password.errors?.['minlength']">Лозинката мора да содржи барем 6 карактери.</span>
                     <span *ngIf="password.errors?.['pattern']">
-                        Password must include an uppercase letter, a number, and a special character.
+                        Лозинката мора да содржи барем едно голема буква, една цифра и еден специјален карактер.
                     </span>
                 </mat-error>
-            </mat-form-field>
 
+            </mat-form-field>
+            <p>Ја заборави лозинката? <a class="active" [routerLink]="['/forgot-password']">Ресетирај ја.</a></p>
             <!-- Submit Button -->
-            <button mat-flat-button color="primary" class="full-width mt-3" [disabled]="loginForm.invalid">
-                <ng-container *ngIf="!isLoading(); else loadingTpl">Login</ng-container>
+            <button color="primary" class="btn btn-primary full-width mt-3" [disabled]="loginForm.invalid">
+                <ng-container *ngIf="!isLoading(); else loadingTpl">Најави се</ng-container>
                 <ng-template #loadingTpl>
                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     <span class="visually-hidden">Loading...</span>
                 </ng-template>
             </button>
 
-            <div class="register-link">
-                Don't have an account?
-                <a routerLink="/register">Register</a>
-            </div>
         </form>
     </mat-card>
 </div>

@@ -21,6 +21,7 @@ import { Pagination, PaginationResult } from '../../../_models/Pagination';
 import { DialogComponent } from '../../../_shared/dialog/dialog/dialog.component';
 import { Dialog } from '@angular/cdk/dialog';
 import { BeltMkName } from '../../../_mappings/beltMapping';
+import { c } from '../../../../../node_modules/@angular/cdk/a11y-module.d-DBHGyKoh';
 
 @Component({
   selector: 'app-member-list',

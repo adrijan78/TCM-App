@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TCM_App.Data;
+using TCM_App.EmailService;
+using TCM_App.EmailService.Services.Interfaces;
 using TCM_App.Helpers;
 using TCM_App.Models.DTOs;
 using TCM_App.Services.Interfaces;
@@ -15,6 +17,7 @@ namespace TCM_App.Controllers
     public class MembersController(
         IMemberService _memberService,
         ILogger<MembersController> logger,
+        IEmailService _emailService,
         IMapper mapper) : BaseController
     {
 
@@ -78,6 +81,14 @@ namespace TCM_App.Controllers
 
 
                 await _memberService.UpdateMember(id, member);
+
+                await _emailService.SendEmailAsync(new SendEmailRequest
+                {
+                    Recipient = member.Email,
+                    Subject = "Промена на податоци",
+                    MessageBody = $"Почитуван/а {member.FirstName} {member.LastName},<br/>Вашите податоци се успешно променети.<br/>Со почит,<br/>Тимот на TCM"
+                });
+
 
                 return Ok(new ApiResponse<string>
                 {

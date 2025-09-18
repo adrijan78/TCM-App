@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using TCM_App.Data;
+using TCM_App.EmailService;
+using TCM_App.EmailService.Services.Interfaces;
 using TCM_App.Models;
 using TCM_App.Models.DTOs;
 using TCM_App.Repositories.Interfaces;
@@ -18,7 +20,8 @@ namespace TCM_App.Controllers
         ITokenService tokenService,
         RoleManager<AppRole> roleManager,
         IRepository<MemberBelt> _memberBeltRepository,
-        IRepository<Photo> _photoRepository
+        IRepository<Photo> _photoRepository,
+        IEmailService _emailService
         ) : BaseController
     {
         [HttpPost("register")]
@@ -187,6 +190,58 @@ namespace TCM_App.Controllers
         }
 
 
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody]ForgotPasswordDto forgotPasswordDto)
+        {
+            var member = await userManager.FindByEmailAsync(forgotPasswordDto.Email);
+            if (member == null)
+            {
+                return NotFound();
+            }
+            var token = await userManager.GeneratePasswordResetTokenAsync(member);
+            var encodedToken = System.Web.HttpUtility.UrlEncode(token);
+            var resetLink = $"{forgotPasswordDto.ClientUri}?email={forgotPasswordDto.Email}&token={encodedToken}";
+            var emailRequest = new SendEmailRequest
+            {
+                Recipient = forgotPasswordDto.Email!,
+                Subject = "Промена на лозинка",
+                MessageBody = $"Можете да ја промените лозинката со кликање <a href='{resetLink}'>овде</a>."
+            };
+            await _emailService.SendEmailAsync(emailRequest);
+            return Ok(new ApiResponse<string>
+            {
+                Success = true,
+                Message = "Линк за ресетирање на лозинката е испратен на вашата емаил адреса"
+            });
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
+        {
+            var member = await userManager.FindByEmailAsync(resetPasswordDto.Email);
+            if (member == null)
+            {
+                return NotFound();
+            }
+            var decodedToken = resetPasswordDto.Token;
+            var result = await userManager.ResetPasswordAsync(member, decodedToken!, resetPasswordDto.Password!);
+            if (!result.Succeeded)
+            {
+                return BadRequest(new ApiResponse<IEnumerable<string>>
+                {
+                    Success = false,
+                    Message = "Грешка при ресетирање на лозинката",
+                    Data = result.Errors.Select(e => e.Description)
+                });
+            }
+            return Ok(new ApiResponse<string>
+            {
+                Success = true,
+                Message = "Лозинката е успешно променета"
+            });
+        }
+
         //[HttpPost("register-member")]
         //public async Task<IActionResult> RegisterMember( MemberRegisterDto registerDto)
         //{
@@ -225,17 +280,17 @@ namespace TCM_App.Controllers
         //        {
         //            Success = true,
         //            Message = "Member registered successfully",
-                    
+
         //        });
 
         //    }
         //    catch (Exception e)
         //    {
-                
+
         //        throw new Exception(e.ToString());
         //    }
         //}
-            
+
 
         private async Task<bool> MemberExists(string email)
         {

@@ -12,6 +12,7 @@ import { map } from 'rxjs';
 export class MemberService {
   private http = inject(HttpClient);
   baseUrl = environment.apiUrl;
+  beltChanged = signal<number>(0);
 
   getMembers(
     pageNumber?: number,
@@ -74,6 +75,10 @@ export class MemberService {
       this.baseUrl + 'members/edit-member/' + memberId,
       member
     );
+  }
+
+  reloadMemberDataAfterBeltChange(beltId: number) {
+    this.beltChanged.set(beltId);
   }
 
   getMemberBeltExams(id: number) {

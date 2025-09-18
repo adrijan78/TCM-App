@@ -11,7 +11,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (authService.currentUser()) {
     return true;
   } else {
-    toast.error("You can't access this page");
+    toast.error('Немате пристап до оваа страна');
     return false;
   }
 };

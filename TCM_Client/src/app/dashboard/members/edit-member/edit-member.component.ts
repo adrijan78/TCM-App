@@ -73,6 +73,10 @@ export class EditMemberComponent implements OnInit {
         this.selectedMember()?.lastName,
         [Validators.required, Validators.maxLength(50)],
       ],
+      email: [
+        this.selectedMember()?.email,
+        [Validators.required, Validators.email],
+      ],
       dateOfBirth: [this.selectedMember()?.dateOfBirth, Validators.required],
       height: [this.selectedMember()?.height, Validators.required],
       weight: [this.selectedMember()?.weight, Validators.required],
@@ -110,6 +114,7 @@ export class EditMemberComponent implements OnInit {
           role: member.rolesIds,
           photo: member.photoId,
           belt: member.currentBelt,
+          email: member.email,
         });
       },
       error: () => {},
@@ -169,6 +174,7 @@ export class EditMemberComponent implements OnInit {
     this.formData.append('weight', this.editForm.value.weight);
     this.formData.append('newPhoto', this.editForm.value.photo);
     this.formData.append('currentBeltId', this.editForm.value.belt.id);
+    this.formData.append('email', this.editForm.value.email);
     if (typeof this.editForm.value.dateOfBirth == 'string') {
       const iso = new Date(this.editForm.value.dateOfBirth).toISOString();
       this.formData.append('dateOfBirth', iso);

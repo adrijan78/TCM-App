@@ -4,8 +4,23 @@
     </button>
     <span routerLink="/club-details" style="cursor: pointer;">TCM</span>
     <span class="spacer"></span>
+    @if(members.length>0){
+    <mat-form-field appearance="fill" class="w-50 mt-4 mb-1">
+        <input type="text" [formControl]="memberCtrl" matInput placeholder="Внеси име и презиме" class="searchInput"
+            [matAutocomplete]="auto" />
 
+        <mat-autocomplete [displayWith]="displayMember" #auto="matAutocomplete"
+            (optionSelected)="onSelect($event.option.value)">
+            <mat-option *ngFor="let member of filteredMembers()" [value]="member" class="mb-2">
+                <img [src]="member.profilePicture" style="width: 50px; height: 50px; border-radius: 50%;"
+                    alt="{{ member.name }}" class="profile-img" />
+                {{ member.name }} <span class="text-muted"></span>
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+    }
 
+    <span class="spacer"></span>
 
     <button (click)="logout()" mat-icon-button aria-label="Logout">
         <mat-icon>logout</mat-icon>
@@ -17,7 +32,8 @@
         <!-- Profile Section -->
         @if(loggedMember()){
 
-        <div class="profile-container" (click)="closeSidenav()" [routerLink]="['members/',loggedMember()?.id]">
+        <div class="profile-container" (click)="closeSidenav()"
+            [routerLink]="[`members/${loggedMember()?.id}/attendance-performance`]">
             <div class="profile-img-container">
                 <!-- <img src="https://sportsmatik.com/uploads/users-media/profile-pic/img-20200729-221005-185_1634550787.jpg"
                          alt="Profile" class="profile-img"> -->

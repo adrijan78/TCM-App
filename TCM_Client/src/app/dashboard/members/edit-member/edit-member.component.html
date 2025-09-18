@@ -4,7 +4,7 @@
     <form [formGroup]="editForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
         <div class="row justify-content-center">
             <div class="col-4 d-flex justify-content-center pb-5">
-                <input #fileInput type="file" accept="image/*"  (change)="onFileSelected($event)" hidden />
+                <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
 
                 <!-- Trigger file input with Material icon button -->
                 <button type="button" style="background-color: rgb(219, 220, 220)" mat-icon-button color="success"
@@ -36,24 +36,26 @@
             </mat-form-field>
         </div>
 
-
         <div class="form-group">
+            <mat-form-field appearance="outline">
+                <mat-label>Емаил</mat-label>
+                <input matInput type="email" formControlName="email" required />
+            </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>Висина</mat-label>
                 <input matInput type="number" [value]="selectedMember()?.height" min="0" max="250"
                     formControlName="height" required />
             </mat-form-field>
+        </div>
+
+        <div class="form-group">
+
 
             <mat-form-field appearance="outline">
                 <mat-label>Тежина</mat-label>
                 <input matInput [value]="selectedMember()?.weight" type="text" formControlName="weight" required />
             </mat-form-field>
 
-
-        </div>
-
-
-        <div class="form-group">
             <mat-form-field appearance="outline">
                 <mat-label>Датум на раѓање</mat-label>
                 <input matInput [matDatepicker]="picker" [value]="selectedMember()?.dateOfBirth"
@@ -65,10 +67,15 @@
 
             </mat-form-field>
 
+
+        </div>
+
+
+        <div class="form-group">
             <mat-form-field>
                 <mat-label>Улога</mat-label>
-                <mat-select formControlName="role" multiple (selectionChange)="OnRoleSelect($event)" [value]="selectedMember()?.memberRoles"
-                    [compareWith]="compareRoles">
+                <mat-select formControlName="role" multiple (selectionChange)="OnRoleSelect($event)"
+                    [value]="selectedMember()?.memberRoles" [compareWith]="compareRoles">
 
                     <mat-option *ngFor="let role of roles()" [value]="role">{{role.name}}</mat-option>
 
@@ -76,23 +83,23 @@
 
                 </mat-select>
             </mat-form-field>
+            <mat-form-field>
+                <mat-label>Појас</mat-label>
+                <mat-select formControlName="belt" [compareWith]="compareBelts">
+                    @for (belt of clubBelts(); track belt.id) {
+                    <mat-option [value]="belt">{{belt.name}}</mat-option>
+                    }
 
-            <div class="form-group w-100">
-                            <mat-form-field>
-                 <mat-label>Појас</mat-label>
-                            <mat-select formControlName="belt" [compareWith]="compareBelts">
-                                @for (belt of clubBelts(); track belt.id) {
-                                   <mat-option [value]="belt">{{belt.name}}</mat-option> 
-                                }
-                             
 
-                            </mat-select>
+                </mat-select>
             </mat-form-field>
-            </div>
+
+            <!-- <div class="form-group w-100">
+                
+            </div> -->
 
             <div class="w-100 d-flex justify-content-end">
-                <button mat-raised-button color="primary" (click)="onSubmit()" class="submit-btn" type="button"
-                >
+                <button mat-raised-button color="primary" (click)="onSubmit()" class="submit-btn" type="button">
                     Промени податоци
                 </button>
 

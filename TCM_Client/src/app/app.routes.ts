@@ -17,9 +17,18 @@ import { ClubDetailsComponent } from './dashboard/club-details/club-details.comp
 import { EditMemberComponent } from './dashboard/members/edit-member/edit-member.component';
 import { NotesAndBeltsComponent } from './dashboard/members/member-detail/notes-and-belts/notes-and-belts.component';
 import { MembershipFeeComponent } from './dashboard/members/member-detail/membership-fee/membership-fee.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { AttendancePerformanceComponent } from './dashboard/members/member-detail/attendance-performance/attendance-performance.component';
 
 export const routes: Routes = [
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent,
+  },
   { path: 'login', component: LoginComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+
   {
     path: '',
     component: DashboardComponent,
@@ -41,6 +50,10 @@ export const routes: Routes = [
         children: [
           { path: 'notes-and-belts', component: NotesAndBeltsComponent },
           { path: 'membership-fee', component: MembershipFeeComponent },
+          {
+            path: 'attendance-performance',
+            component: AttendancePerformanceComponent,
+          },
         ],
       },
       { path: 'notes:id', component: NoteDetailComponent },

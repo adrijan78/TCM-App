@@ -13,7 +13,7 @@
 
   
   .content {
-    margin-top: 64px; /* Adjust based on toolbar height (usually 64px for desktop) */
+    margin-top: 24px !important; /* Adjust based on toolbar height (usually 64px for desktop) */
   }
   
   
@@ -129,7 +129,7 @@
   }
   
   .content{
-    margin: 1rem;
+    margin: 0rem;
     background-color: #f5f5f5!important;
     border: 10px;
     padding: 1rem;
@@ -144,9 +144,22 @@
     padding: 0rem;
     background-color: #f5f5f5!important;
   }
+  /* Wrap the whole field in a white background */
+.search-wrapper {
+  background-color: white;
+  border-radius: 10px;
+  padding: 4px;  /* optional padding to avoid label clipping */
 }
+
+
+
+
+}
+
+
+
   
-  mat-sidenav-content{
-    background-color: #f3f3f3;
-  }
+
+
+
   

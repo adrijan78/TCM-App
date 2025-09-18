@@ -93,7 +93,7 @@
                     <tr *ngFor="let member of members; let i = index">
 
                         <td>{{ i + 1 }}</td>
-                        <td routerLink="/members/{{member.id}}">
+                        <td routerLink="/members/{{member.id}}/attendance-performance">
                             @if (member.profilePicture !=null) {
 
                             <img [src]="member?.profilePicture?.url" alt="Profile" class="avatar">
@@ -105,10 +105,11 @@
                             }
 
                         </td>
-                        <td routerLink="/members/{{member.id}}">{{ member.startedOn | date: 'dd/MM/yyyy' }}</td>
-                        <td routerLink="/members/{{member.id}}">{{ member.email }}</td>
-                        <td routerLink="/members/{{member.id}}">{{ member.age }}</td>
-                        <td routerLink="/members/{{member.id}}" class="text-start">
+                        <td routerLink="/members/{{member.id}}/attendance-performance">{{ member.startedOn | date:
+                            'dd/MM/yyyy' }}</td>
+                        <td routerLink="/members/{{member.id}}/attendance-performance">{{ member.email }}</td>
+                        <td routerLink="/members/{{member.id}}/attendance-performance">{{ member.age }}</td>
+                        <td routerLink="/members/{{member.id}}/attendance-performance" class="text-start">
                             @if(member.isCoach){
                             <i class="material-icons text-success" title="Тренер">check</i>
                             }

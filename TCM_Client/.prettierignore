@@ -1,0 +1,12 @@
+# Ignore node_modules
+node_modules
+
+# Ignore build outputs
+dist
+.build
+
+# Ignore Angular cache
+.angular/cache
+
+# Ignore Vite cache
+node_modules/.vite

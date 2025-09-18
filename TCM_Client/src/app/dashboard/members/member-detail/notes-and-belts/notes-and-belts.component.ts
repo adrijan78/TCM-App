@@ -1,5 +1,5 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute } from '@angular/router';
 import { AddNote } from '../../../../_models/_enums/AddNote';
@@ -96,6 +96,7 @@ export class NotesAndBeltsComponent implements OnInit {
           next: (res) => {
             this.toast.success('Успешно додадовте полагање за појас');
             this.getMemberBeltExams();
+            this.memberService.reloadMemberDataAfterBeltChange(result.beltId);
           },
         });
       } else {
@@ -156,6 +157,7 @@ export class NotesAndBeltsComponent implements OnInit {
           next: (res: any) => {
             this.toast.success(res.message);
             this.getMemberBeltExams();
+            this.memberService.reloadMemberDataAfterBeltChange(id);
           },
           error: (err) => {
             console.log(err);

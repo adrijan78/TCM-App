@@ -29,6 +29,12 @@ export interface LoginMember {
   profilePicture: string;
 }
 
+export interface DropDownMember {
+  id: number;
+  name: string;
+  profilePicture: string;
+}
+
 export interface EditMember {
   id: number;
   firstName: string;
