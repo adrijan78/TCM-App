@@ -27,6 +27,7 @@ export interface LoginMember {
   email: string;
   token: string;
   profilePicture: string;
+  roles: string[];
 }
 
 export interface DropDownMember {

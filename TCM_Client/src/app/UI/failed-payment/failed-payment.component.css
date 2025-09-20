@@ -1,0 +1,94 @@
+
+
+::ng-deep .content{
+   display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+ 
+  padding: 20px; 
+}
+
+.success-card {
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  padding: 40px 30px;
+  border-radius: 16px;
+  border:2px solid black;
+  box-shadow: 0 60px 60px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.icon-wrapper {
+  margin-bottom: 20px;
+}
+
+.success-icon {
+  font-size: 80px;
+  color: #4caf50;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.message {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.actions button {
+  padding: 12px 25px;
+  font-weight: 500;
+}
+
+.fail-mark {
+  width: 60px;
+  height: 60px;
+  display: block;
+  margin: 0 auto;
+  overflow: visible; /* prevent clipping */
+}
+
+.fail-circle {
+  stroke: #f44336; /* red */
+  stroke-width: 4;
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-linecap: round;
+  animation: dash-circle 0.6s forwards;
+}
+
+.fail-line1, .fail-line2 {
+  stroke: #f44336;
+  stroke-width: 4;
+  stroke-dasharray: 28;
+  stroke-dashoffset: 28;
+  stroke-linecap: round;
+  animation: dash-line 0.3s 0.6s forwards;
+}
+
+.fail-line2 {
+  animation-delay: 0.9s; /* animate second line after first */
+}
+
+@keyframes dash-circle {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes dash-line {
+  to { stroke-dashoffset: 0; }
+}

@@ -16,8 +16,20 @@ namespace TCM_App.Services
           var training = mapper.Map<Training>(trainingDto);
           foreach (var memberT in trainingDto.MembersToAttend)
           {
+
               if(memberT != null) {
                     var existingMember = await _memberRepository.GetMemberById(memberT.MemberId);
+
+                    if (existingMember == null)
+                    {
+                        throw new Exception($"Членот не е пронајден");
+                    }
+
+                    if(existingMember.StartedOn > trainingDto.Date)
+                    {
+                        throw new Exception($"Членот {existingMember.FirstName} {existingMember.LastName} не може да присуствува на тренингот бидејќи е регистриран на {existingMember.StartedOn.ToUniversalTime().ToShortDateString()}");
+                    }
+
                     var memberTraining = new MemberTraining
                     {
                         MemberId = memberT.MemberId,

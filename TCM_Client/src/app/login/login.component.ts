@@ -40,6 +40,13 @@ export class LoginComponent {
       .subscribe({
         next: (response) => {
           console.log(response);
+
+          this.accountService.getStripePriceId().subscribe({
+            next: (res: any) => {
+              localStorage.setItem('priceId', res.priceId);
+            },
+          });
+
           this.accountService.isLoggedIn.set(true);
           this.router.navigate(['/club-details']);
         },

@@ -8,15 +8,20 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
+using Stripe;
+using Stripe.TestHelpers;
 using System.Text;
 using TCM_App.Data;
 using TCM_App.EmailService.Services;
 using TCM_App.EmailService.Services.Interfaces;
 using TCM_App.Models;
+using TCM_App.Models.Stripe;
 using TCM_App.Repositories;
 using TCM_App.Repositories.Interfaces;
 using TCM_App.Services;
 using TCM_App.Services.Interfaces;
+using TCM_App.Services.StripeServices;
+using TokenService = TCM_App.Services.TokenService;
 
 namespace TCM_App
 {
@@ -32,7 +37,7 @@ namespace TCM_App
             // Read the credentials path from appsettings.json
             var keyPath = config["FIREBASE_CREDENTIALS:CredentialsPath"];
 
-            if (string.IsNullOrWhiteSpace(keyPath) || !File.Exists(keyPath))
+            if (string.IsNullOrWhiteSpace(keyPath) || !System.IO.File.Exists(keyPath))
                 throw new Exception("Firebase credentials path is invalid or file not found.");
 
             // Create the GoogleCredential once
@@ -96,7 +101,7 @@ namespace TCM_App
             builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
             builder.Services.AddScoped<INoteRepository, NoteRepository>();
             #endregion
-
+            
             #region Authentication
 
 
@@ -142,6 +147,15 @@ namespace TCM_App
                .AddPolicy("RequireCoachRole", policy => policy.RequireRole("Coach"))
                .AddPolicy("RequireMemberAndCoachRole", policy => policy.RequireRole("Member", "Coach"));
 
+
+            #endregion
+
+            #region Stripe
+
+            builder.Services.Configure<StripeModel>(builder.Configuration.GetSection("Stripe"));
+            builder.Services.AddScoped<Stripe.CustomerService>();
+            builder.Services.AddScoped<ProductService>();
+            builder.Services.AddScoped<IStripeService,StripeService>();
 
             #endregion
 

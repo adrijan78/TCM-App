@@ -65,6 +65,17 @@ export class AcountService {
     return this.http.get(this.baseUrl + 'roles');
   }
 
+  getStripePriceId() {
+    return this.http.get(this.baseUrl + 'stripe/get-all-products');
+  }
+
+  payMembership(priceId: string) {
+    const obj = {
+      priceId: priceId,
+    };
+    return this.http.post(this.baseUrl + 'stripe/pay', obj);
+  }
+
   logout() {
     localStorage.removeItem('member');
     this.currentUser.set(null);

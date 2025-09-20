@@ -145,7 +145,10 @@ namespace TCM_App.Controllers
             {
                 
                 _logger.LogError(ex, "Cannot create training");
-                throw new Exception("Cannot create training", ex);
+                return Problem(
+                        title: ex.Message,
+                        statusCode: StatusCodes.Status500InternalServerError
+                    );
             }
         }
 

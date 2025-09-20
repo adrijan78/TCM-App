@@ -208,13 +208,26 @@ export class AttendancePerformanceComponent implements OnInit {
     this.getMemberTrainingData();
   }
 
+  resetData() {
+    this.attendancePercentage.set(0);
+    this.memberTotalNumOfTrainings.set(0);
+    this.clubTotalNumOfTrainings.set(0);
+  }
+
   getClubNumberOfTrainings() {
-    this.sharedService.getClubNumberOfTrainings(this.year, null).subscribe({
-      next: (res: any) => {
-        this.clubTotalNumOfTrainings.set(res);
-        this.getTotalNumberOfTrainings();
-      },
-    });
+    this.resetData();
+    this.memberService
+      .getNumberOfTrainingsForMember(
+        this.year,
+        this.memberService.memberStartedOn!.toISOString(),
+        null
+      )
+      .subscribe({
+        next: (res: any) => {
+          this.clubTotalNumOfTrainings.set(res);
+          this.getTotalNumberOfTrainings();
+        },
+      });
   }
 
   countMemberAttendanceByMonth() {

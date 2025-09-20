@@ -146,9 +146,16 @@
             </div>
 
             <div class="row ">
-                <div class="w-100 mt-2" *ngIf="clubNumbersInfo()?.nextTraining">
+                @if(!clubNumbersInfo()?.nextTraining){
+                <div class="w-100 mt-2 p-4 app-info-card">
+                    <h4>Нема нареден тренинг</h4>
+                </div>
+                }@else {
+                <div class="w-100 mt-2 ">
                     <app-countdown-timer [targetDate]="clubNumbersInfo()?.nextTraining" />
                 </div>
+
+                }
 
             </div>
 

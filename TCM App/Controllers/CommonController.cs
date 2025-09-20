@@ -54,6 +54,24 @@ namespace TCM_App.Controllers
             }
         }
 
+
+        [HttpGet("number-of-trainings-for-member")]
+        public async Task<IActionResult> GetNumberOfTrainingsForMember([FromQuery] int year,[FromQuery] DateTime dateStarted, [FromQuery] int? month)
+        {
+            try
+            {
+                var trainingsNumber = await _commonService.GetNumberOfTrainingsForMember(year, month,dateStarted);
+                return Ok(trainingsNumber);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error getting trainings");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
+
+
+
         [HttpGet("club-numbers-info")]
         public async Task<IActionResult> GetClubNumbersInfo([FromQuery] int year, [FromQuery] int? month)
         {

@@ -20,8 +20,9 @@ namespace TCM_App.Repositories
 
         public async Task<PagedList<MemberTrainingDto>> GetMemberAttendanceAndPerformance(int memberId, UserParams userParams)
         {
-            var query =  _context.Attendaces
-                .Where(a => a.MemberId == memberId && userParams.Year == a.Date.Year && a.Status==MemberTrainingStatusEnum.Attended)
+            var query =  _context.Attendaces.Include(a=>a.Training)
+                .Where(a => a.MemberId == memberId && userParams.Year == a.Date.Year && a.Status==MemberTrainingStatusEnum.Attended
+                && a.Training.Status == (int)TrainingStatusesEnum.Finished)
                 .OrderByDescending(x=>x.Date)
                 .AsQueryable();
 

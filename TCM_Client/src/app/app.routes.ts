@@ -20,6 +20,8 @@ import { MembershipFeeComponent } from './dashboard/members/member-detail/member
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { AttendancePerformanceComponent } from './dashboard/members/member-detail/attendance-performance/attendance-performance.component';
+import { SuccessfullPaymentComponent } from './UI/successfull-payment/successfull-payment.component';
+import { FailedPaymentComponent } from './UI/failed-payment/failed-payment.component';
 
 export const routes: Routes = [
   {
@@ -57,6 +59,8 @@ export const routes: Routes = [
         ],
       },
       { path: 'notes:id', component: NoteDetailComponent },
+      { path: 'successfull-payment', component: SuccessfullPaymentComponent },
+      { path: 'failed-payment', component: FailedPaymentComponent },
     ],
   },
   { path: '**', component: NotFoundComponent },

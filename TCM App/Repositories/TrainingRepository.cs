@@ -25,6 +25,7 @@ namespace TCM_App.Repositories
         public async Task<Dictionary<int, int>> GetNumberOfAttendedMemberTrainingsForEveryMonth(int clubId, int year,int memberId)
         {
             var numOfTrainingsInMonths = await _context.Trainings.Include(t=>t.MemberTrainings).Where(x => x.ClubId == clubId && x.Date.Year == year
+            && x.Status == (int)TrainingStatusesEnum.Finished
             && x.MemberTrainings.Any(m=>m.MemberId==memberId && m.Status == MemberTrainingStatusEnum.Attended)).GroupBy(x => x.Date.Month)
                .Select(x => new { Month = x.Key, Total = x.Count() }).ToDictionaryAsync(x => x.Month, x => x.Total);
 
@@ -127,6 +128,7 @@ namespace TCM_App.Repositories
 
             if (existingMemberTrainings != null)
             {
+
                 if (trainingDto.Status == TrainingStatusesEnum.Finished)
                 {
                     var flag = existingMemberTrainings.Any(x=>x.Status == MemberTrainingStatusEnum.Pending);
@@ -161,6 +163,18 @@ namespace TCM_App.Repositories
 
                     if (existingMemberTraining == null)
                 {
+                    var existingMember = await _context.Members.FindAsync(memberTraining.MemberId);
+
+                    if (existingMember == null)
+                    {
+                        throw new Exception($"Членот не е пронајден");
+                    }
+
+                    if (existingMember.StartedOn > trainingDto.Date)
+                    {
+                        throw new Exception($"Членот {existingMember.FirstName} {existingMember.LastName} не може да присуствува на тренингот бидејќи е регистриран на {existingMember.StartedOn.ToShortDateString()}");
+                    }
+
                     // Add new member training
                     var newMemberTraining = new MemberTraining
                     {

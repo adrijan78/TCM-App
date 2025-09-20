@@ -52,7 +52,7 @@ namespace TCM_App.Services
                 allTrainings = await _trainingRepository.Query().Where(t => t.Date.Year == year && t.Date.Month == month )
                     .ProjectTo<TrainingDetailsDto>(mapper.ConfigurationProvider).ToListAsync();
                 
-                trainings = allTrainings.Where(t=> t.Status == TrainingStatusesEnum.Finished.ToString()).ToList();
+                trainings = allTrainings.Where(t=> t.Status == TrainingStatusesEnum.Finished.GetDescription()).ToList();
 
                 clubNumbersInfoDto.NumberOfMembers = clubNumbersInfoDto.NumberOfMembers == 0 ? 0 : await _memberRepository.Query()
                     .Where(x => x.StartedOn.Year == year && x.StartedOn.Month <= month.Value)
@@ -117,5 +117,21 @@ namespace TCM_App.Services
             }
 
         }
+
+        public async Task<int> GetNumberOfTrainingsForMember(int year, int? month,DateTime memberStartInClubDate) 
+        {
+            if (month.HasValue)
+            {
+                return await _trainingRepository.Query().CountAsync(t => t.Date.Year == year && t.Date.Month == month.Value && t.Date>=memberStartInClubDate && t.Status == (int)TrainingStatusesEnum.Finished);
+            }
+            else
+            {
+                return await _trainingRepository.Query().CountAsync(t => t.Date.Year == year && t.Date >= memberStartInClubDate && t.Status == (int)TrainingStatusesEnum.Finished);
+
+            }
+
+        }
+
+
     }
 }

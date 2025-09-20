@@ -1,0 +1,36 @@
+<div class="success-page">
+    <mat-card class="success-card">
+        <div class="fail-wrapper">
+            <svg class="fail-mark" viewBox="0 0 52 52">
+                <circle class="fail-circle" cx="26" cy="26" r="25" fill="none" />
+                <line class="fail-line1" x1="16" y1="16" x2="36" y2="36" />
+                <line class="fail-line2" x1="36" y1="16" x2="16" y2="36" />
+            </svg>
+        </div>
+
+
+
+
+        <h2 class="title text-danger">Неуспешна трансакција!</h2>
+        <p class="message">
+            Вашата трансакција не е успешна. Ве молиме обидете се повторно или контактирајте ја вашата банка.
+        </p>
+
+        <div class="actions">
+            @if(roles.includes('Coach')){
+            <button mat-raised-button color="primary" routerLink="/club-details">
+                Врати се на почетна
+            </button>
+            }
+            @else
+            {
+            <button mat-raised-button color="primary"
+                [routerLink]="['/members', currentUser?.id,'attendance-performance']">
+                Врати се на почетна
+            </button>
+            }
+
+
+        </div>
+    </mat-card>
+</div>

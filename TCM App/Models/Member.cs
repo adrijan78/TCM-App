@@ -30,6 +30,8 @@ namespace TCM_App.Models
 
         public List<AppMemberRole> MemberRoles { get; set; } = [];
 
+        public string? StripeCustomerId { get; set; } 
+
         //public int GetAge()
         //{
         //    return CalculateAgeHelper.CalculateAge(DateOfBirth);

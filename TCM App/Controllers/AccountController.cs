@@ -12,6 +12,7 @@ using TCM_App.Models;
 using TCM_App.Models.DTOs;
 using TCM_App.Repositories.Interfaces;
 using TCM_App.Services.Interfaces;
+using TCM_App.Services.StripeServices;
 
 namespace TCM_App.Controllers
 {
@@ -21,7 +22,8 @@ namespace TCM_App.Controllers
         RoleManager<AppRole> roleManager,
         IRepository<MemberBelt> _memberBeltRepository,
         IRepository<Photo> _photoRepository,
-        IEmailService _emailService
+        IEmailService _emailService,
+        IStripeService _stripeService
         ) : BaseController
     {
         [HttpPost("register")]
@@ -29,7 +31,10 @@ namespace TCM_App.Controllers
         {
             if (await MemberExists(registerDto.Email))
             {
-                return BadRequest("User already exists");
+                return Problem(
+                        title: "Членот веќе постои",
+                        statusCode: StatusCodes.Status400BadRequest
+                    );
             }
 
 
@@ -41,11 +46,10 @@ namespace TCM_App.Controllers
 
             if (!result.Succeeded)
             {
-                return BadRequest(new ApiResponse<string>
-                {
-                    Success = false,
-                    Message = "Failed to register member"
-                });
+                return Problem(
+                        title: "Настана грешка. Членот не беше додаден",
+                        statusCode: StatusCodes.Status400BadRequest
+                    );
             }
             else
             {
@@ -59,20 +63,18 @@ namespace TCM_App.Controllers
                             var roleResult = await userManager.AddToRoleAsync(member, role.Name!);
                             if (!roleResult.Succeeded)
                             {
-                                return BadRequest(new ApiResponse<string>
-                                {
-                                    Success = false,
-                                    Message = "Failed to assign role to member"
-                                });
+                                return Problem(
+                        title: "Неуспешно додавање на улога",
+                        statusCode: StatusCodes.Status400BadRequest
+                    );
                             }
                         }
                         else
                         {
-                            return NotFound(new ApiResponse<string>
-                            {
-                                Success = false,
-                                Message = $"Role with ID {roleId} not found"
-                            });
+                            return Problem(
+                        title: "Улогата не е пронајдена",
+                        statusCode: StatusCodes.Status404NotFound
+                    );
                         }
 
                     }
@@ -94,6 +96,16 @@ namespace TCM_App.Controllers
                 await _memberBeltRepository.AddAsync(memberBelt);
 
                 await _memberBeltRepository.SaveChangesAsync();
+
+                var customer=await _stripeService.CreateCustomer(new Models.Stripe.StripeCustomer
+                {
+                    Email = member.Email,
+                    Name = $"{member.FirstName} {member.LastName}"
+                });
+
+                member.StripeCustomerId = customer.Id.ToString();
+                await userManager.UpdateAsync(member);
+
 
 
 

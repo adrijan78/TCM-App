@@ -187,7 +187,11 @@ export class EditMemberComponent implements OnInit {
       .editMember(this.selectedMember()?.id, this.formData)
       .subscribe({
         next: (res: any) => {
-          this.router.navigate(['members', this.id()]);
+          this.router.navigate([
+            'members',
+            this.id(),
+            'attendance-performance',
+          ]);
           console.log('Response', res);
         },
       });

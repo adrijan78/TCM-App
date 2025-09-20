@@ -20,6 +20,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { SharedService } from '../../../_services/shared.service';
+import { AcountService } from '../../../_services/account/acount.service';
 
 @Component({
   selector: 'app-member-detail',
@@ -41,6 +42,7 @@ import { SharedService } from '../../../_services/shared.service';
   styleUrls: ['./member-detail.component.css'],
 })
 export class MemberDetailComponent implements OnInit {
+  acountService = inject(AcountService);
   memberService = inject(MemberService);
   trainingService = inject(TrainingService);
   toast = inject(ToastrService);
@@ -77,9 +79,25 @@ export class MemberDetailComponent implements OnInit {
     this.memberService.getMember(this.id).subscribe({
       next: (res) => {
         this.member.set(res);
+        this.memberService.memberStartedOn = new Date(res.startedOn);
       },
       error: (err) => {
         console.log('Error: ', err);
+      },
+    });
+  }
+
+  payMembershipFee() {
+    let priceId = localStorage.getItem('priceId');
+    if (!priceId) {
+      this.toast.error(
+        'Моментално не можете да платите членарина. Ве молиме повторно најавете се и пробајте.'
+      );
+      return;
+    }
+    this.acountService.payMembership(priceId).subscribe({
+      next: (res: any) => {
+        window.location.href = res.data;
       },
     });
   }

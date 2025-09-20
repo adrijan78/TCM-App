@@ -74,7 +74,6 @@ export class NoteListComponent implements OnInit {
         next: (notes: any) => {
           this.notes.set(notes.body as Note[] | null);
           this.clubMembers = this.sharedService.clubMembers;
-          debugger;
           let pagination: Pagination = JSON.parse(
             notes.headers.get('Pagination')!
           );

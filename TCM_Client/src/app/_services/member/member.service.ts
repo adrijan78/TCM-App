@@ -13,6 +13,7 @@ export class MemberService {
   private http = inject(HttpClient);
   baseUrl = environment.apiUrl;
   beltChanged = signal<number>(0);
+  memberStartedOn: Date | null = null;
 
   getMembers(
     pageNumber?: number,
@@ -74,6 +75,23 @@ export class MemberService {
     return this.http.put(
       this.baseUrl + 'members/edit-member/' + memberId,
       member
+    );
+  }
+
+  getNumberOfTrainingsForMember(
+    year: number,
+    dateStarted: string,
+    month?: number | null
+  ) {
+    let params = new HttpParams();
+    params = params.append('year', year);
+    params = params.append('dateStarted', dateStarted);
+    if (month) {
+      params = params.append('month', month);
+    }
+    return this.http.get<number>(
+      this.baseUrl + 'common/number-of-trainings-for-member',
+      { params }
     );
   }
 
