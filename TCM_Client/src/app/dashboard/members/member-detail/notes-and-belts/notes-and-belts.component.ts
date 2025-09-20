@@ -51,15 +51,13 @@ export class NotesAndBeltsComponent implements OnInit {
   }
 
   getNotesForMember() {
-    this.noteService
-      .getNotesForMember(new Date().toDateString(), 0, +this.id(), null)
-      .subscribe({
-        next: (res: Note[]) => {
-          this.notesForMember.set(res);
-        },
-        error: () => {},
-        complete: () => {},
-      });
+    this.noteService.getNotesForMember(0, +this.id(), null).subscribe({
+      next: (res: Note[]) => {
+        this.notesForMember.set(res);
+      },
+      error: () => {},
+      complete: () => {},
+    });
   }
 
   getFilteredNotes() {

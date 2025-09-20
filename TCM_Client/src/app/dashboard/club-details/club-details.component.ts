@@ -1,4 +1,12 @@
-import { Component, inject, model, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  model,
+  OnInit,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import {
   LegendPosition,
@@ -9,6 +17,7 @@ import { CardComponent } from '../../_shared/card/card/card.component';
 import { NoteComponent } from '../notes/note/note.component';
 import { MatCardModule } from '@angular/material/card';
 import {
+  MatCalendar,
   MatCalendarCellClassFunction,
   MatDatepickerModule,
 } from '@angular/material/datepicker';
@@ -31,7 +40,6 @@ import { TrainingService } from '../../_services/training/training.service';
     MatTabsModule,
     NgxChartsModule,
     CardComponent,
-    NoteComponent,
     MatCardModule,
     MatDatepickerModule,
     CountdownTimerComponent,
@@ -55,6 +63,8 @@ export class ClubDetailsComponent implements OnInit {
   trainingsForCalendar = signal<Training[] | null>(null);
   displayedMonth: string = new Date().getMonth().toString();
   nextTraining: Date | undefined = undefined;
+  calendar = viewChild(MatCalendar<Date>);
+  initialPull = signal<boolean>(true);
 
   barChartColorScheme = {
     name: 'blueGradientScheme',
@@ -84,6 +94,21 @@ export class ClubDetailsComponent implements OnInit {
   showYAxisLabel = false; // Image doesn't show axis labels
   xAxisLabel = ''; // Not used if showXAxisLabel is false
   yAxisLabel = ''; // Not used if showYAxisLabel is false
+
+  constructor() {
+    effect(() => {
+      const cal = this.calendar(); // unwrap the signal
+      if (cal) {
+        cal.stateChanges.subscribe(() => {
+          var tmp = cal.activeDate.getMonth().toString();
+          if (tmp != this.displayedMonth) {
+            this.displayedMonth = tmp;
+            this.getTrainingsForMonth(+this.displayedMonth);
+          }
+        });
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.getClubNumbersInfo();
@@ -129,6 +154,7 @@ export class ClubDetailsComponent implements OnInit {
     // Only apply custom classes for the 'month' view
     if (view === 'month') {
       let hasTraining = false;
+      let isFinished = false;
       // this.trainings()?.some(
       //   (training) => {
       //     new Date(training.date).toDateString() == date.toDateString()
@@ -137,29 +163,33 @@ export class ClubDetailsComponent implements OnInit {
       for (let training of this.trainingsForCalendar()!) {
         if (new Date(training.date).toDateString() == date.toDateString()) {
           hasTraining = true;
+          isFinished = training.status == 'Завршен';
           break;
         }
       }
-      return hasTraining ? 'has-training' : '';
+      return hasTraining
+        ? isFinished
+          ? 'has-finished-training'
+          : 'has-training'
+        : '';
     }
     return ''; // No custom class for 'year' or 'multi-year' views
   };
 
   getTrainingsForMonth(month: number) {
     var correctedMonth = month + 1;
-    debugger;
+
     this.trainingService.getTrainingsForMonth(correctedMonth).subscribe({
       next: (res: any) => {
         let response = res;
         this.trainingsForCalendar.set(response);
 
         this.forceReloadCalendarSelectedDates();
-        // this.onDateSelected(new Date());
-        // if (this.initialPull() == false) {
-        //   this.calendar()?.updateTodaysDate();
-        // } else {
-        //   this.initialPull.set(false);
-        // }
+        if (this.initialPull() == false) {
+          this.calendar()?.updateTodaysDate();
+        } else {
+          this.initialPull.set(false);
+        }
       },
       error: (err) => {},
     });
@@ -170,6 +200,7 @@ export class ClubDetailsComponent implements OnInit {
       // Only apply custom classes for the 'month' view
       if (view === 'month') {
         let hasTraining = false;
+        let isFinished = false;
         // this.trainings()?.some(
         //   (training) => {
         //     new Date(training.date).toDateString() == date.toDateString()
@@ -178,10 +209,15 @@ export class ClubDetailsComponent implements OnInit {
         for (let training of this.trainingsForCalendar()!) {
           if (new Date(training.date).toDateString() == date.toDateString()) {
             hasTraining = true;
+            isFinished = training.status == 'Завршен';
             break;
           }
         }
-        return hasTraining ? 'has-training' : '';
+        return hasTraining
+          ? isFinished
+            ? 'has-finished-training'
+            : 'has-training'
+          : '';
       }
       return ''; // No custom class for 'year' or 'multi-year' views
     };
@@ -193,7 +229,6 @@ export class ClubDetailsComponent implements OnInit {
   }
 
   countTrainingAttendanceByMonth() {
-    debugger;
     this.barChartData.set([]);
 
     const tmp2 = this.trainingsByMonth();

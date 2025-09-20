@@ -61,8 +61,8 @@
                     [cardValue]="clubNumbersInfo()?.numberOfTrainings" />
             </div>
             <div class="col-sm-12 col-md-6 col-lg-4 justify-content-center d-flex ">
-                <app-card title="Присутност" image="assets/images/attendance-percentage.png"
-                    [cardValue]="clubNumbersInfo()?.attendance?.toFixed(2) + '%'" />
+                <app-card title="Присутност" routePath="club-details" image="assets/images/attendance-percentage.png"
+                    [cardValue]="clubNumbersInfo()?.attendance !=100 ? clubNumbersInfo()?.attendance?.toFixed(2) + '%' :clubNumbersInfo()?.attendance + '%'" />
             </div>
 
         </div>

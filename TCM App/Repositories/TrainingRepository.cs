@@ -112,7 +112,7 @@ namespace TCM_App.Repositories
 
             if (training == null)
             {
-                throw new Exception($"Training with id {trainingDto.Id} not found");
+                throw new Exception($"Тренингoт не е пронајден");
             }
 
             training.Description = trainingDto.Description;
@@ -124,6 +124,18 @@ namespace TCM_App.Repositories
             var existingMemberTrainings= _context.Attendaces
                 .Where(mt => mt.TrainingId == training.Id)
                 .ToList();
+
+            if (existingMemberTrainings != null)
+            {
+                if (trainingDto.Status == TrainingStatusesEnum.Finished)
+                {
+                    var flag = existingMemberTrainings.Any(x=>x.Status == MemberTrainingStatusEnum.Pending);
+                    if (flag)
+                    {
+                        throw new Exception("Не можете да го завршите тренингот бидејќи постојат членови со статус На чекање ");
+                    }
+                }
+            }
 
             var toRemove = existingMemberTrainings
                 .Where(mt => !memberTrainingDtos.Any(x => x.MemberId == mt.MemberId))

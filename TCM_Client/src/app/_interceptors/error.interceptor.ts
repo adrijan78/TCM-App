@@ -42,7 +42,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             break;
 
           case 500:
-            toast.error('Настана грешка', error.status);
+            if (error.error.title) {
+              toast.error(error.error.title);
+            } else {
+              toast.error('Настана грешка', error.status);
+            }
+            console.log('error', error.error);
             break;
           default:
             toast.error('Настана грешка.');

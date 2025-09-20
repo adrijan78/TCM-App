@@ -40,8 +40,19 @@
                 </mat-select>
             </mat-form-field>
 
+            @if (data?.isFromNoteList){
 
-
+            <mat-form-field appearance="outline" class="full-width-input d-block mt-2">
+                <mat-label>Член</mat-label>
+                <mat-select formControlName="toMember">
+                    @for (member of clubMembers; track member.id) {
+                    <mat-option [value]="member.id">
+                        {{ member.name }}
+                    </mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            }
         </form>
     </mat-dialog-content>
     <mat-dialog-actions align="end">

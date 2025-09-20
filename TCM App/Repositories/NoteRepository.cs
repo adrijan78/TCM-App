@@ -10,10 +10,13 @@ namespace TCM_App.Repositories
 {
     public class NoteRepository(DataContext _context,IMapper _mapper) : Repository<Note>(_context), INoteRepository
     {
-        public Task<List<NoteDto>> GetNotesForMember(DateTime dateCreated, int fromMemberId, int toMemberId,int? trainingId)
+        public Task<List<NoteDto>> GetNotesForMember( int fromMemberId, int? toMemberId,int? trainingId)
          {
             var year = DateTime.Now.Year;
-            var query = _context.Notes
+            IQueryable<Note> query;
+            if (trainingId.HasValue)
+            {
+             query = _context.Notes
                 .Where(n =>
                 n.FromMemberId == fromMemberId &&
                 n.ToMemberId == toMemberId &&
@@ -22,6 +25,18 @@ namespace TCM_App.Repositories
                 n.CreatedAt.Year ==year)
                 .OrderByDescending(x=>x.Priority)
                 .ThenByDescending(x=>x.CreatedAt).AsQueryable();
+
+            }
+            else
+            {
+                query = _context.Notes
+                .Where(n =>
+                n.FromMemberId == fromMemberId  &&
+                n.ToMemberId == toMemberId &&
+                n.CreatedAt.Year == year)
+                .OrderByDescending(x => x.Priority)
+                .ThenByDescending(x => x.CreatedAt).AsQueryable();
+            }
 
 
                 return

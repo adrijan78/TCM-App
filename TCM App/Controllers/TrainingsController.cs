@@ -165,7 +165,10 @@ namespace TCM_App.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Cannot edit training with id {Id}", trainingDto.Id);
-                throw new Exception($"Cannot edit training with id {trainingDto.Id}", ex);
+                return Problem(
+                        title:ex.Message,
+                        statusCode:StatusCodes.Status500InternalServerError
+                    );
             }
         }
 

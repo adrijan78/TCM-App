@@ -233,9 +233,8 @@
 
                                     </tbody>
                                 </table>
-                                <mat-paginator class="table-paginator" [pageIndex]="pageNumber"
-                                    [length]="totalTrainings" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
-                                    (page)="onPageChange($event)">
+                                <mat-paginator class="table-paginator" [length]="totalTrainings" [pageSize]="pageSize"
+                                    [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)">
                                 </mat-paginator>
                             </div>
                         </div>

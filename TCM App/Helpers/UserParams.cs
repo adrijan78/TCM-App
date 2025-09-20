@@ -36,4 +36,12 @@ namespace TCM_App.Helpers
         public int? TrainingMonth { get; set; }
 
     }
+
+    public class NoteParams:BaseParams
+    {
+        public int FromMemberId { get; set; }
+        public int? ToMemberId { get; set; }
+        public int? TrainingId { get; set; }
+        public int? Priority { get; set; }
+    }
 }

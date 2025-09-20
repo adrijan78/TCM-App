@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { environment } from '../../environments/environment.development';
 import { map } from 'rxjs/operators';
 import { ProfilePicture } from './../_models/ProfilePicture';
+import { DropDownMember } from '../_models/Member';
 
 @Injectable({
   providedIn: 'root',
@@ -12,9 +13,14 @@ export class SharedService {
   private router = inject(Router);
   private http = inject(HttpClient);
   baseUrl = environment.apiUrl;
+  clubMembers: DropDownMember[] = [];
 
   getClubBelts() {
     return this.http.get(this.baseUrl + 'common/belts');
+  }
+
+  getClubMembers() {
+    return this.http.get(this.baseUrl + 'common/members');
   }
 
   getClubNumberOfTrainings(year: number, month: number | null) {

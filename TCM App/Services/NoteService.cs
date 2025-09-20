@@ -1,17 +1,48 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using TCM_App.Helpers;
+using TCM_App.Models;
 using TCM_App.Models.DTOs;
 using TCM_App.Repositories.Interfaces;
 using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Services
 {
-    public class NoteService(INoteRepository _noteRepository,IMemberService _memberService) : INoteService
+    public class NoteService(INoteRepository _noteRepository, IMemberService _memberService, IMapper mapper) : INoteService
     {
 
-        public Task<List<NoteDto>> GetNotesForMember(DateTime dateCreated, int fromMemberId, int toMemberId, int? trainingId)
+        public Task<List<NoteDto>> GetNotesForMember( int fromMemberId, int? toMemberId, int? trainingId)
         {
-            return _noteRepository.GetNotesForMember(dateCreated, fromMemberId, toMemberId, trainingId);
+            return _noteRepository.GetNotesForMember( fromMemberId, toMemberId, trainingId);
         }
+
+        Task<PagedList<NoteDto>> INoteService.GetClubNotes(NoteParams noteParams)
+        {
+            var query = _noteRepository.Query().OrderByDescending(x => x.CreatedAt).AsQueryable();
+
+            if (noteParams.SearchTerm != null && noteParams.SearchTerm != "")
+            {
+                query = query.Where(x => x.Title.Contains(noteParams.SearchTerm));
+            }
+
+
+            if (noteParams.Priority.HasValue)
+            {
+                query = query.Where(x => (int)x.Priority == noteParams.Priority.Value);
+            }
+
+            if (noteParams.ToMemberId.HasValue)
+            {
+                query = query.Where(x => x.ToMemberId == noteParams.ToMemberId);
+            }
+
+
+            return PagedList<NoteDto>
+                .CreateAsync(query.ProjectTo<NoteDto>(mapper.ConfigurationProvider), noteParams.PageNumber, noteParams.PageSize);
+        }
+
+
         public async Task AddNote(AddNoteDto noteDto)
         {
             var memId = await _memberService.GetMember(noteDto.ToMemberId);
@@ -42,5 +73,7 @@ namespace TCM_App.Services
                 throw new Exception("Белешката не постои");
             }
         }
+
+       
     }
 }

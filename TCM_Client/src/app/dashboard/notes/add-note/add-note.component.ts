@@ -15,6 +15,8 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { DropDownMember } from '../../../_models/Member';
+import { SharedService } from '../../../_services/shared.service';
 
 @Component({
   selector: 'app-add-note',
@@ -32,7 +34,9 @@ import { MatSelectModule } from '@angular/material/select';
 })
 export class AddNoteComponent {
   fb = inject(FormBuilder);
+  sharedService = inject(SharedService);
   addNoteForm: FormGroup;
+  clubMembers = this.sharedService.clubMembers;
 
   constructor(
     public dialogRef: MatDialogRef<AddNoteComponent>,
@@ -43,6 +47,13 @@ export class AddNoteComponent {
       content: ['', [Validators.required, Validators.maxLength(50)]],
       priority: [''],
     });
+
+    if (data.isFromNoteList) {
+      this.addNoteForm.addControl(
+        'toMember',
+        this.fb.control(null, Validators.required)
+      );
+    }
   }
 
   onSend() {

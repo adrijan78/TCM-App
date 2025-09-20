@@ -239,7 +239,6 @@ export class AttendancePerformanceComponent implements OnInit {
     let perc =
       (this.memberTotalNumOfTrainings() / this.clubTotalNumOfTrainings()) *
       100.0;
-    debugger;
     console.log(
       'Perc',
       perc,

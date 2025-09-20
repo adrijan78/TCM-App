@@ -7,4 +7,5 @@ export interface Note {
   toMemberId: number;
   trainingId: number | null;
   priority: number;
+  toMemberFullName?: string;
 }

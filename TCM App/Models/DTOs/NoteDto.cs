@@ -12,6 +12,7 @@ namespace TCM_App.Models.DTOs
         public bool CreatedForTraining { get; set; }
 
         public NotePriorityEnum Priority { get; set; }
+        public string? ToMemberFullName { get; set; } = String.Empty;
     }
 
     public class AddNoteDto

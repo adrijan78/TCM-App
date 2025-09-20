@@ -90,12 +90,7 @@ export class TrainingDetailComponent implements OnInit {
 
   getNotesForMember() {
     this.noteService
-      .getNotesForMember(
-        this.training()!.date.toString(),
-        1,
-        this.selectedMemberId(),
-        this.training()!.id
-      )
+      .getNotesForMember(1, this.selectedMemberId(), this.training()!.id)
       .subscribe({
         next: (res: Note[]) => {
           this.notesForMember.set(res);

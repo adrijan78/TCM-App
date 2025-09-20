@@ -70,7 +70,6 @@ export class DashboardComponent implements OnInit {
   title = 'TCM_Client';
   loggedMember = signal<LoginMember | null>(null);
   filteredMembers: any = [];
-  memberCtrl = new FormControl('');
 
   searchTerm = signal('');
   // filteredMembers = computed(() =>
@@ -84,6 +83,7 @@ export class DashboardComponent implements OnInit {
     this.sharedService.getClubMembersForDropdown().subscribe({
       next: (members: any) => {
         this.members = members;
+        this.sharedService.clubMembers = members;
         this.filteredMembers = computed(() =>
           this.members.filter((m) =>
             m.name.toLowerCase().includes(this.searchTerm().toLowerCase())
@@ -92,10 +92,23 @@ export class DashboardComponent implements OnInit {
       },
     });
   }
+
+  getFilteredMembers() {
+    const members = this.members;
+    if (!members) return [];
+
+    const term = this.searchTerm().toLowerCase().trim();
+    if (!term) return members;
+
+    return members.filter((n) => {
+      const title = n.name.toLowerCase();
+      return title.includes(term);
+    });
+  }
+
   onSelect(member: DropDownMember) {
     this.searchTerm.set('');
     this.router.navigate([`/members/${member.id}/attendance-performance`]);
-    this.memberCtrl.reset();
   }
 
   displayMember(member: DropDownMember): string {

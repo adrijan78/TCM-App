@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TCM_App.Helpers;
 using TCM_App.Models;
 using TCM_App.Models.DTOs;
 using TCM_App.Models.Enums;
@@ -44,11 +45,14 @@ namespace TCM_App.Services
 
 
             //Trainings and attencaces
+            var allTrainings = new List<TrainingDetailsDto>();
             var trainings = new List<TrainingDetailsDto>();
             if (month.HasValue)
             {
-                trainings = await _trainingRepository.Query().Where(t => t.Date.Year == year && t.Date.Month == month && t.Status == (int)TrainingStatusesEnum.Finished)
+                allTrainings = await _trainingRepository.Query().Where(t => t.Date.Year == year && t.Date.Month == month )
                     .ProjectTo<TrainingDetailsDto>(mapper.ConfigurationProvider).ToListAsync();
+                
+                trainings = allTrainings.Where(t=> t.Status == TrainingStatusesEnum.Finished.ToString()).ToList();
 
                 clubNumbersInfoDto.NumberOfMembers = clubNumbersInfoDto.NumberOfMembers == 0 ? 0 : await _memberRepository.Query()
                     .Where(x => x.StartedOn.Year == year && x.StartedOn.Month <= month.Value)
@@ -56,7 +60,9 @@ namespace TCM_App.Services
             }
             else
             {
-                trainings = await _trainingRepository.Query().Where(t => t.Date.Year == year && t.Status == (int)TrainingStatusesEnum.Finished).ProjectTo<TrainingDetailsDto>(mapper.ConfigurationProvider).ToListAsync();
+                allTrainings = await _trainingRepository.Query().Where(t => t.Date.Year == year)
+                    .ProjectTo<TrainingDetailsDto>(mapper.ConfigurationProvider).ToListAsync();
+                trainings = allTrainings.Where(t => t.Date.Year == year && t.Status ==TrainingStatusesEnum.Finished.GetDescription()).ToList();
             }
 
 
@@ -79,7 +85,7 @@ namespace TCM_App.Services
             }
 
             //Next training
-            var nextTraining = trainings.Where(t => t.Date > DateTime.UtcNow).OrderBy(t => t.Date).FirstOrDefault();
+            var nextTraining = allTrainings.Where(t => t.Date > DateTime.UtcNow).OrderBy(t => t.Date).FirstOrDefault();
 
             clubNumbersInfoDto.NextTraining = nextTraining?.Date;
 
@@ -102,11 +108,11 @@ namespace TCM_App.Services
         {
             if (month.HasValue)
             {
-                return await _trainingRepository.Query().CountAsync(t => t.Date.Year == year && t.Date.Month == month.Value);
+                return await _trainingRepository.Query().CountAsync(t => t.Date.Year == year && t.Date.Month == month.Value && t.Status == (int)TrainingStatusesEnum.Finished);
             }
             else
             {
-                return await _trainingRepository.Query().CountAsync(t=>t.Date.Year==year);
+                return await _trainingRepository.Query().CountAsync(t=>t.Date.Year==year && t.Status == (int)TrainingStatusesEnum.Finished);
 
             }
 
