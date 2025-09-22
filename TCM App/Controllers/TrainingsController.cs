@@ -70,11 +70,40 @@ namespace TCM_App.Controllers
         {
             try
             {
-                var training = await _trainingService.GetTraining(id, clubId);
+                
+                var roles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+                bool includeAllMembers = false;
+                TrainingDetailsDto training;
+
+                if (roles.Contains("Coach"))
+                {
+                    // Coaches can access all trainings within their club
+                    includeAllMembers = true;
+                    training = await _trainingService.GetTraining(id,includeAllMembers,null);
+
+                }
+                else if(roles.Contains("Member"))
+                {
+                    var loggedUserId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value);
+
+
+                    training = await _trainingService.GetTraining(id, includeAllMembers, loggedUserId);
+
+                    // Members can only access trainings they are associated with
+                    // You might want to add additional checks here to ensure the member is part of the training
+
+                }
+                else
+                {
+                    return Forbid();
+                }
+
+
                 if (training == null)
                 {
                     return NotFound();
                 }
+
                 return Ok(training);
             }
             catch (Exception ex)

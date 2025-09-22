@@ -1,24 +1,43 @@
 <div class="row justify-content-center1 mt-2">
 
     <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="col-12 mb-3 pb-5 mt-4">
-
-            <div class="table-title">
-                <div class="row">
-                    <div class="col-sm-12 text-center ">
-                        <h2>Проценти на платени/неплатени членарини</h2>
-                    </div>
-                </div>
+        <div class="col-12 mt-5 mb-5 ">
+            @if(nextPaymentDate > today){
+            <div class="d-flex justify-content-center align-items-center alert alert-success">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="currentColor"
+                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-check-circle flex-shrink-0 me-3" role="img" aria-label="Success:">
+                    <circle cx="24" cy="24" r="20"></circle>
+                    <path d="M16 24l6 6 12-12"></path>
+                </svg>
+                <h5>
+                    Следната членарина треба да се плати до:
+                    {{ nextPaymentDate ? (nextPaymentDate | date: 'dd.MM.yyyy') : 'Нема податоци' }}
+                </h5>
             </div>
 
-            <div class="chart-item pie-chart-container">
-                <ngx-charts-pie-chart [scheme]="pieChartColorSchemeForPayment" [results]="pieChartDataForPayment"
-                    [gradient]="gradient" [legend]="showLegend" [labels]="pieChartOptionsForPayment.labels"
-                    [doughnut]="pieChartOptionsForPayment.doughnut" [arcWidth]="pieChartOptionsForPayment.arcWidth"
-                    [legendPosition]="commonChartOptions.legendPosition"
-                    [tooltipText]="pieChartOptionsForPayment.labelFormatting" (select)="onSelect($event)">
-                </ngx-charts-pie-chart>
+            }@else {
+            <div class="alert alert-danger justify-content-center d-flex align-items-center" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="currentColor"
+                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-x-circle flex-shrink-0 me-3" role="img" aria-label="Error:">
+                    <circle cx="24" cy="24" r="20"></circle>
+                    <line x1="16" y1="16" x2="32" y2="32"></line>
+                    <line x1="32" y1="16" x2="16" y2="32"></line>
+                </svg>
+                <h5>
+                    Последната членарина беше со рок до:
+                    {{ nextPaymentDate ? (nextPaymentDate | date: 'dd.MM.yyyy') : 'Нема податоци' }}. Доцните со
+                    плаќање на членарина.
+                </h5>
             </div>
+
+            }
+
+
+
+
+
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12">
@@ -39,55 +58,37 @@
 
                                 <th>Датум</th>
                                 <th>Начин на плaќање</th>
-                                <th>Сума</th>
-                                <th>Опис</th>
-                                <th>Опис</th>
+                                <th>Рок на плаќање</th>
+                                <th>Акции</th>
+
 
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let row of dataSourceForPayment; let i = index">
+                            <tr *ngFor="let payment of dataSourceForPayment; let i = index">
 
                                 <td>
-                                    <span class="status" [ngClass]="{
-                                                                    'text-success': 'good' === 'good',
-                                                                    
-                                                                }">
-                                        &bull;
-                                    </span>
-                                    {{ 5 }}
+                                    {{ payment.paymentDate | date: 'dd.MM.yyyy' }}
                                 </td>
-                                <td>{{ 'Note 1' }}</td>
+                                <td>{{ payment.isPaidOnline ? 'Онлајн' : 'Готовина' }}</td>
+                                <td>{{ payment.nextPaymentDate | date: 'dd.MM.yyyy' }}</td>
                                 <td>
-                                    <a href="#" class="settings" title="Edit" data-toggle="tooltip">
-                                        <i class="material-icons">&#xE8B8;</i>
-                                    </a>
-                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip">
+                                    <a (click)="deletePayment(payment.id)" class="delete" title="Delete"
+                                        data-toggle="tooltip">
                                         <i class="material-icons">&#xE5C9;</i>
                                     </a>
                                 </td>
                             </tr>
                             <tr *ngIf="dataSourceForPayment && dataSourceForPayment.length === 0">
-                                <td colspan="7" class="text-center">Нема податоци за обавени
-                                    тренинзи
+                                <td colspan="7" class="text-center">Нема податоци за платени
+                                    членарини
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <div class="clearfix">
-                        <div class="hint-text">
-                            Showing <b>{{ dataSourceForPayment ? dataSourceForPayment.length :
-                                0}}</b> entries
-                        </div>
-                        <ul class="pagination">
-                            <li class="page-item disabled"><a href="#">Previous</a></li>
-                            <li class="page-item active"><a href="#" class="page-link">1</a>
-                            </li>
-                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                            <li class="page-item"><a href="#" class="page-link">Next</a>
-                            </li>
-                        </ul>
-                    </div>
+                    <mat-paginator class="table-paginator" [length]="totalPayments" [pageSize]="pageSize"
+                        [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)">
+                    </mat-paginator>
                 </div>
             </div>
         </div>

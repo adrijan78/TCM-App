@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using TCM_App.EmailService;
+using TCM_App.EmailService.Services.Interfaces;
 using TCM_App.Helpers;
 using TCM_App.Models;
 using TCM_App.Models.DTOs;
@@ -8,7 +10,10 @@ using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Services
 {
-    public class TrainingService(ITrainingRepository _trainingRepository,IMapper mapper,IMemberRepository _memberRepository) : ITrainingService
+    public class TrainingService(ITrainingRepository _trainingRepository,
+        IMapper mapper,
+        IMemberRepository _memberRepository,
+        IEmailService _emailService) : ITrainingService
     {
 
         public async Task<string> AddTraining(CreateTrainingDto trainingDto)
@@ -39,11 +44,40 @@ namespace TCM_App.Services
                         Description = training.Description,
                     };
                     training.MemberTrainings.Add(memberTraining);
-                }
+              }
               
           }
+          var trainingId= await _trainingRepository.CreateTraining(training);
 
-            return await _trainingRepository.CreateTraining(training);
+            if (trainingId != null) {
+
+                var trainingLink = $"http://localhost:4200/trainings/{trainingId}";
+
+                foreach (var memberT in trainingDto.MembersToAttend)
+                {
+                    if(memberT != null) { 
+                        var existingMember = await _memberRepository.GetMemberById(memberT.MemberId);
+                        if(existingMember != null)
+                        {
+                            var emailRequest = new SendEmailRequest
+                            {
+                                Recipient = existingMember.Email!,
+                                Subject = "Нов тренинг",
+                                MessageBody = $"Почитуван/а {existingMember.FirstName} {existingMember.LastName},<br/> Нов тренинг е закажан за вас на {training.Date.ToString("f")}.<br/>Опис: {training.Description}. " +
+                                $"На следниот линк можете да го најавите вашето присуство/отсуство {trainingLink}"
+                            };
+                             _emailService.SendEmailAsync(emailRequest);
+                        }
+                    }
+                }
+
+            }
+
+            return trainingId;
+
+
+
+
 
         }
 
@@ -57,9 +91,17 @@ namespace TCM_App.Services
             return await _trainingRepository.GetNumberOfAttendedMemberTrainingsForEveryMonth(clubId, year, memberId);
         }
 
-        public async Task<TrainingDetailsDto> GetTraining(int trainingId, int clubId)
+        public async Task<TrainingDetailsDto> GetTraining(int trainingId, bool includeAllMembers, int? memberId = null)
         {
-            return await _trainingRepository.GetTraining(trainingId);
+            var training = await _trainingRepository.GetTraining(trainingId, includeAllMembers, memberId);
+            if (!includeAllMembers)
+            {
+            training.MemberTrainings = training.MemberTrainings?.Where(mt=> mt.MemberId == memberId).ToList();
+
+            }
+
+            return training;
+
         }
 
         public async Task<List<TrainingDetailsDto>> GetTrainingsForSpecificMonth(int month)

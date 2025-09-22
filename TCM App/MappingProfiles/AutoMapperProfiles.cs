@@ -31,6 +31,7 @@ namespace TCM_App.MappingProfiles
             ;
 
 
+
             CreateMap<Member, MemberListDto>()
                 .ForMember(d => d.Age, o => o.MapFrom(s => CalculateAgeHelper.CalculateAge(s.DateOfBirth)))
                 .ForMember(d => d.Belt, o => o.MapFrom(s => s.Belts.OrderByDescending(b=>b.DateReceived).Select(x=>new BeltDto { Id=x.BeltId,Name=x.Belt.BeltName,EarnedOn=x.DateReceived}).FirstOrDefault()))
@@ -74,6 +75,12 @@ namespace TCM_App.MappingProfiles
             CreateMap<MemberBelt, UpdateMemberBeltDto>()
                 .ForMember(d=>d.Name,o=>o.MapFrom(s=>s.Belt.BeltName))
                 .ForMember(d=>d.EarnedOn,o=>o.MapFrom(s=>s.DateReceived));
+
+            CreateMap<Payments, PaymentsDto>()
+                .ForMember(d => d.PaymentDate, o => o.MapFrom(s => s.PaymentDate))
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(d => d.IsPaidOnline, o => o.MapFrom(s => s.IsPaidOnline))
+                .ForMember(d => d.MemberName, o => o.MapFrom(s => s.Member.FirstName + " "+ s.Member.LastName));
 
             CreateMap<UpdateTrainingDto, Training>()
                 .ForMember(d => d.MemberTrainings, o => o.Ignore())

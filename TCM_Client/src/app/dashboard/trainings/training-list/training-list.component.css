@@ -121,7 +121,7 @@
 /* This needs to be global or use ViewEncapsulation.None on the component */
 /* Add this to training-list.component.css OR your global styles.css */
 .mat-calendar-body-cell.has-training {
-  background-color: #c8e6c9 !important; /* Light green background */
+  background-color: #d8f11a !important; /* Light green background */
   border-radius: 50% !important; /* Make it circular */
   font-weight: bold;
 }
@@ -137,6 +137,28 @@
   background-color: #90caf9 !important; /* Material Blue (lighter) */
   color: #212121; /* Darker text for contrast */
 }
+
+/* --- Custom Calendar Styling for highlighted days --- */
+/* This needs to be global or use ViewEncapsulation.None on the component */
+/* Add this to training-list.component.css OR your global styles.css */
+ .mat-calendar-body-cell.has-finished-training {
+  background-color: #73d969 !important; /* Light green background */
+  border-radius: 50% !important; /* Make it circular */
+  font-weight: bold;
+}
+
+/* Style for the current day when it has training */
+ .mat-calendar-body-cell.mat-calendar-body-today.has-finished-training {
+  background-color: #546ff8 !important; /* Darker green */
+  color: #3f51b5; /* Primary text color for today */
+}
+
+/* Style for selected day when it has training */
+ .mat-calendar-body-cell.mat-calendar-body-selected.has-finished-training {
+  background-color: #34e63d !important; /* Material Blue (lighter) */
+  color: #212121; /* Darker text for contrast */
+}
+
 
 
 /* .mat-expansion-panel-header,

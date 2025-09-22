@@ -174,6 +174,7 @@ export class TrainingListComponent implements OnInit, AfterViewInit {
     // Only apply custom classes for the 'month' view
     if (view === 'month') {
       let hasTraining = false;
+      let isFinished = false;
       // this.trainings()?.some(
       //   (training) => {
       //     new Date(training.date).toDateString() == date.toDateString()
@@ -182,10 +183,16 @@ export class TrainingListComponent implements OnInit, AfterViewInit {
       for (let training of this.trainingsForCalendar()!) {
         if (new Date(training.date).toDateString() == date.toDateString()) {
           hasTraining = true;
+          isFinished = training.status == 'Завршен';
           break;
         }
       }
-      return hasTraining ? 'has-training' : '';
+
+      return hasTraining
+        ? isFinished
+          ? 'has-finished-training'
+          : 'has-training'
+        : '';
     }
     return ''; // No custom class for 'year' or 'multi-year' views
   };
@@ -309,6 +316,7 @@ export class TrainingListComponent implements OnInit, AfterViewInit {
       // Only apply custom classes for the 'month' view
       if (view === 'month') {
         let hasTraining = false;
+        let isFinished = false;
         // this.trainings()?.some(
         //   (training) => {
         //     new Date(training.date).toDateString() == date.toDateString()
@@ -317,10 +325,16 @@ export class TrainingListComponent implements OnInit, AfterViewInit {
         for (let training of this.trainingsForCalendar()!) {
           if (new Date(training.date).toDateString() == date.toDateString()) {
             hasTraining = true;
+            isFinished = training.status == 'Завршен';
             break;
           }
         }
-        return hasTraining ? 'has-training' : '';
+
+        return hasTraining
+          ? isFinished
+            ? 'has-finished-training'
+            : 'has-training'
+          : '';
       }
       return ''; // No custom class for 'year' or 'multi-year' views
     };

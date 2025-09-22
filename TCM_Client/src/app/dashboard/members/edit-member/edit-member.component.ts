@@ -83,6 +83,7 @@ export class EditMemberComponent implements OnInit {
       role: [this.selectedMember()?.rolesIds, Validators.required],
       photo: [this.selectedMember()?.photoId, Validators.required],
       belt: [this.selectedMember()?.currentBelt, Validators.required],
+      status: [this.selectedMember()?.isActive, Validators.required],
     });
   }
   ngOnInit(): void {
@@ -101,6 +102,8 @@ export class EditMemberComponent implements OnInit {
     });
   }
 
+  // [compareWith]="compareStatuses"
+
   getUserToEdit() {
     this.memberService.getMember(this.id()).subscribe({
       next: (member: any) => {
@@ -115,6 +118,7 @@ export class EditMemberComponent implements OnInit {
           photo: member.photoId,
           belt: member.currentBelt,
           email: member.email,
+          status: member.isActive,
         });
       },
       error: () => {},
@@ -175,6 +179,7 @@ export class EditMemberComponent implements OnInit {
     this.formData.append('newPhoto', this.editForm.value.photo);
     this.formData.append('currentBeltId', this.editForm.value.belt.id);
     this.formData.append('email', this.editForm.value.email);
+    this.formData.append('isActive', this.editForm.value.status);
     if (typeof this.editForm.value.dateOfBirth == 'string') {
       const iso = new Date(this.editForm.value.dateOfBirth).toISOString();
       this.formData.append('dateOfBirth', iso);

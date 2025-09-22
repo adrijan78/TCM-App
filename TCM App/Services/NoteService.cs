@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using TCM_App.EmailService;
+using TCM_App.EmailService.Services.Interfaces;
 using TCM_App.Helpers;
 using TCM_App.Models;
 using TCM_App.Models.DTOs;
@@ -9,7 +11,11 @@ using TCM_App.Services.Interfaces;
 
 namespace TCM_App.Services
 {
-    public class NoteService(INoteRepository _noteRepository, IMemberService _memberService, IMapper mapper) : INoteService
+    public class NoteService(INoteRepository _noteRepository,
+        IMemberService _memberService,
+        IMapper mapper,
+        IEmailService _emailService
+        ) : INoteService
     {
 
         public Task<List<NoteDto>> GetNotesForMember( int fromMemberId, int? toMemberId, int? trainingId)
@@ -45,11 +51,19 @@ namespace TCM_App.Services
 
         public async Task AddNote(AddNoteDto noteDto)
         {
-            var memId = await _memberService.GetMember(noteDto.ToMemberId);
-            if(memId != null)
+            var mem = await _memberService.GetMember(noteDto.ToMemberId);
+            if(mem != null)
             {
 
                  await _noteRepository.AddNote(noteDto);
+
+                var emailRequest = new SendEmailRequest
+                {
+                    Recipient = mem.Email!,
+                    Subject = "Имате нова белешка",
+                    MessageBody = $"Додадена е нова белешка за вас. Ве молиме најавете се и погледнете ја."
+                };
+                _emailService.SendEmailAsync(emailRequest);
 
             }
             else

@@ -37,6 +37,16 @@ namespace TCM_App.Helpers
 
     }
 
+    public class PaymentParams:BaseParams
+    {
+        public bool PaymentType { get; set; }
+        public int? PaymentMonth { get; set; }
+
+        public int? PaymentYear { get; set; }
+
+        public int? MemberId { get; set; }
+    }
+
     public class NoteParams:BaseParams
     {
         public int FromMemberId { get; set; }

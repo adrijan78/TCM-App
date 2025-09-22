@@ -95,6 +95,7 @@ namespace TCM_App.Services
         public async Task<Dictionary<int, int>> GetNumberOfAttendedTrainingsForEveryMonth(int clubId, int year, int? month)
         {
             var numOfTrainingsInMonths = await _trainingRepository.Query().Include(t => t.MemberTrainings).Where(x => x.ClubId == clubId && x.Date.Year == year
+            && x.Status == (int)TrainingStatusesEnum.Finished
             ).GroupBy(x => x.Date.Month)
                .Select(x => new { Month = x.Key, Total = x.Count() }).ToDictionaryAsync(x => x.Month, x => x.Total);
 

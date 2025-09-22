@@ -30,7 +30,7 @@ namespace TCM_App.Repositories
         }
 
 
-        public async Task UpdateMemberAttendanceAndPerformace(List<UpdateMemberTrainingDto> memberTrainingDtos)
+        public async Task UpdateMemberAttendanceAndPerformace(List<UpdateMemberTrainingDto> memberTrainingDtos, bool isCoach)
         {
             var membersForTraining = await _context.Attendaces
                 .Where(a => memberTrainingDtos.Select(m => m.Id).Contains(a.Id))
@@ -40,7 +40,12 @@ namespace TCM_App.Repositories
                 var dtoMember = memberTrainingDtos.FirstOrDefault(m => m.Id == attendance.Id);
                 if (dtoMember != null)
                 {
-                    attendance.Performace = dtoMember.Performance.HasValue?dtoMember.Performance.Value:0;
+                    if (isCoach) { 
+                    
+                        attendance.Performace = dtoMember.Performance.HasValue?dtoMember.Performance.Value:0;
+                        
+                    }
+                    attendance.Performace=attendance.Performace;
                     attendance.Status = dtoMember.Status;
                     _context.Attendaces.Update(attendance);
                 }

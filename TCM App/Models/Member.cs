@@ -28,6 +28,8 @@ namespace TCM_App.Models
 
         public List<Note> NotesReceived { get; set; }= [];
 
+        public List<Payments> Payments { get; set; }
+
         public List<AppMemberRole> MemberRoles { get; set; } = [];
 
         public string? StripeCustomerId { get; set; } 

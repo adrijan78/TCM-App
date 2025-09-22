@@ -8,7 +8,7 @@ namespace TCM_App.Services.Interfaces
     {
         Task<string> AddTraining(CreateTrainingDto training);
         Task<int> UpdateTraining(UpdateTrainingDto training);
-        Task<TrainingDetailsDto> GetTraining(int trainingId,int clubId);
+        Task<TrainingDetailsDto> GetTraining(int trainingId, bool includeAllMembers, int? memberId = null);
         Task<Dictionary<int,int>> GetNumberOfTrainingsForEveryMonth(int clubId, int year);
 
         Task<Dictionary<int, int>> GetNumberOfAttendedMemberTrainingsForEveryMonth(int clubId, int year, int memberId);

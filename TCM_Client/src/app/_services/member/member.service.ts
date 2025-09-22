@@ -115,6 +115,54 @@ export class MemberService {
     return this.http.post(this.baseUrl + 'members/add-belt-exam', exam);
   }
 
+  getMemberPayments(id: number, pageNumber?: number, pageSize?: number) {
+    let params = new HttpParams();
+    if (pageNumber && pageSize) {
+      params = params.append('pageNumber', pageNumber);
+      params = params.append('pageSize', pageSize);
+    }
+    return this.http.get(this.baseUrl + 'members/member-payments/' + id, {
+      observe: 'response',
+      params,
+    });
+  }
+
+  getMembersPayments(
+    pageNumber?: number,
+    pageSize?: number,
+    memberId?: number | null,
+    paymentType?: boolean | null,
+    paymentMonth?: number | null,
+    paymentYear?: number | null
+  ) {
+    let params = new HttpParams();
+    if (pageNumber && pageSize) {
+      params = params.append('pageNumber', pageNumber);
+      params = params.append('pageSize', pageSize);
+    }
+    if (memberId != null) {
+      params = params.append('memberId', memberId);
+    }
+    if (paymentType != null) {
+      params = params.append('paymentType', paymentType);
+    }
+    if (paymentMonth != null) {
+      params = params.append('paymentMonth', paymentMonth);
+    }
+    if (paymentYear != null) {
+      params = params.append('paymentYear', paymentYear);
+    }
+
+    return this.http.get(this.baseUrl + 'members/members-payments', {
+      observe: 'response',
+      params,
+    });
+  }
+
+  deleteMemberPayment(id: number) {
+    return this.http.delete(this.baseUrl + 'members/delete-payment/' + id);
+  }
+
   deleteMemberBeltExam(id: number) {
     return this.http.delete(this.baseUrl + 'members/delete-belt-exam/' + id);
   }

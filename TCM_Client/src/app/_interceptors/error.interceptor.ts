@@ -29,7 +29,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             break;
 
           case 401:
-            toast.error('Неавторизиран пристап', error.status);
+            toast.error(error.error.title);
             break;
 
           case 403:

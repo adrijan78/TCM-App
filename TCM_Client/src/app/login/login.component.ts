@@ -56,7 +56,7 @@ export class LoginComponent {
               'A problem occured in the login proccess.Please try again later!'
             );
           } else {
-            this.toastr.error(err.error.message);
+            //this.toastr.error(err.error.message);
           }
 
           console.log(err);

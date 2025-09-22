@@ -72,7 +72,7 @@
 
 
         <div class="form-group">
-            <mat-form-field>
+            <mat-form-field appearance="outline">
                 <mat-label>Улога</mat-label>
                 <mat-select formControlName="role" multiple (selectionChange)="OnRoleSelect($event)"
                     [value]="selectedMember()?.memberRoles" [compareWith]="compareRoles">
@@ -83,12 +83,25 @@
 
                 </mat-select>
             </mat-form-field>
-            <mat-form-field>
+            <mat-form-field appearance="outline">
                 <mat-label>Појас</mat-label>
                 <mat-select formControlName="belt" [compareWith]="compareBelts">
                     @for (belt of clubBelts(); track belt.id) {
                     <mat-option [value]="belt">{{belt.name}}</mat-option>
                     }
+
+
+                </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline">
+                <mat-label>Статус</mat-label>
+                <mat-select formControlName="status">
+
+                    <mat-option [value]="false">Неактивен</mat-option>
+                    <mat-option [value]="true">Активен</mat-option>
+
 
 
                 </mat-select>

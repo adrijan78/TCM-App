@@ -82,7 +82,7 @@ namespace TCM_App.Controllers
 
                 await _memberService.UpdateMember(id, member);
 
-                await _emailService.SendEmailAsync(new SendEmailRequest
+                _emailService.SendEmailAsync(new SendEmailRequest
                 {
                     Recipient = member.Email,
                     Subject = "Промена на податоци",
@@ -142,7 +142,9 @@ namespace TCM_App.Controllers
         {
             try
             {
-                await _memberService.UpdateMemberAttendanceAndPerformace(memberAttendances);
+                bool isCoach = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value == "Coach";
+
+                await _memberService.UpdateMemberAttendanceAndPerformace(memberAttendances, isCoach);
                 return Ok(new ApiResponse<string>
                 {
                     Success = true,
@@ -171,12 +173,47 @@ namespace TCM_App.Controllers
             }
         }
 
+        [HttpGet("member-payments/{id}")]
+        public async Task<IActionResult> GetMemberPayments(int id, [FromQuery] BaseParams paymentParams)
+        {
+            try
+            {
+                var payments = await _memberService.GetMemberPayments(id,paymentParams); // Replace 1 with the actual clubId from the authenticated user context
+                Response.AddPaginationHeader(payments);
+                return Ok(payments);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error getting member payments");
+                throw new Exception(e.ToString());
+            }
+        }
+
+        [HttpGet("members-payments")]
+        public async Task<IActionResult> GetMembersPayments([FromQuery] PaymentParams paymentParams)
+        {
+            try
+            {
+                var payments = await _memberService.GetMembersPayments( paymentParams);
+                Response.AddPaginationHeader(payments);
+                return Ok(payments);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error getting members payments");
+                throw new Exception(e.ToString());
+            }
+        }
+
+
         [HttpPost("add-belt-exam")]
         public async Task<IActionResult> AddBeltExamForMember([FromBody]UpdateMemberBeltDto memberBelt)
         {
             try
             {
                 var newMemberBeltId = await _memberService.AddBeltExamForMember(memberBelt);
+
+                
                 return Ok(new ApiResponse<int>
                 {
                     Success = true,
@@ -201,6 +238,9 @@ namespace TCM_App.Controllers
                
                 // Proceed to delete the member belt
                 await _memberService.DeleteBeltExamForMember(id);
+
+                
+
                 return Ok(new ApiResponse<string>
                 {
                     Success = true,
@@ -213,6 +253,8 @@ namespace TCM_App.Controllers
                 throw new Exception(e.ToString());
             }
         }
+
+
 
 
 
@@ -229,6 +271,28 @@ namespace TCM_App.Controllers
                 logger.LogError(e, "Error deleting member with id {Id}", id);
                 throw new Exception(e.ToString());
             }
+        }
+
+        [HttpDelete("delete-payment/{id}")]
+        public async Task<IActionResult> DeletePayment(int id)
+        {
+            try
+            {
+                var deletedPaymentId = await _memberService.DeleteMemberPayment(id);
+                return Ok(new ApiResponse<int>
+                {
+                    Success = true,
+                    Message = "Успешно избришавте уплата",
+                    Data = deletedPaymentId
+                });
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error deleting payment with id {Id}", id);
+                throw new Exception(e.ToString());
+            }
+
+
         }
     }
 }

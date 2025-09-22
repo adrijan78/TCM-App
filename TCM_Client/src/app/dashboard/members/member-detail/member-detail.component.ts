@@ -95,11 +95,13 @@ export class MemberDetailComponent implements OnInit {
       );
       return;
     }
-    this.acountService.payMembership(priceId).subscribe({
-      next: (res: any) => {
-        window.location.href = res.data;
-      },
-    });
+    this.acountService
+      .payMembership(priceId, this.member()!.id, this.member()!.email)
+      .subscribe({
+        next: (res: any) => {
+          window.location.href = res.data;
+        },
+      });
   }
 
   onTabChange(index: number) {

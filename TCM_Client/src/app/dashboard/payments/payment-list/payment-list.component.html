@@ -1,1 +1,127 @@
-<p>payment-list works!</p>
+<div class="row justify-content-center1 mt-2">
+
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="col-12 mt-2 mb-2 ">
+            <mat-expansion-panel class="">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Филтри</mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row">
+                    <mat-form-field appearance="outline" class="w-50  mb-2 ">
+                        <mat-label>Година на плаќање</mat-label>
+                        <mat-select [(value)]="year" (valueChange)="refetchData()">
+                            @for (y of years; track $index) {
+                            <mat-option [value]="y">{{y}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+
+
+                    <mat-form-field appearance="outline" class="w-50  mb-2 ">
+                        <mat-label>Месец на плаќање</mat-label>
+                        <mat-select [(value)]="month" (valueChange)="refetchData()">
+
+                            <mat-option [value]="1">Јануари</mat-option>
+                            <mat-option [value]="2">Февруари</mat-option>
+                            <mat-option [value]="3">Март</mat-option>
+                            <mat-option [value]="4">Април</mat-option>
+                            <mat-option [value]="5">Мај</mat-option>
+                            <mat-option [value]="6">Јуни</mat-option>
+                            <mat-option [value]="7">Јули</mat-option>
+                            <mat-option [value]="8">Август</mat-option>
+                            <mat-option [value]="9">Септември</mat-option>
+                            <mat-option [value]="10">Октомври</mat-option>
+                            <mat-option [value]="11">Ноември</mat-option>
+                            <mat-option [value]="12">Декември</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="w-50 mb-2 ">
+                        <mat-label>Членови</mat-label>
+                        <mat-select [(ngModel)]="memberId" (selectionChange)="refetchData()">
+                            <mat-option *ngFor="let member of clubMembers" [value]="member.id">
+                                {{ member.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="w-50  mb-2 ">
+                        <mat-label>Начин на плаќање</mat-label>
+                        <mat-select [(value)]="paymentType" (valueChange)="refetchData()">
+
+                            <mat-option [value]="true">Oнлајн</mat-option>
+                            <mat-option [value]="false">Готовина</mat-option>
+
+                        </mat-select>
+                    </mat-form-field>
+
+
+
+                    <div class="col-12 text-end">
+                        <button mat-raised-button class="btn btn-primary" color="primary"
+                            (click)="resetFilters()">Ресетирај
+                            филтри</button>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="d-flex justify-content-center1">
+
+            <div class="table-responsive w-100">
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h2>Платени членарини</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Член</th>
+                                <th>Датум</th>
+                                <th>Начин на плaќање</th>
+                                <th>Рок на плаќање</th>
+                                <th>Акции</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let payment of dataSourceForPayment; let i = index">
+
+                                <td>
+                                    {{ payment.memberName}}
+                                </td>
+                                <td>
+                                    {{ payment.paymentDate | date: 'dd.MM.yyyy' }}
+                                </td>
+                                <td>{{ payment.isPaidOnline ? 'Онлајн' : 'Готовина' }}</td>
+                                <td>{{ payment.nextPaymentDate | date: 'dd.MM.yyyy' }}</td>
+                                <td>
+                                    <a (click)="deletePayment(payment.id)" class="delete" title="Delete"
+                                        data-toggle="tooltip">
+                                        <i class="material-icons">&#xE5C9;</i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr *ngIf="dataSourceForPayment && dataSourceForPayment.length === 0">
+                                <td colspan="7" class="text-center">Нема податоци за платени
+                                    членарини
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <mat-paginator class="table-paginator" [length]="totalPayments" [pageSize]="pageSize"
+                        [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)">
+                    </mat-paginator>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

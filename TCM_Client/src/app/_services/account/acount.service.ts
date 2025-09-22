@@ -69,9 +69,11 @@ export class AcountService {
     return this.http.get(this.baseUrl + 'stripe/get-all-products');
   }
 
-  payMembership(priceId: string) {
+  payMembership(priceId: string, memberId: number, email: string) {
     const obj = {
       priceId: priceId,
+      memberId: memberId,
+      email: email,
     };
     return this.http.post(this.baseUrl + 'stripe/pay', obj);
   }

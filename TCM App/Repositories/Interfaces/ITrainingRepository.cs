@@ -11,7 +11,7 @@ namespace TCM_App.Repositories.Interfaces
         Task<Dictionary<int, int>> GetNumberOfAttendedMemberTrainingsForEveryMonth(int clubId, int year, int memberId);
         Task<List<TrainingDetailsDto>> GetTrainingsForSpecificMonth(int month);
         Task<PagedList<TrainingDto>> GetTrainingsByClubId(int clubId, TrainingParams userParams);
-        Task<TrainingDetailsDto> GetTraining(int trainingId);
+        Task<TrainingDetailsDto> GetTraining(int trainingId, bool includeAllMembers, int? memberId = null);
 
         Task<TrainingEditDto> GetTrainingForUpdate(int id);
 

@@ -22,6 +22,8 @@ namespace TCM_App.Data
         public DbSet<Training> Trainings { get; set; }
         public DbSet<Note> Notes { get; set; }
 
+        public DbSet<Payments> Payments { get; set; }
+
 
 
 
@@ -71,6 +73,14 @@ namespace TCM_App.Data
                 .HasForeignKey(mr => mr.RoleId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Payments>()
+                .HasOne(p => p.Member)
+                .WithMany(m => m.Payments)
+                .HasForeignKey(p => p.MemberId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+                
 
 
 

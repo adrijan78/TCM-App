@@ -66,6 +66,8 @@ export class TrainingDetailComponent implements OnInit {
   AttendanceStatus = AttendanceStatus;
   panel = viewChildren<MatExpansionPanel>('panel');
   selectedMemberId = signal<number>(0);
+  loggedUserRole = this.accountService.currentUser()!.roles;
+  isCoach = this.loggedUserRole.includes('Coach');
 
   constructor(private dialog: MatDialog) {
     effect(() => {

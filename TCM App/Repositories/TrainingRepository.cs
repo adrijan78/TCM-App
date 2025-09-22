@@ -84,12 +84,27 @@ namespace TCM_App.Repositories
         }            
         
 
-        public async Task<TrainingDetailsDto> GetTraining(int trainingId)
+        public async Task<TrainingDetailsDto> GetTraining(int trainingId,bool includeAllMembers,int? memberId=null)
         {
-            var training = await _context.Trainings
-                .Where(x => x.Id == trainingId)   
-                .ProjectTo<TrainingDetailsDto>(mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync();
+            TrainingDetailsDto training;
+
+            if (!includeAllMembers && memberId.HasValue)
+            {
+                training = await _context.Trainings
+                    .Where(t => t.Id == trainingId &&
+                                t.MemberTrainings.Any(mt => mt.MemberId == memberId))
+                    .ProjectTo<TrainingDetailsDto>(mapper.ConfigurationProvider, new { memberId })
+                    .FirstOrDefaultAsync();
+            }
+            else
+            {
+                training = await _context.Trainings
+                    .Where(x => x.Id == trainingId)
+                    .ProjectTo<TrainingDetailsDto>(mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync();
+            }
+
+
 
             return training ?? throw new KeyNotFoundException($"Training with id {trainingId} not found.");
 
@@ -190,6 +205,10 @@ namespace TCM_App.Repositories
             }
 
             _context.Update(training);
+
+            //get the removed members
+            
+            
 
             await _context.SaveChangesAsync();
 

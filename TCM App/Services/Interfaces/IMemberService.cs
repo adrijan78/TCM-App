@@ -16,12 +16,19 @@ namespace TCM_App.Services.Interfaces
 
         Task<PagedList<MemberTrainingDto>> GetMemberAttendanceAndPerformance(int member, UserParams userParams);
 
-        Task UpdateMemberAttendanceAndPerformace(List<UpdateMemberTrainingDto> memberTrainingDtos);
+        Task UpdateMemberAttendanceAndPerformace(List<UpdateMemberTrainingDto> memberTrainingDtos, bool isCoach);
 
         Task<List<UpdateMemberBeltDto>> GetMemberBelts(int id);
 
         Task<int> AddBeltExamForMember(UpdateMemberBeltDto memberBelt);
         Task<IActionResult> DeleteBeltExamForMember(int id);
+
+        Task<PagedList<PaymentsDto>> GetMemberPayments(int id, BaseParams paymentParams);
+
+        //For every club member
+        Task<PagedList<PaymentsDto>> GetMembersPayments( PaymentParams paymentParams);
+
+        Task<int> DeleteMemberPayment(int paymentId);
 
 
         Task DeactivateMember(int memberId);

@@ -13,7 +13,7 @@ namespace TCM_App.Repositories.Interfaces
 
         Task<PagedList<MemberTrainingDto>> GetMemberAttendanceAndPerformance (int member, UserParams memberParams);
 
-        Task UpdateMemberAttendanceAndPerformace(List<UpdateMemberTrainingDto> memberTrainingDtos);
+        Task UpdateMemberAttendanceAndPerformace(List<UpdateMemberTrainingDto> memberTrainingDtos, bool isCoach);
 
         Task DeactivateMember(int memberId);
     }

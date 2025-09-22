@@ -91,7 +91,7 @@ mat-calendar,.mat-datepicker-content
 /* This needs to be global or use ViewEncapsulation.None on the component */
 /* Add this to training-list.component.css OR your global styles.css */
 ::ng-deep .mat-calendar-body-cell.has-training {
-  background-color: #c8e6c9 !important; /* Light green background */
+  background-color: #d8f11a !important; /* Light green background */
   border-radius: 50% !important; /* Make it circular */
   font-weight: bold;
 }
@@ -113,7 +113,7 @@ mat-calendar,.mat-datepicker-content
 /* This needs to be global or use ViewEncapsulation.None on the component */
 /* Add this to training-list.component.css OR your global styles.css */
 ::ng-deep .mat-calendar-body-cell.has-finished-training {
-  background-color: #0965c5 !important; /* Light green background */
+  background-color: #73d969 !important; /* Light green background */
   border-radius: 50% !important; /* Make it circular */
   font-weight: bold;
 }

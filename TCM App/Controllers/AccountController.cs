@@ -23,7 +23,8 @@ namespace TCM_App.Controllers
         IRepository<MemberBelt> _memberBeltRepository,
         IRepository<Photo> _photoRepository,
         IEmailService _emailService,
-        IStripeService _stripeService
+        IStripeService _stripeService,
+        IRepository<Payments> _paymentsRepository
         ) : BaseController
     {
         [HttpPost("register")]
@@ -103,8 +104,24 @@ namespace TCM_App.Controllers
                     Name = $"{member.FirstName} {member.LastName}"
                 });
 
+
                 member.StripeCustomerId = customer.Id.ToString();
                 await userManager.UpdateAsync(member);
+
+                var today = DateTime.UtcNow;
+                var payment = new Payments
+                {
+                    MemberId = member.Id,
+                    IsPaidOnline = false,
+                    PaymentDate = today,
+                    NextPaymentDate = new DateTime(today.Year, today.Month, 15).AddMonths(1)
+                };
+
+
+
+                await _paymentsRepository.AddAsync(payment);
+                await _paymentsRepository.SaveChangesAsync();
+
 
 
 
@@ -139,21 +156,27 @@ namespace TCM_App.Controllers
                     .FirstOrDefaultAsync(m => m.Email == loginMemberDto.Email.ToLower());
                 if (member == null)
                 {
-                    return Unauthorized(new ApiResponse<string>
-                    {
-                        Success = false,
-                        Message = "Invalid credentials"
-                    });
+                    return Problem(
+                       title: "Внесовте погрешни податоци",
+                       statusCode: StatusCodes.Status401Unauthorized
+                   );
+                }
+
+                if (!member.IsActive)
+                {
+                    return Problem(
+                        title: "Вашиот акаунт е привремено деактивиран. Контактирајте го тренерот за повеќе информации",
+                        statusCode: StatusCodes.Status401Unauthorized
+                    );
                 }
 
                 var result = await userManager.CheckPasswordAsync(member, loginMemberDto.Password);
                 if (!result)
                 {
-                    return Unauthorized(new ApiResponse<string>
-                    {
-                        Success = false,
-                        Message = "Invalid credentials"
-                    });
+                    return Problem(
+                            title:"Внесовте погрешни податоци",
+                            statusCode:StatusCodes.Status401Unauthorized
+                        );
                 }
                 else
                 {
@@ -220,7 +243,7 @@ namespace TCM_App.Controllers
                 Subject = "Промена на лозинка",
                 MessageBody = $"Можете да ја промените лозинката со кликање <a href='{resetLink}'>овде</a>."
             };
-            await _emailService.SendEmailAsync(emailRequest);
+            _emailService.SendEmailAsync(emailRequest);
             return Ok(new ApiResponse<string>
             {
                 Success = true,
